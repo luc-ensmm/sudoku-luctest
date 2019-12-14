@@ -13,7 +13,7 @@ public class Coup {
     private int position;
     private int valeur;
 
-    public Coup(int position, int taille, int valeur) {
+    public Coup(int position, int valeur) {
         this.position = position;
         this.valeur = valeur;
     }

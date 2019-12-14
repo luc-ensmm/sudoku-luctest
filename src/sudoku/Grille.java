@@ -25,17 +25,29 @@ public class Grille {
     private boolean estInitialiser; // peut-être supprimable plus tard
 
     public Grille(int taille, ArrayList<Case> ensembleCases) {
-       // il faut vérifier que le nombre d'objets dans les ArrayList et cohérent avec la taille 
-       // précisé !
-        this.taille = taille;
-        this.ensembleCases = ensembleCases;
-        this.estInitialiser = false;
-        for (Case c: ensembleCases){
-            if (c.getValeur() != 0){
-                estInitialiser = true;
+        // il faut vérifier que le nombre d'objets dans les ArrayList et cohérent avec la taille 
+        // précisé !
+        try {
+            if (taille != ensembleCases.size()) {
+                throw new IllegalArgumentException("La taille précisée(" + taille 
+                        + ") est incompatible avec la taille de l'ArrayList("
+                        + ensembleCases.size() + ")");
+            } else {
+                this.taille = taille;
+                this.ensembleCases = ensembleCases;
+
+                this.estInitialiser = false;
+                for (Case c : ensembleCases) {
+                    if (c.getValeur() != 0) {
+                        estInitialiser = true;
+                    }
+
+                }
             }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
-        
+
     }
     
 
@@ -51,19 +63,10 @@ public class Grille {
         
     }
         
-    public void randomInitialization(int nbCasesReveles){
+    public static Grille randomInitialization(int nbCasesReveles, int taille){
         
         int tailleAuCarree = taille*taille;
-        ArrayList<Integer> allCandidates = new ArrayList<>();
-        for (int i = 0; i < tailleAuCarree; i++){
-            allCandidates.add(i+1);
-        }
-        // il faut s'assurer que toutes les cases soient modifiables
-        for (Case c: ensembleCases){
-            c.estModifiable(true);
-            c.addCandidat(allCandidates);
-        }
-        
+        Grille g = new Grille(taille);
         ArrayList<Integer> randomIndex = new ArrayList<>();
         int i = 0;
         int index;
@@ -79,7 +82,7 @@ public class Grille {
         
         for (Integer j: randomIndex){
             
-            Case c = ensembleCases.get(j);
+            Case c = g.ensembleCases.get(j);
             ArrayList<Integer> candidats = c.getCandidats();
             Collections.shuffle(candidats);
             int valeur_c = candidats.remove(0);
@@ -88,9 +91,9 @@ public class Grille {
             int ligne = j/tailleAuCarree;
             int colonne = j-ligne*tailleAuCarree;
             int bloc = (ligne/taille)*taille + colonne/taille;
-            ArrayList<Case> cLine = this.getLine(ligne); 
-            ArrayList<Case> cColumn = this.getColumn(colonne);
-            ArrayList<Case> cBlock = this.getBlock(bloc);
+            ArrayList<Case> cLine = g.getLine(ligne); 
+            ArrayList<Case> cColumn = g.getColumn(colonne);
+            ArrayList<Case> cBlock = g.getBlock(bloc);
             
             for (Case d : cLine){
                 d.removeCandidat(valeur_c);
@@ -103,22 +106,34 @@ public class Grille {
             
             }
             
-            this.setLine(ligne, cLine);
-            this.setColumn(colonne,cColumn);
-            this.setBlock(bloc, cBlock); 
-            ensembleCases.set(j, c);
+            g.setLine(ligne, cLine);
+            g.setColumn(colonne,cColumn);
+            g.setBlock(bloc, cBlock); 
+            g.ensembleCases.set(j, c);
             
             
         }
         
-        
+        return g;
+      
     }
     
-    /* 
-    La solution, si non fourni à la création de la grille, sera générée à partir des 
-    algorithmes de résolution de sudoku.
+    public void singletonNu(int indexCase){
+       
+       Case c = ensembleCases.get(indexCase);
+       if (c.estModifiable()){
+            if (c.getCandidats().size() == 1){
+                int valeur_c = c.getCandidats().get(0);
+                c.setValeur(valeur_c);
+                c.removeCandidat(valeur_c);
+            }
+            ensembleCases.set(indexCase, c);
+       }
+       else {
+           System.out.println("La case " + indexCase + " n'est pas modifiable !");
+       }
     
-    */
+    }
 
     public ArrayList<Case> getEnsembleCases() {
         return ensembleCases;
@@ -303,6 +318,7 @@ public class Grille {
             la recherche et on refait 2) pour le candidat suivant
         3) Si étape 2) passée pour le candidat(courant) alors la valeur de la case devient la valeur du candidat et l'algo se termine
         */
+        
         int tailleAuCarree = taille*taille;
         
         int i = indexCase/tailleAuCarree;
@@ -311,66 +327,189 @@ public class Grille {
         ArrayList<Case> colonne = this.getColumn(j);
         int b = (i/taille)*taille + j/taille;
         ArrayList<Case> bloc = this.getBlock(b);
-        
-        Case c = ensembleCases.get(indexCase);
-        int valeur_c = 0; // par souci d'initialisation
-        int compteurDuCandidat = 0;
-        
-        for (Integer candidat: c.getCandidats()){
-            
-            for (Case d : ligne){
-                if(d.getCandidats().contains(candidat)){
-                    compteurDuCandidat++;
-                }
-            }
-            
-            // si compteurDuCandidat > 1 alors il y a au moins 2 cases dans la ligne contenant le candidat
-            // dans leur liste de candidat, donc on sort de la boucle, plus besoin de vérifier le reste du voisinage
-            if (compteurDuCandidat > 1){
+        //System.out.println("\nCandidats de la case: " + ensembleCases.get(indexCase).getCandidats());
+        for (Integer candidat: ensembleCases.get(indexCase).getCandidats()){
+            //System.out.println("Candidat courant: " + candidat);
+            if(singletonCacheOneCandidate(indexCase,candidat,ligne,colonne,bloc)){
                 break;
             }
-            else{
-                valeur_c = candidat;
-                compteurDuCandidat = 0;
-            }
-            
-            // même chose mais avec la colonne
-            for (Case d: colonne){
-                if(d.getCandidats().contains(candidat)){
-                    compteurDuCandidat++;
-                }
-            }
-            if (compteurDuCandidat > 1){
-                break;
-            }
-            else{
-                valeur_c = candidat;
-                compteurDuCandidat = 0;
-            }
-            
-            // même chose mais avec le bloc
-            for (Case d: bloc){
-                if(d.getCandidats().contains(candidat)){
-                    compteurDuCandidat++;
-                }
-            }
-            if (compteurDuCandidat > 1){
-                break;
-            }
-            else{
-                valeur_c = candidat;
-                compteurDuCandidat = 0;
-            }
-            
         }
         
-        if (compteurDuCandidat < 2){
+    }
+    
+    private boolean singletonCacheOneCandidate(int indexCase, int candidat,
+        ArrayList<Case> ligne, ArrayList<Case> colonne, ArrayList<Case> bloc){
+        /*
+        
+        1) On récupère les candidats de la case
+        2) Pour chaque candidat, on vérifie dans son voisinage(ligne,colonne,bloc) si le candidat
+            est présent dans les candidats d'une autre case. Si durant la recherche on trouve le candidat alors on stoppe
+            la recherche et on refait 2) pour le candidat suivant
+        3) Si étape 2) passée pour le candidat(courant) alors la valeur de la case devient la valeur du candidat et l'algo se termine
+        */
+        
+        int valeur_c = 0; // par souci d'initialisation
+        int compteurDuCandidat = 0;
+        boolean finDeLalgo = false;
+           
+        for (Case d : ligne){
+            if((d.getCandidats().contains(candidat) && d.getValeur() == 0)
+                        || d.getValeur() == candidat){
+                compteurDuCandidat++;
+            }
+        }
+   
+        // Si compteurDuCandidat > 1 alors il y a au moins 2 cases dans la ligne contenant le candidat
+        // dans leur liste de candidat, donc on passe au candidat suivant.
+        //Plus besoin de vérifier le reste du voisinage si compteurDuCandidat  = 1 cependant
+        if (compteurDuCandidat == 1){
+            valeur_c = candidat;
+            finDeLalgo = true;  
+        }
+        else{
+            compteurDuCandidat = 0;
+        }
+
+        // même chose mais avec la colonne
+        if (!finDeLalgo){
+            for (Case d: colonne){
+                if((d.getCandidats().contains(candidat) && d.getValeur() == 0)
+                        || d.getValeur() == candidat){
+                    compteurDuCandidat++;
+                }
+            }
+            
+            if (compteurDuCandidat == 1){
+            valeur_c = candidat;
+            finDeLalgo = true;
+            
+            }
+            else{
+                compteurDuCandidat = 0;
+            }
+        
+        }
+
+        // même chose mais avec le bloc
+        if (!finDeLalgo){
+            for (Case d: bloc){
+                if((d.getCandidats().contains(candidat) && d.getValeur() == 0)
+                        || d.getValeur() == candidat){
+                    compteurDuCandidat++;
+                }
+            }
+            if (compteurDuCandidat == 1){
+            valeur_c = candidat;
+            }
+        }
+
+        if (compteurDuCandidat == 1){
+            Case c = ensembleCases.get(indexCase);
             c.setValeur(valeur_c);
             ensembleCases.set(indexCase, c);
         }
-        
+        return finDeLalgo;
         
     }
+    
+    private boolean singletonCacheOneCandidateVerbose(int indexCase, int candidat,
+        ArrayList<Case> ligne, ArrayList<Case> colonne, ArrayList<Case> bloc){
+        /*
+        
+        1) On récupère les candidats de la case
+        2) Pour chaque candidat, on vérifie dans son voisinage(ligne,colonne,bloc) si le candidat
+            est présent dans les candidats d'une autre case. Si durant la recherche on trouve le candidat alors on stoppe
+            la recherche et on refait 2) pour le candidat suivant
+        3) Si étape 2) passée pour le candidat(courant) alors la valeur de la case devient la valeur du candidat et l'algo se termine
+        */
+        
+        int valeur_c = 0; // par souci d'initialisation
+        int compteurDuCandidat = 0;
+        boolean finDeLalgo = false;
+        
+        System.out.println("Ligne:");    
+        for (Case d : ligne){
+            System.out.println("Valeur:" + d.getValeur() + "; Candidats:" + d.getCandidats());
+            if((d.getCandidats().contains(candidat) && d.getValeur() == 0)
+                        || d.getValeur() == candidat){
+                compteurDuCandidat++;
+            }
+        }
+        System.out.print("\n");
+        // Si compteurDuCandidat > 1 alors il y a au moins 2 cases dans la ligne contenant le candidat
+        // dans leur liste de candidat, donc on passe au candidat suivant.
+        //Plus besoin de vérifier le reste du voisinage si compteurDuCandidat  = 1 cependant
+        if (compteurDuCandidat == 1){
+            valeur_c = candidat;
+            finDeLalgo = true;
+            System.out.println("Le candidat " + candidat + " va devenir de la valeur de la case (l)");
+            
+        }
+        else{
+            System.out.println("Ligne checked, pas fin de l'algo. Compteur = " + compteurDuCandidat);
+            compteurDuCandidat = 0;
+        }
+
+        // même chose mais avec la colonne
+        if (!finDeLalgo){
+            System.out.println("Colonne:");
+            for (Case d: colonne){
+                System.out.println("Valeur:" + d.getValeur() + "; Candidats:" + d.getCandidats());
+                if((d.getCandidats().contains(candidat) && d.getValeur() == 0)
+                        || d.getValeur() == candidat){
+                    compteurDuCandidat++;
+                }
+            }
+            System.out.print("\n");
+            if (compteurDuCandidat == 1){
+            valeur_c = candidat;
+            finDeLalgo = true;
+            System.out.println("Le candidat " + candidat + " va devenir de la valeur de la case (c)");
+            }
+            else{
+                System.out.println("Colonne checked, pas fin de l'algo. Compteur = " + compteurDuCandidat);
+                compteurDuCandidat = 0;
+            }
+        
+        }
+
+        // même chose mais avec le bloc
+        if (!finDeLalgo){
+            System.out.println("Bloc:");
+            for (Case d: bloc){
+                System.out.println("Valeur:" + d.getValeur() + "; Candidats:" + d.getCandidats());
+                if((d.getCandidats().contains(candidat) && d.getValeur() == 0)
+                        || d.getValeur() == candidat){
+                    compteurDuCandidat++;
+                }
+            }
+            System.out.print("\n");
+            if (compteurDuCandidat == 1){
+            valeur_c = candidat;
+            System.out.println("Le candidat " + candidat + " va devenir de la valeur de la case (b)");
+            }
+            else {
+                System.out.println("Block checked. Compteur = " + compteurDuCandidat);
+            }
+        
+        }
+
+        
+        
+        if (compteurDuCandidat == 1){
+            Case c = ensembleCases.get(indexCase);
+            System.out.println("Modification de la valeur de la case. Valeur de la case " + 
+                    indexCase + " avant la modif: " + ensembleCases.get(indexCase).getValeur());
+            c.setValeur(valeur_c);
+            ensembleCases.set(indexCase, c);
+            System.out.println("Valeur de la case " + indexCase + " màj :" + 
+                    ensembleCases.get(indexCase).getValeur());
+        }
+        
+        return finDeLalgo;
+        
+    }
+    
     
      public boolean candidatsPlausible(int lineCase, int columnCase){
         boolean candidatBon = true;

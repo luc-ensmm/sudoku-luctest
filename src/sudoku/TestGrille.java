@@ -23,16 +23,92 @@ public class TestGrille {
    
     public static void main(String[] args) {
         // TODO code application logic here
-        test_set(); 
+        test_singletonNu();
+        //ldfklgjfgvfjgviojfgofhghfughdfuioghfduifhgifhfkj
    
     }
     
+    //fonctionnelle
+    public static ArrayList<Integer> stringToArray(String str, String regex){
+        
+        String [] elts = str.split(regex);
+        ArrayList<Integer> retour =  new ArrayList<>();
+        for (int i = 0; i < elts.length; i++){
+            retour.add(Integer.parseInt(elts[i]));
+        }
+        return retour;
+    }
     
+    //fonctionnelle
     public static void test_singletonCache(){
+        
+        ArrayList<Case> testList = new ArrayList<>();
+        int taille = 2;
+        
+        testList.add(new Case(taille,0,stringToArray("1 3 4"," "),true));
+        testList.add(new Case(taille,0,stringToArray("1 3 4"," "),true));
+        testList.add(new Case(taille,2,true));
+        testList.add(new Case(taille,0,stringToArray("1"," "),true));
+        testList.add(new Case(taille,0,stringToArray("1 2 4"," "),true));
+        testList.add(new Case(taille,0,stringToArray("2 4"," "),true));
+        testList.add(new Case(taille,0,stringToArray("1 4"," "),true));
+        testList.add(new Case(taille,3,true));
+        testList.add(new Case(taille,0,stringToArray("2 3"," "),true));
+        testList.add(new Case(taille,0,stringToArray("2 3"," "),true));
+        testList.add(new Case(taille,0,stringToArray("1 3"," "),true));
+        testList.add(new Case(taille,4,true));
+        testList.add(new Case(taille,0,stringToArray("2 3 4"," "),true));
+        testList.add(new Case(taille,1,true));
+        testList.add(new Case(taille,0,stringToArray("3 4"," "),true));
+        testList.add(new Case(taille,0,stringToArray("2"," "),true));
+        
+        Grille g = new Grille(taille,testList);
+        g.showGrille();
+        g.singletonCache(6);
+        System.out.println("\nApplication du singleton caché sur la case 6");
+        g.showGrille();
+        
+    }
+    
+    //fonctionnelle
+    public static void test_singletonNu(){
+        int taille = 2;
+        ArrayList<Case> testList = new ArrayList<>();
+        testList.add(new Case(taille,0,stringToArray("4"," "),true));
+        testList.add(new Case(taille,0,stringToArray("4 2"," "),true));
+        testList.add(new Case(taille,1,false)); 
+        testList.add(new Case(taille,3,false));
+        testList.add(new Case(taille,3,false));
+        testList.add(new Case(taille,0,stringToArray("2 4 1"," "),true));
+        testList.add(new Case(taille,0,stringToArray("2 4"," "),true));
+        testList.add(new Case(taille,0,stringToArray("4"," "),true));
+        testList.add(new Case(taille,0,stringToArray("1"," "),true));
+        testList.add(new Case(taille,0,stringToArray("1 4"," "),true));
+        testList.add(new Case(taille,0,stringToArray("3 4"," "),true));
+        testList.add(new Case(taille,2,false));
+        testList.add(new Case(taille,2,false));
+        testList.add(new Case(taille,3,false));
+        testList.add(new Case(taille,0,stringToArray("4"," "),true));
+        testList.add(new Case(taille,0,stringToArray("1 4"," "),true));
+        
+        Grille g = new Grille(taille,testList);
+        System.out.println("Grille avant l'application du singleton nu");
+        g.showGrille();
+        System.out.println("\nGrille après l'application du singleton nu sur la case d'index 0");
+        g.singletonNu(0);
+        g.showGrille();
+        System.out.println("\nGrille après l'application du singleton nu sur la case d'index 1 (ne modifie pas la grille)");
+        g.singletonNu(1);
+        g.showGrille();
+        System.out.println("\nGrille après l'application du singleton nu sur la case d'index 2, non modifiable");
+        g.singletonNu(2);
+        g.showGrille();
+        
         
     }
     // fonctionnelle
     public static void test_set(){
+        
         int taille = 3;
         int tailleAuCarre = taille*taille; 
         ArrayList<Case> testList = new ArrayList<Case>();
@@ -78,23 +154,19 @@ public class TestGrille {
         
     }
     
-
+    //fonctionnelle
     public static void test_initialisationAleatoire(){
     
         int taille = 3;
-        Grille g = new Grille(taille);
-        System.out.println("Grille avec que des 0 (pas initialisé)");
-        g.showGrille();
-        int nbCasesImmuables = 17;
-        g.randomInitialization(nbCasesImmuables);
+        int nbCasesImmuables = 40;
+        Grille g = Grille.randomInitialization(nbCasesImmuables,taille);
         System.out.println("\n\nGrille après initialisation aléatoire:");
         g.showGrille();
         
     }
     
-    
-    public static void test_get(){
-         
+    //fonctionnelle
+    public static void test_get(){ 
        
         int taille = 3;
         int tailleAuCarre = taille*taille; 
@@ -140,8 +212,8 @@ public class TestGrille {
     }
     
     
-    
-    public static void test_dAlgorithme(){
+    //fonctionnelle
+    public static void test_dAlgorithmeDansColonne(){
         // Test de l'algorithme utilisé dans le getColumn
         ArrayList<Integer> testList = new ArrayList<Integer>();
         int taille = 3; // taille d'un bloc (= nombre de ligne et de colonne d'un bloc)

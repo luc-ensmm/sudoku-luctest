@@ -78,7 +78,7 @@ public class Sudoku {
                 else {
                     cases.get(position_case).setValeur(valeur);
                     g.setEnsembleCases(cases);
-                    listeCoup.push(new Coup(position_case,taille, valeur));
+                    listeCoup.push(new Coup(position_case, valeur));
                     
                 }
             }
