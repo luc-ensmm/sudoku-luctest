@@ -109,8 +109,10 @@ public class TestSudoku {
         Grille grilleSolution = new Grille(taille,solution);
         Joueur j = new Joueur("Nom",0);
         Sudoku s = new Sudoku(j,uneGrille,grilleSolution);
-        s.play();
-        s.saveGame();
-        //s.chargerGrille("nouvelle_grille");
+        //s.play();
+        //s.saveGame();
+        Sudoku s1 = Sudoku.chargerGrille("nouvelle_grille");
+        s1.afficheSudoku();
+        
     }
 }

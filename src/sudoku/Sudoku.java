@@ -29,10 +29,18 @@ public class Sudoku {
         this.listeCoup = new Pile();
     }
     
-    public Sudoku(Joueur j, Grille g, Pile listCoup, Grille solution){
+    public Sudoku(Joueur j, Grille g, Pile listeCoup, Grille solution){
         this.j = j;
         this.g = g;
-        this.
+        this.listeCoup = listeCoup;
+        this.solution = solution;
+    }
+    
+    public Sudoku(){
+        Joueur j = new Joueur("Nom",0);
+        Grille g = new Grille(0);
+        Pile listeCoup = new Pile();
+        Grille solution = new Grille(0);
     }
     
     public void jouerUnCoup(){
@@ -133,17 +141,16 @@ public class Sudoku {
         }
     }
     
-    public static chargerGrille (String nomDuFichier){
-        int score = 0;
+    public static Sudoku chargerGrille (String nomDuFichier){
+        int scoreCourant = 0;
         String name = "";
         Case nouvelleCase;
-        int taille = 0;
         Joueur joueurNouveau;
+        int taille = 0;
         ArrayList<Case> ensembleDesCases = new ArrayList<Case>();
-        //Grille grilleCourante = new Grille(taille);
         Pile listeDesCoups = new Pile();
-        //Grille laSolution;
         ArrayList<Case> ensembleSolutionCase = new ArrayList<Case>();
+        Sudoku s = new Sudoku();
         try{
             BufferedReader fichier = new BufferedReader (new FileReader(nomDuFichier+".txt"));//rajouter condition si txt déjà dans nom du fichier
             while (fichier.ready()){
@@ -158,7 +165,7 @@ public class Sudoku {
                         name = ligne.substring(16);
                     }
                     if(ligne.contains("score")){
-                        score = Integer.parseInt(ligne.substring(7));
+                        scoreCourant = Integer.parseInt(ligne.substring(8));
                     }
                 } else if (ligne.startsWith("%")){
                     String champs[] = ligne.split(";");
@@ -189,13 +196,17 @@ public class Sudoku {
                         
                     }
                 } 
-            }Joueur joueurCourant = new Joueur(name,score); 
+            }Joueur joueurCourant = new Joueur(name,scoreCourant); 
             Grille grilleCourante = new Grille(taille,ensembleDesCases);
             Grille laSolution = new Grille(taille,ensembleSolutionCase);
-            Sudoku s = new Sudoku(joueurCourant, grilleCourante,listeDesCoups);
+            s = new Sudoku(joueurCourant,grilleCourante,listeDesCoups,laSolution);
         }catch (IOException e){
             e.printStackTrace();
-        } this.g.afficheGrille();
+        } return s;
+    }
+    
+    public void afficheSudoku(){
+        this.g.afficheGrille();
     }
         
   
