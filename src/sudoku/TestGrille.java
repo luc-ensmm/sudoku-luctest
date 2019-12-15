@@ -23,7 +23,7 @@ public class TestGrille {
    
     public static void main(String[] args) {
         // TODO code application logic here
-        test_singletonNu();
+        test_solution();
         //ldfklgjfgvfjgviojfgofhghfughdfuioghfduifhgifhfkj
    
     }
@@ -37,6 +37,33 @@ public class TestGrille {
             retour.add(Integer.parseInt(elts[i]));
         }
         return retour;
+    }
+    
+    public static void test_solution(){
+        /*
+        ArrayList<Integer> one = new ArrayList<>();
+        ArrayList<Integer> two = new ArrayList<>();
+        for(int i = 0; i < 5; i++){
+            one.add(i);
+            two.add(4-i);
+        }
+        
+        System.out.println(one.containsAll(two));
+        
+        */
+        
+        Grille g = Grille.randomInitialization(17, 3);
+        g.showGrille();
+        System.out.println();
+        for(Case c: g.getEnsembleCases()){
+            System.out.println(c.estModifiable());
+        }
+        /*
+        Grille solution_de_g = g.solution();
+        System.out.println("\nSolution de la grille ci-dessus:");
+        solution_de_g.showGrille();
+        */
+        
     }
     
     //fonctionnelle

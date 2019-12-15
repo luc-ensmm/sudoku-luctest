@@ -28,7 +28,7 @@ public class Grille {
         // il faut vérifier que le nombre d'objets dans les ArrayList et cohérent avec la taille 
         // précisé !
         try {
-            if (taille != ensembleCases.size()) {
+            if (taille*taille*taille*taille != ensembleCases.size()) {
                 throw new IllegalArgumentException("La taille précisée(" + taille 
                         + ") est incompatible avec la taille de l'ArrayList("
                         + ensembleCases.size() + ")");
@@ -38,7 +38,7 @@ public class Grille {
 
                 this.estInitialiser = false;
                 for (Case c : ensembleCases) {
-                    if (c.getValeur() != 0) {
+                    if (c.getValeur() != 0) { // s'il y a au moins une case non vide
                         estInitialiser = true;
                     }
 
@@ -118,7 +118,7 @@ public class Grille {
       
     }
     
-    public void singletonNu(int indexCase){
+    public void singletonNuVersbose(int indexCase){
        
        Case c = ensembleCases.get(indexCase);
        if (c.estModifiable()){
@@ -133,6 +133,20 @@ public class Grille {
            System.out.println("La case " + indexCase + " n'est pas modifiable !");
        }
     
+    }
+    
+    public void singletonNu (int indexCase){
+       
+       Case c = ensembleCases.get(indexCase);
+       if (c.estModifiable()){
+            if (c.getCandidats().size() == 1){
+                int valeur_c = c.getCandidats().get(0);
+                c.setValeur(valeur_c);
+                c.removeCandidat(valeur_c);
+            }
+            ensembleCases.set(indexCase, c);
+       }
+       
     }
 
     public ArrayList<Case> getEnsembleCases() {
@@ -524,6 +538,47 @@ public class Grille {
                 candidatBon = false;
             }
         } return candidatBon;
+    }
+     
+    public Grille solution(){
+      
+        Grille g = new Grille(taille,ensembleCases);
+        ArrayList<Case> unit = new ArrayList<>();
+        for (int i = 0; i < taille*taille; i++){
+            unit.add(new Case(taille,i,true));
+        }
+        return this.solution(g,unit,0);
+       
+    }
+    
+    private Grille solution(Grille g, ArrayList<Case> unit,int tour){
+        
+        boolean bonneSolution = true;
+        int tailleAuCarree = taille*taille;
+        int index = 0;
+       
+        while (bonneSolution && index < tailleAuCarree) {
+            if (!g.getLine(index).containsAll(unit) || !g.getColumn(index).containsAll(unit)) {
+                bonneSolution = false;
+            }
+            index++;
+        }
+        
+        
+        if(!(bonneSolution && tour < 5)){
+            for(int i = 0; i < tailleAuCarree*tailleAuCarree; i++){
+                g.singletonCache(i);
+            }
+            for(int i = 0; i < tailleAuCarree*tailleAuCarree; i++){
+                g.singletonNu(i);
+            }
+            
+            g = this.solution(g,unit,tour+1);
+            
+        }
+        
+        return g;
+        
     }
 }
     
