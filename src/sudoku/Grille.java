@@ -551,6 +551,7 @@ public class Grille {
        
     }
     
+    
     private Grille solution(Grille g, ArrayList<Case> unit,int tour){
         
         boolean bonneSolution = true;
@@ -567,10 +568,15 @@ public class Grille {
         
         if(!(bonneSolution && tour < 5)){
             for(int i = 0; i < tailleAuCarree*tailleAuCarree; i++){
-                g.singletonCache(i);
+                if(g.getEnsembleCases().get(i).estModifiable()){
+                   g.singletonCache(i); 
+                }
+                
             }
             for(int i = 0; i < tailleAuCarree*tailleAuCarree; i++){
-                g.singletonNu(i);
+                if(g.getEnsembleCases().get(i).estModifiable()){
+                   g.singletonNu(i); 
+                }
             }
             
             g = this.solution(g,unit,tour+1);
@@ -580,6 +586,11 @@ public class Grille {
         return g;
         
     }
+    
+    /*
+    Faire une méthode de résolution purement hasardeuse ! (choix de la valeur aléatoire
+    et récursivité)
+    */
 }
     
       
