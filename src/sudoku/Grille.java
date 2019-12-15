@@ -135,17 +135,21 @@ public class Grille {
     
     }
     
-    public void singletonNu (int indexCase){
+    public boolean singletonNu (int indexCase){
        
+       boolean aEteAppliquer = false;
        Case c = ensembleCases.get(indexCase);
        if (c.estModifiable()){
             if (c.getCandidats().size() == 1){
                 int valeur_c = c.getCandidats().get(0);
                 c.setValeur(valeur_c);
                 c.removeCandidat(valeur_c);
+                ensembleCases.set(indexCase, c);
+                aEteAppliquer = true;
             }
-            ensembleCases.set(indexCase, c);
        }
+     
+       return aEteAppliquer;
        
     }
 
@@ -333,20 +337,34 @@ public class Grille {
         3) Si étape 2) passée pour le candidat(courant) alors la valeur de la case devient la valeur du candidat et l'algo se termine
         */
         
-        int tailleAuCarree = taille*taille;
-        
-        int i = indexCase/tailleAuCarree;
-        ArrayList<Case> ligne = this.getLine(i);
-        int j = indexCase-i*tailleAuCarree;
-        ArrayList<Case> colonne = this.getColumn(j);
-        int b = (i/taille)*taille + j/taille;
-        ArrayList<Case> bloc = this.getBlock(b);
-        //System.out.println("\nCandidats de la case: " + ensembleCases.get(indexCase).getCandidats());
-        for (Integer candidat: ensembleCases.get(indexCase).getCandidats()){
-            //System.out.println("Candidat courant: " + candidat);
-            if(singletonCacheOneCandidate(indexCase,candidat,ligne,colonne,bloc)){
-                break;
+        try {
+
+            if (ensembleCases.get(indexCase).estModifiable()) {
+                int tailleAuCarree = taille * taille;
+
+                int i = indexCase / tailleAuCarree;
+                ArrayList<Case> ligne = this.getLine(i);
+                int j = indexCase - i * tailleAuCarree;
+                ArrayList<Case> colonne = this.getColumn(j);
+                int b = (i / taille) * taille + j / taille;
+                ArrayList<Case> bloc = this.getBlock(b);
+                //System.out.println("\nCandidats de la case: " + ensembleCases.get(indexCase).getCandidats());
+                for (Integer candidat : ensembleCases.get(indexCase).getCandidats()) {
+                    //System.out.println("Candidat courant: " + candidat);
+                    if (singletonCacheOneCandidate(indexCase, candidat, ligne, colonne, bloc)) {
+                        break;
+                    }
+                }
+
             }
+            else{
+                throw new IllegalArgumentException("La case d'index" + indexCase +
+                        "est non modifiable");
+            }
+        
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
         }
         
     }
@@ -566,7 +584,7 @@ public class Grille {
         }
         
         
-        if(!(bonneSolution && tour < 5)){
+        if(!bonneSolution && tour < 15){
             for(int i = 0; i < tailleAuCarree*tailleAuCarree; i++){
                 if(g.getEnsembleCases().get(i).estModifiable()){
                    g.singletonCache(i); 
@@ -591,6 +609,110 @@ public class Grille {
     Faire une méthode de résolution purement hasardeuse ! (choix de la valeur aléatoire
     et récursivité)
     */
+    
+    /*
+    Pour les candidats proposées par le joueur, créer une grille fantome qui
+    contiendra les propositions du joueuer
+    
+    */
+    
+    /*
+    1) utiliser tous les algo(sauf singleton nu) sur toutes les cases modifiables de la grille
+    pour simplifier les candidats de chaque case
+    2) appliquer le singleton nu sur toute les cases modifiables
+    3) si le singleton nu a réussi sur au moins 1 case, on boucle les étapes 1 et 2 en 
+    enclenchant une récursion.
+    Si la grille est totalement rempli (aucune valeur non nulle), on vérifie que la grille
+    est correcte. Si la grille n'est pas correcte, on revient à l'étape de récursion précédente
+    et au lieu d'appliquer le singleton nu, on choisit une case parmi celle qui contiennent le
+    moins de candidat(au minimum 2 candidats donc singleton nu exclu) et on choisit la valeur
+    de cette case de façon aléatoire parmi ces candidats puis on boucle par récursion
+    4) Une fois la grille complète est correcte, la retourner (sans appel récursif)
+    
+    */
+    
+    public Grille solution2(){
+        Grille g = new Grille(taille,ensembleCases);
+        // Algorithmes permettant de simplifier les candidats des cases
+        
+        //Application du singleton caché
+        
+        for (int i = 0; i < g.getEnsembleCases().size(); i++){
+            if (ensembleCases.get(i).estModifiable()){
+                g.singletonCache(i);
+            }
+        }
+        
+        // Singleton nu et récursion
+        int utilisationSingletonNu = 0;
+        for (int i = 0; i < g.getEnsembleCases().size(); i++){
+            if (g.singletonNu(i)){
+                utilisationSingletonNu++;
+            }
+        }
+        if(!g.correcteEtPleine()){
+            if(utilisationSingletonNu == 0){
+                int index = 0;
+                int temp = 0;
+                while (temp < g.getEnsembleCases().size()){
+                    if (g.ensembleCases.get(temp).getCandidats().size() <
+                           g.ensembleCases.get(index).getCandidats().size()){
+                        index = temp;
+                    }
+                    if (g.ensembleCases.get(index).getCandidats().size() == 2){
+                            temp+=g.getEnsembleCases().size();
+                        }
+                    else{
+                        temp++;
+                    }
+                    
+                }
+                
+                Case c = g.getEnsembleCases().get(index);
+                Collections.shuffle(c.getCandidats());
+                // fonctionne (à priori) car la méthode getCandidat retourne
+                // directement l'ArrayList contenant les candidats et non une copie
+                c.setValeur(c.getCandidats().get(0));
+                Random ran = new Random();
+                
+                
+                
+                
+            }
+        }
+    
+        
+    }
+    
+    /**
+     * Utiliser collections.shuffle une seule fois sur chaque liste de candidats
+     *  puis récusivé pour la résolution aléatoire
+     */
+    
+    public boolean correcteEtPleine() {
+        boolean estCorrecte = true;
+        if (this.pleine()) {
+            ArrayList<Case> unit = new ArrayList<>();
+            for (int i = 0; i < taille * taille; i++) {
+                unit.add(new Case(taille, i, true));
+            }
+
+            int index = 0;
+            
+            while (estCorrecte && index < taille*taille) {
+                if (!this.getLine(index).containsAll(unit) || !this.getColumn(index).containsAll(unit)) {
+                    estCorrecte = false;
+                }
+                index++;
+            }
+        }
+        
+        return estCorrecte;
+    }
+    
+    private Grille solution2(Grille g,int indexCase, ArrayList<Integer> candidats){
+        
+    }
 }
     
       
