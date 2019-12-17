@@ -631,14 +631,13 @@ public class Grille {
     
     */
     
-    public Grille solution2(){
-        Grille g = new Grille(taille,ensembleCases);
+    public static Grille solution2(Grille g){
         // Algorithmes permettant de simplifier les candidats des cases
         
         //Application du singleton caché
         
         for (int i = 0; i < g.getEnsembleCases().size(); i++){
-            if (ensembleCases.get(i).estModifiable()){
+            if (g.ensembleCases.get(i).estModifiable()){
                 g.singletonCache(i);
             }
         }
@@ -654,13 +653,13 @@ public class Grille {
             if(utilisationSingletonNu == 0){
                 int index = 0;
                 int temp = 0;
-                while (temp < g.getEnsembleCases().size()){
+                while (temp < g.ensembleCases.size()){
                     if (g.ensembleCases.get(temp).getCandidats().size() <
                            g.ensembleCases.get(index).getCandidats().size()){
                         index = temp;
                     }
                     if (g.ensembleCases.get(index).getCandidats().size() == 2){
-                            temp+=g.getEnsembleCases().size();
+                            temp+=g.ensembleCases.size();
                         }
                     else{
                         temp++;
@@ -668,22 +667,79 @@ public class Grille {
                     
                 }
                 
-                Case c = g.getEnsembleCases().get(index);
-                Collections.shuffle(c.getCandidats());
-                // fonctionne (à priori) car la méthode getCandidat retourne
-                // directement l'ArrayList contenant les candidats et non une copie
-                c.setValeur(c.getCandidats().get(0));
-                Random ran = new Random();
-                
-                
+                Case c = g.ensembleCases.get(index);
+                Grille g1 = new Grille(g.taille,g.ensembleCases);
+                for (int candidat: c.getCandidats()){
+                    c.setValeur(candidat);
+                    c.removeCandidat(candidat);
+                    g1.ensembleCases.set(index,c);
+                    g1 = solution2(g1);
+                    if (g1.correcteEtPleine()){
+                        g = g1;
+                        break;
+                    }
+                }
                 
                 
             }
         }
-    
         
+        return g;
+    
     }
     
+    private void setCase(int index, Case c){
+        ensembleCases.set(index, c);
+    }
+    
+    private Case getCase(int index){
+        return ensembleCases.get(index);
+    }
+    
+    private void setValeurCase(int index, int valeur){
+        Case c = ensembleCases.get(index);
+        c.setValeur(valeur);
+        ensembleCases.set(index,c);
+    }
+    
+    private int getValeurCase(int index){
+        return ensembleCases.get(index).getValeur();
+    }
+    
+    private void setCandidatCase(int index, ArrayList<Integer> candidats){
+        
+        Case c = ensembleCases.get(index);
+        ArrayList<Integer> candidatsAvant = c.getCandidats();
+        for(int cand: candidatsAvant){
+            if(!candidats.contains(cand)){
+                c.removeCandidat(cand);
+            }
+        }
+        c.addCandidat(candidats);
+        ensembleCases.set(index, c);
+       
+    }
+    
+    // incomplet , solution utilisation de l'aléa
+    public static Grille solution3(Grille g,int indexDepart){
+        
+        if(!g.correcteEtPleine()){
+            if (indexDepart < g.getEnsembleCases().size()){
+                if (g.getEnsembleCases().get(indexDepart).estModifiable()) {
+                    Case c = g.getEnsembleCases().get(indexDepart);
+                    Collections.shuffle(c.getCandidats()); // à modifier, ne modifie pas l'ordre des candidats
+                    for(int candidat : c.getCandidats()){
+                        c.setValeur(candidat);
+                        
+                    }
+                }
+            }
+        }
+        
+        return g;
+    }
+    
+   
     /**
      * Utiliser collections.shuffle une seule fois sur chaque liste de candidats
      *  puis récusivé pour la résolution aléatoire
@@ -710,9 +766,7 @@ public class Grille {
         return estCorrecte;
     }
     
-    private Grille solution2(Grille g,int indexCase, ArrayList<Integer> candidats){
-        
-    }
+    
 }
     
       
