@@ -23,11 +23,25 @@ public class TestGrille {
    
     public static void main(String[] args) {
         // TODO code application logic here
-        test_solution();
+        test_ArrayList_get();
         //ldfklgjfgvfjgviojfgofhghfughdfuioghfduifhgifhfkj
    
     }
     
+    
+    public static void test_ArrayList_get(){
+        ArrayList<String> list = new ArrayList<>();
+        for (int i = 0; i < 10; i++){
+            list.add("" + i);
+        }
+        System.out.println(list);
+        String str = list.get(5);
+        str = "1558998";
+        System.out.println(list);
+        // Montre bien que la méthode get des ArrayList renvoie une copie de l'objet
+        // et non une référence(adresse dans l'arrayList) de l'objet
+        
+    }
     //fonctionnelle
     public static ArrayList<Integer> stringToArray(String str, String regex){
         
@@ -39,6 +53,7 @@ public class TestGrille {
         return retour;
     }
     
+    // à faire
     public static void test_solution(){
         /*
         ArrayList<Integer> one = new ArrayList<>();
@@ -54,15 +69,14 @@ public class TestGrille {
         
         Grille g = Grille.randomInitialization(17, 3);
         g.showGrille();
+        /*
         System.out.println();
         for(Case c: g.getEnsembleCases()){
             System.out.println(c.estModifiable());
         }
-        /*
-        Grille solution_de_g = g.solution();
-        System.out.println("\nSolution de la grille ci-dessus:");
-        solution_de_g.showGrille();
         */
+        
+        
         
     }
     

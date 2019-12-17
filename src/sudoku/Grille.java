@@ -558,57 +558,7 @@ public class Grille {
         } return candidatBon;
     }
      
-    public Grille solution(){
-      
-        Grille g = new Grille(taille,ensembleCases);
-        ArrayList<Case> unit = new ArrayList<>();
-        for (int i = 0; i < taille*taille; i++){
-            unit.add(new Case(taille,i,true));
-        }
-        return this.solution(g,unit,0);
-       
-    }
     
-    
-    private Grille solution(Grille g, ArrayList<Case> unit,int tour){
-        
-        boolean bonneSolution = true;
-        int tailleAuCarree = taille*taille;
-        int index = 0;
-       
-        while (bonneSolution && index < tailleAuCarree) {
-            if (!g.getLine(index).containsAll(unit) || !g.getColumn(index).containsAll(unit)) {
-                bonneSolution = false;
-            }
-            index++;
-        }
-        
-        
-        if(!bonneSolution && tour < 15){
-            for(int i = 0; i < tailleAuCarree*tailleAuCarree; i++){
-                if(g.getEnsembleCases().get(i).estModifiable()){
-                   g.singletonCache(i); 
-                }
-                
-            }
-            for(int i = 0; i < tailleAuCarree*tailleAuCarree; i++){
-                if(g.getEnsembleCases().get(i).estModifiable()){
-                   g.singletonNu(i); 
-                }
-            }
-            
-            g = this.solution(g,unit,tour+1);
-            
-        }
-        
-        return g;
-        
-    }
-    
-    /*
-    Faire une méthode de résolution purement hasardeuse ! (choix de la valeur aléatoire
-    et récursivité)
-    */
     
     /*
     Pour les candidats proposées par le joueur, créer une grille fantome qui
@@ -631,10 +581,10 @@ public class Grille {
     
     */
     
-    public static Grille solution2(Grille g){
+    public static Grille solutionAlgorithmique(Grille g){
         // Algorithmes permettant de simplifier les candidats des cases
         
-        //Application du singleton caché
+        //Application du singleton caché à toutes les cases de la grille
         
         for (int i = 0; i < g.getEnsembleCases().size(); i++){
             if (g.ensembleCases.get(i).estModifiable()){
@@ -642,15 +592,31 @@ public class Grille {
             }
         }
         
-        // Singleton nu et récursion
+        // Singleton nu 
         int utilisationSingletonNu = 0;
         for (int i = 0; i < g.getEnsembleCases().size(); i++){
             if (g.singletonNu(i)){
                 utilisationSingletonNu++;
             }
         }
+        
+        /*
+        Inutile de faire le reste si la grille est déjà correctement rempli.
+        On peut directement la renvoyer
+        */
         if(!g.correcteEtPleine()){
+            
             if(utilisationSingletonNu == 0){
+                /*
+                Si les candidats de chaque case ne peuvent pas être réduit
+                à 1 seul candidat par case (qui devient alors la valeur de
+                la case par l'application du singleton nu) alors on choisis
+                la première case que l'on trouve parmi celle ayant le moins
+                de candidats et la valeur de cette case devient l'un de ses
+                candidats (autrement dit on fait 1 test) et on recommence
+                la méthode sur toute la grille par récursion
+                
+                */
                 int index = 0;
                 int temp = 0;
                 while (temp < g.ensembleCases.size()){
@@ -667,20 +633,32 @@ public class Grille {
                     
                 }
                 
-                Case c = g.ensembleCases.get(index);
+                
+                /*
+                Création d'une copie de g pour sauvegarder l'état de g en cas
+                de "remonter de branche" lors d'une récursion. C'est en effet 
+                nécessaire ici car on teste chaque valeur possible de la case c
+                (parmi ses candidats) sans garanti que la modification appliqué
+                est la bonne, contrairement à l'utilisation des algorithmes 
+                ci-dessus qui dans le pire des cas ne faussent pas le remplissage
+                de la grille (sous réserve que ces algorithmes soient fonctionnels)
+                */
                 Grille g1 = new Grille(g.taille,g.ensembleCases);
-                for (int candidat: c.getCandidats()){
-                    c.setValeur(candidat);
-                    c.removeCandidat(candidat);
-                    g1.ensembleCases.set(index,c);
-                    g1 = solution2(g1);
+                for (int candidat: g1.getCandidatCase(index)){
+                    g1.setValeurCase(index,candidat);
+                    g1.removeCandidatCase(index,candidat);
+                    // RECURSION
+                    g1 = solutionAlgorithmique(g1);
                     if (g1.correcteEtPleine()){
                         g = g1;
                         break;
+                        /*
+                        Si g1 n'est pas correctement remplie alors on retourne
+                        à l'étape précédente (on "remonte la branche de la récursion")
+                        */
                     }
                 }
-                
-                
+               
             }
         }
         
@@ -688,24 +666,39 @@ public class Grille {
     
     }
     
+    /* Introduit pour alléger l'écriture dans certaines méthodes.
+    A usage interne uniquement.
+    */
     private void setCase(int index, Case c){
         ensembleCases.set(index, c);
     }
     
+    /* Introduit pour alléger l'écriture dans certaines méthodes.
+    A usage interne uniquement.
+    */
     private Case getCase(int index){
         return ensembleCases.get(index);
     }
     
+    /* Introduit pour alléger l'écriture dans certaines méthodes.
+    A usage interne uniquement.
+    */
     private void setValeurCase(int index, int valeur){
         Case c = ensembleCases.get(index);
         c.setValeur(valeur);
         ensembleCases.set(index,c);
     }
     
+    /* Introduit pour alléger l'écriture dans certaines méthodes.
+    A usage interne uniquement.
+    */
     private int getValeurCase(int index){
         return ensembleCases.get(index).getValeur();
     }
     
+    /* Introduit pour alléger l'écriture dans certaines méthodes.
+    A usage interne uniquement.
+    */
     private void setCandidatCase(int index, ArrayList<Integer> candidats){
         
         Case c = ensembleCases.get(index);
@@ -720,30 +713,61 @@ public class Grille {
        
     }
     
+    /* Introduit pour alléger l'écriture dans certaines méthodes.
+    A usage interne uniquement.
+    */
+    private void removeCandidatCase(int index, int candidat){
+        Case c = ensembleCases.get(index);
+        c.removeCandidat(candidat);
+        ensembleCases.set(index, c);
+    }
+    
+    /* Introduit pour alléger l'écriture dans certaines méthodes.
+    A usage interne uniquement.
+    */
+    private void addCandidatCase(int index, int candidat){
+        Case c = ensembleCases.get(index);
+        c.addCandidat(candidat);
+        ensembleCases.set(index, c);
+    }
+    
+    /* Introduit pour alléger l'écriture dans certaines méthodes.
+    A usage interne uniquement.
+    */
+    private ArrayList<Integer> getCandidatCase(int index){
+        return ensembleCases.get(index).getCandidats();
+    }
+    
     // incomplet , solution utilisation de l'aléa
-    public static Grille solution3(Grille g,int indexDepart){
+    public static Grille resolutionHasardeuse(Grille g,int indexDepart){
         
-        if(!g.correcteEtPleine()){
-            if (indexDepart < g.getEnsembleCases().size()){
-                if (g.getEnsembleCases().get(indexDepart).estModifiable()) {
-                    Case c = g.getEnsembleCases().get(indexDepart);
-                    Collections.shuffle(c.getCandidats()); // à modifier, ne modifie pas l'ordre des candidats
-                    for(int candidat : c.getCandidats()){
+        Grille g1 = new Grille(g.taille,g.ensembleCases);
+        /*
+        La ligne ci-dessus est très importante car elle permet de sauvegarder l'état
+        de la grille avant modification et donc assure que l'on puisse "remonter les
+        branches" lors de la récursion
+        */
+        if(!g1.correcteEtPleine()){
+            if (indexDepart < g1.getEnsembleCases().size()){
+                if (g1.getEnsembleCases().get(indexDepart).estModifiable()) {
+                    Case c = g1.getEnsembleCases().get(indexDepart);
+                    ArrayList<Integer> candidats = c.getCandidats();
+                    Collections.shuffle(candidats); 
+                    for(int candidat : candidats){
                         c.setValeur(candidat);
-                        
+                        g1 = resolutionHasardeuse(g1,indexDepart+1);
+                        if(g1.correcteEtPleine()){
+                            break;
+                        }
                     }
                 }
             }
         }
         
-        return g;
+        return g1;
+        
     }
     
-   
-    /**
-     * Utiliser collections.shuffle une seule fois sur chaque liste de candidats
-     *  puis récusivé pour la résolution aléatoire
-     */
     
     public boolean correcteEtPleine() {
         boolean estCorrecte = true;
