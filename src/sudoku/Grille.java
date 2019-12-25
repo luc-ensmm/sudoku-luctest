@@ -737,64 +737,38 @@ public class Grille {
         return ensembleCases.get(index).getCandidats();
     }
     
+    // fonctionne seulement si tous les valeurs correctes des cases modifiables sont présentes
+    // parmi les candidats !!!!!!!!!!!!!!!!!!!
     
-    private static int compteur = 0;
-    public static boolean estEgalALaSolution = false;
-    
-    // fonctionne !!!!!!!!!!!!!!!!!!!
-    public static Grille resolutionHasardeuse(Grille g,int indexDepart,Grille solution){
+    public static Grille resolutionHasardeuse(Grille g,int indexDepart){
         
-        g.showGrille();
-        System.out.println("\n");
         if(!g.correcteEtPleine()){
-            
             if (indexDepart < g.getEnsembleCases().size()){
                 if (g.getEnsembleCases().get(indexDepart).estModifiable()) {
                     Grille g1 = new Grille(g.getTaille(),g.getEnsembleCases());
                     /*
                     La ligne ci-dessus est très importante car elle permet de sauvegarder l'état
-                    de la grille avant modification et donc assure que l'on puisse "remonter les
-                    branches" lors de la récursion
+                    de la grille avant modification et donc assure que l'on puisse backtrack
+                    lors de la récursion
                      */
                     ArrayList<Integer> candidats = g1.getCandidatCase(indexDepart);
-                    Collections.shuffle(candidats); 
+                    Collections.shuffle(candidats); // aléa
                     for(int candidat : candidats){
                         g1.setValeurCase(indexDepart, candidat);
-                        System.out.println("Test du candidat " + candidat + " dans la case " + indexDepart +
-                                "\nPlongée dans la case " + (indexDepart+1));
-                        compteur++;
-                        g1 = resolutionHasardeuse(g1,indexDepart+1,solution);
-                        
-                        
+                        g1 = resolutionHasardeuse(g1,indexDepart+1);
+                     
                         if(g1.correcteEtPleine()){
                             g = g1; // on valide les modifications si g1 est bonne
-                            System.out.println("La grille est correcte et pleine");
                             break;
-                        }
-                        if(g == solution || g1 == solution){
-                            estEgalALaSolution = true;
-                            System.out.println("La grille est bien égal à la solution pour l'appel #" + compteur);
-                            break;
-                        }
-                        else{
-                            g1 = g;
                         }
                     } 
                 }
                 else{
-                    System.out.println("Case " + indexDepart + " non modifiable.\nPlongée dans la case " + (indexDepart+1));
-                    compteur++;
-                    g = resolutionHasardeuse(g,indexDepart+1,solution);
-                    
+                    g = resolutionHasardeuse(g,indexDepart+1);   
                 }
             }
-            // si indexDepart > size() et que !g1.correcteEtPleine alors g1 est pleine mais pas 
-            // correcte. Dans ce cas on "remonte la branche de récursion" et on retourne g1 = g.
-            // Pour cela il suffit juste de continuer jusqu'au return sans modifier g1
         }
         
-        
-        System.out.println("Remonté dans la case " + (indexDepart-1));
         return g;
         
     }

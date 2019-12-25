@@ -58,17 +58,7 @@ public class TestGrille {
     
     // à faire
     public static void test_solution(){
-        /*
-        ArrayList<Integer> one = new ArrayList<>();
-        ArrayList<Integer> two = new ArrayList<>();
-        for(int i = 0; i < 5; i++){
-            one.add(i);
-            two.add(4-i);
-        }
         
-        System.out.println(one.containsAll(two));
-        
-        */
         
         ArrayList<Case> listetest = new ArrayList<>();
         listetest.add(new Case(2,0,stringToArray("3 4"," "),true));
@@ -88,40 +78,16 @@ public class TestGrille {
         listetest.add(new Case(2,0,stringToArray("2 4"," "),true));
         listetest.add(new Case(2,0,stringToArray("2 4"," "),true));
         
-      
-        ArrayList<Case> listetest2 = new ArrayList<>();
-        listetest2.add(new Case(2,3,stringToArray("3 4"," "),true));
-        listetest2.add(new Case(2,4,stringToArray("3 4"," "),true));
-        listetest2.add(new Case(2,2,stringToArray("1 3 4"," "),true));
-        listetest2.add(new Case(2,1,stringToArray(""," "),false));
-        listetest2.add(new Case(2,2,stringToArray(""," "),false));
-        listetest2.add(new Case(2,1,stringToArray("1 3 4"," "),true));
-        listetest2.add(new Case(2,3,stringToArray("3 4"," "),true));
-        listetest2.add(new Case(2,4,stringToArray("4"," "),true));
-        listetest2.add(new Case(2,4,stringToArray("4"," "),true));
-        listetest2.add(new Case(2,2,stringToArray("2"," "),true));
-        listetest2.add(new Case(2,1,stringToArray("1 2 4"," "),true));
-        listetest2.add(new Case(2,3,stringToArray(""," "),false));
-        listetest2.add(new Case(2,1,stringToArray(""," "),false));
-        listetest2.add(new Case(2,3,stringToArray("2 3 4"," "),true));
-        listetest2.add(new Case(2,4,stringToArray("2 4"," "),true));
-        listetest2.add(new Case(2,2,stringToArray("2 4"," "),true));
-        
-        Grille g1 = new Grille(2,listetest2);
-        System.out.println(g1.correcteEtPleine());
-        System.out.println(g1.pleine());
-        
         
         Grille g = new Grille(2,listetest); 
-        //g.showGrille();
+        g.showGrille();
         System.out.println("\n");
+        g = Grille.resolutionHasardeuse(g, 0);
+        g.showGrille();
         
-        g = Grille.resolutionHasardeuse(g, 0,g1);
-        System.out.println(Grille.estEgalALaSolution);
-        System.out.println();
         //g = Grille.resolutionAlgorithmique(g);
         //System.out.println("\nGrille après l'application de la résolution hasardeuse");
-        //g.showGrille();
+        
         
         /*
         System.out.println();
