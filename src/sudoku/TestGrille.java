@@ -23,7 +23,7 @@ public class TestGrille {
    
     public static void main(String[] args) {
         // TODO code application logic here
-        test_ArrayList_get();
+        test_solution();
         //ldfklgjfgvfjgviojfgofhghfughdfuioghfduifhgifhfkj
    
     }
@@ -45,11 +45,14 @@ public class TestGrille {
     //fonctionnelle
     public static ArrayList<Integer> stringToArray(String str, String regex){
         
-        String [] elts = str.split(regex);
         ArrayList<Integer> retour =  new ArrayList<>();
-        for (int i = 0; i < elts.length; i++){
-            retour.add(Integer.parseInt(elts[i]));
+        if (str != "") {
+            String[] elts = str.split(regex);
+            for (int i = 0; i < elts.length; i++) {
+                retour.add(Integer.parseInt(elts[i]));
+            }
         }
+        
         return retour;
     }
     
@@ -67,16 +70,65 @@ public class TestGrille {
         
         */
         
-        Grille g = Grille.randomInitialization(17, 3);
-        g.showGrille();
+        ArrayList<Case> listetest = new ArrayList<>();
+        listetest.add(new Case(2,0,stringToArray("3 4"," "),true));
+        listetest.add(new Case(2,0,stringToArray("3 4"," "),true));
+        listetest.add(new Case(2,0,stringToArray("1 2 4"," "),true));
+        listetest.add(new Case(2,1,stringToArray(""," "),false));
+        listetest.add(new Case(2,2,stringToArray(""," "),false));
+        listetest.add(new Case(2,0,stringToArray("1 3 4"," "),true));
+        listetest.add(new Case(2,0,stringToArray("3 4"," "),true));
+        listetest.add(new Case(2,0,stringToArray("4"," "),true));
+        listetest.add(new Case(2,0,stringToArray("4"," "),true));
+        listetest.add(new Case(2,0,stringToArray("2"," "),true));
+        listetest.add(new Case(2,0,stringToArray("1 2 4"," "),true));
+        listetest.add(new Case(2,3,stringToArray(""," "),false));
+        listetest.add(new Case(2,1,stringToArray(""," "),false));
+        listetest.add(new Case(2,0,stringToArray("2 3 4"," "),true));
+        listetest.add(new Case(2,0,stringToArray("2 4"," "),true));
+        listetest.add(new Case(2,0,stringToArray("2 4"," "),true));
+        
+      
+        ArrayList<Case> listetest2 = new ArrayList<>();
+        listetest2.add(new Case(2,3,stringToArray("3 4"," "),true));
+        listetest2.add(new Case(2,4,stringToArray("3 4"," "),true));
+        listetest2.add(new Case(2,2,stringToArray("1 3 4"," "),true));
+        listetest2.add(new Case(2,1,stringToArray(""," "),false));
+        listetest2.add(new Case(2,2,stringToArray(""," "),false));
+        listetest2.add(new Case(2,1,stringToArray("1 3 4"," "),true));
+        listetest2.add(new Case(2,3,stringToArray("3 4"," "),true));
+        listetest2.add(new Case(2,4,stringToArray("4"," "),true));
+        listetest2.add(new Case(2,4,stringToArray("4"," "),true));
+        listetest2.add(new Case(2,2,stringToArray("2"," "),true));
+        listetest2.add(new Case(2,1,stringToArray("1 2 4"," "),true));
+        listetest2.add(new Case(2,3,stringToArray(""," "),false));
+        listetest2.add(new Case(2,1,stringToArray(""," "),false));
+        listetest2.add(new Case(2,3,stringToArray("2 3 4"," "),true));
+        listetest2.add(new Case(2,4,stringToArray("2 4"," "),true));
+        listetest2.add(new Case(2,2,stringToArray("2 4"," "),true));
+        
+        Grille g1 = new Grille(2,listetest2);
+        System.out.println(g1.correcteEtPleine());
+        System.out.println(g1.pleine());
+        
+        
+        Grille g = new Grille(2,listetest); 
+        //g.showGrille();
+        System.out.println("\n");
+        
+        g = Grille.resolutionHasardeuse(g, 0,g1);
+        System.out.println(Grille.estEgalALaSolution);
+        System.out.println();
+        //g = Grille.resolutionAlgorithmique(g);
+        //System.out.println("\nGrille après l'application de la résolution hasardeuse");
+        //g.showGrille();
+        
         /*
         System.out.println();
         for(Case c: g.getEnsembleCases()){
             System.out.println(c.estModifiable());
         }
         */
-        
-        
         
     }
     

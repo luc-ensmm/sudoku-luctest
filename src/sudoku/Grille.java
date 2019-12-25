@@ -50,7 +50,6 @@ public class Grille {
 
     }
     
-
     
     public Grille(int taille){
         this.taille = taille;
@@ -581,7 +580,7 @@ public class Grille {
     
     */
     
-    public static Grille solutionAlgorithmique(Grille g){
+    public static Grille resolutionAlgorithmique(Grille g){
         // Algorithmes permettant de simplifier les candidats des cases
         
         //Application du singleton caché à toutes les cases de la grille
@@ -648,7 +647,7 @@ public class Grille {
                     g1.setValeurCase(index,candidat);
                     g1.removeCandidatCase(index,candidat);
                     // RECURSION
-                    g1 = solutionAlgorithmique(g1);
+                    g1 = resolutionAlgorithmique(g1);
                     if (g1.correcteEtPleine()){
                         g = g1;
                         break;
@@ -669,21 +668,21 @@ public class Grille {
     /* Introduit pour alléger l'écriture dans certaines méthodes.
     A usage interne uniquement.
     */
-    private void setCase(int index, Case c){
+    public void setCase(int index, Case c){
         ensembleCases.set(index, c);
     }
     
     /* Introduit pour alléger l'écriture dans certaines méthodes.
     A usage interne uniquement.
     */
-    private Case getCase(int index){
+    public Case getCase(int index){
         return ensembleCases.get(index);
     }
     
     /* Introduit pour alléger l'écriture dans certaines méthodes.
     A usage interne uniquement.
     */
-    private void setValeurCase(int index, int valeur){
+    public void setValeurCase(int index, int valeur){
         Case c = ensembleCases.get(index);
         c.setValeur(valeur);
         ensembleCases.set(index,c);
@@ -692,14 +691,14 @@ public class Grille {
     /* Introduit pour alléger l'écriture dans certaines méthodes.
     A usage interne uniquement.
     */
-    private int getValeurCase(int index){
+    public int getValeurCase(int index){
         return ensembleCases.get(index).getValeur();
     }
     
     /* Introduit pour alléger l'écriture dans certaines méthodes.
     A usage interne uniquement.
     */
-    private void setCandidatCase(int index, ArrayList<Integer> candidats){
+    public void setCandidatCase(int index, ArrayList<Integer> candidats){
         
         Case c = ensembleCases.get(index);
         ArrayList<Integer> candidatsAvant = c.getCandidats();
@@ -716,7 +715,7 @@ public class Grille {
     /* Introduit pour alléger l'écriture dans certaines méthodes.
     A usage interne uniquement.
     */
-    private void removeCandidatCase(int index, int candidat){
+    public void removeCandidatCase(int index, int candidat){
         Case c = ensembleCases.get(index);
         c.removeCandidat(candidat);
         ensembleCases.set(index, c);
@@ -725,7 +724,7 @@ public class Grille {
     /* Introduit pour alléger l'écriture dans certaines méthodes.
     A usage interne uniquement.
     */
-    private void addCandidatCase(int index, int candidat){
+    public void addCandidatCase(int index, int candidat){
         Case c = ensembleCases.get(index);
         c.addCandidat(candidat);
         ensembleCases.set(index, c);
@@ -734,46 +733,79 @@ public class Grille {
     /* Introduit pour alléger l'écriture dans certaines méthodes.
     A usage interne uniquement.
     */
-    private ArrayList<Integer> getCandidatCase(int index){
+    public ArrayList<Integer> getCandidatCase(int index){
         return ensembleCases.get(index).getCandidats();
     }
     
-    // incomplet , solution utilisation de l'aléa
-    public static Grille resolutionHasardeuse(Grille g,int indexDepart){
+    
+    private static int compteur = 0;
+    public static boolean estEgalALaSolution = false;
+    
+    // fonctionne !!!!!!!!!!!!!!!!!!!
+    public static Grille resolutionHasardeuse(Grille g,int indexDepart,Grille solution){
         
-        Grille g1 = new Grille(g.taille,g.ensembleCases);
-        /*
-        La ligne ci-dessus est très importante car elle permet de sauvegarder l'état
-        de la grille avant modification et donc assure que l'on puisse "remonter les
-        branches" lors de la récursion
-        */
-        if(!g1.correcteEtPleine()){
-            if (indexDepart < g1.getEnsembleCases().size()){
-                if (g1.getEnsembleCases().get(indexDepart).estModifiable()) {
-                    Case c = g1.getEnsembleCases().get(indexDepart);
-                    ArrayList<Integer> candidats = c.getCandidats();
+        g.showGrille();
+        System.out.println("\n");
+        if(!g.correcteEtPleine()){
+            
+            if (indexDepart < g.getEnsembleCases().size()){
+                if (g.getEnsembleCases().get(indexDepart).estModifiable()) {
+                    Grille g1 = new Grille(g.getTaille(),g.getEnsembleCases());
+                    /*
+                    La ligne ci-dessus est très importante car elle permet de sauvegarder l'état
+                    de la grille avant modification et donc assure que l'on puisse "remonter les
+                    branches" lors de la récursion
+                     */
+                    ArrayList<Integer> candidats = g1.getCandidatCase(indexDepart);
                     Collections.shuffle(candidats); 
                     for(int candidat : candidats){
-                        c.setValeur(candidat);
-                        g1 = resolutionHasardeuse(g1,indexDepart+1);
+                        g1.setValeurCase(indexDepart, candidat);
+                        System.out.println("Test du candidat " + candidat + " dans la case " + indexDepart +
+                                "\nPlongée dans la case " + (indexDepart+1));
+                        compteur++;
+                        g1 = resolutionHasardeuse(g1,indexDepart+1,solution);
+                        
+                        
                         if(g1.correcteEtPleine()){
+                            g = g1; // on valide les modifications si g1 est bonne
+                            System.out.println("La grille est correcte et pleine");
                             break;
                         }
-                    }
+                        if(g == solution || g1 == solution){
+                            estEgalALaSolution = true;
+                            System.out.println("La grille est bien égal à la solution pour l'appel #" + compteur);
+                            break;
+                        }
+                        else{
+                            g1 = g;
+                        }
+                    } 
+                }
+                else{
+                    System.out.println("Case " + indexDepart + " non modifiable.\nPlongée dans la case " + (indexDepart+1));
+                    compteur++;
+                    g = resolutionHasardeuse(g,indexDepart+1,solution);
+                    
                 }
             }
+            // si indexDepart > size() et que !g1.correcteEtPleine alors g1 est pleine mais pas 
+            // correcte. Dans ce cas on "remonte la branche de récursion" et on retourne g1 = g.
+            // Pour cela il suffit juste de continuer jusqu'au return sans modifier g1
         }
         
-        return g1;
+        
+        System.out.println("Remonté dans la case " + (indexDepart-1));
+        return g;
         
     }
+
     
     
-    public boolean correcteEtPleine() {
+    public boolean correcteEtPleine() { // fonctionne
         boolean estCorrecte = true;
         if (this.pleine()) {
             ArrayList<Case> unit = new ArrayList<>();
-            for (int i = 0; i < taille * taille; i++) {
+            for (int i = 1; i < taille * taille + 1; i++) {
                 unit.add(new Case(taille, i, true));
             }
 
@@ -785,6 +817,9 @@ public class Grille {
                 }
                 index++;
             }
+        }
+        else{
+            estCorrecte = false;
         }
         
         return estCorrecte;
