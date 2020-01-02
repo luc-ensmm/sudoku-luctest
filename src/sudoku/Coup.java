@@ -11,11 +11,13 @@ package sudoku;
  */
 public class Coup {
     private int position;
-    private int valeur;
+    private int valeurApres;
+    private int valeurAvant;
 
-    public Coup(int position, int valeur) {
+    public Coup(int position,int valeurAvant, int valeurApres) {
         this.position = position;
-        this.valeur = valeur;
+        this.valeurApres = valeurApres;
+        this.valeurAvant = valeurAvant;
     }
 
     public int getPosition() {
@@ -26,12 +28,20 @@ public class Coup {
         this.position = position;
     }
     
-    public int getValeur() {
-        return valeur;
+    public int getValeurApres() {
+        return valeurApres;
     }
 
-    public void setValeur(int valeur) {
-        this.valeur = valeur;
+    public void setValeurApres(int valeurApres) {
+        this.valeurApres = valeurApres;
+    }
+
+    public int getValeurAvant() {
+        return valeurAvant;
+    }
+
+    public void setValeurAvant(int valeurAvant) {
+        this.valeurAvant = valeurAvant;
     }
     
     

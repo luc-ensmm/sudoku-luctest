@@ -141,6 +141,21 @@ public class TestSudoku {
         //s.saveGame();
         Sudoku s1 = Sudoku.chargerGrille("nouvelle_grille");
         s1.afficheSudoku();
-        
+        //s1.jouerUnCoup();
+        //s1.getGrille().valeursPlausible(2, 2);
+        //s1.getGrille().valeurPlausibleColonne(2, 1);
+        //s1.getGrille().valeurPlausibleLigne(2, 1);
+        //s1.getGrille().valeurPlausibleBloc(2, 1);
+        //s1.revenirEnArriere(1);
+        //s1.jouerUnCoup();
+        //Calendar cal = Calendar.getInstance();
+        //System.out.println(cal.get(Calendar.HOUR_OF_DAY)+"h "+cal.get(Calendar.MINUTE)+"m et "+cal.get(Calendar.SECOND)+"s"); 
+    }
+    
+    public static void test_jouerAvecUnCandidat(){
+        Sudoku s1 = Sudoku.chargerGrille("nouvelle_grille");
+        s1.afficheSudoku();
+        s1.jouerUnCoupAvecCandidats();
+        s1.getGrille().candidatsEnTropColonne(3, 2);
     }
 }

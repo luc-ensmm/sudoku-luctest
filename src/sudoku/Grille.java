@@ -817,7 +817,145 @@ public class Grille {
         return estCorrecte;
     }
     
-    //test modifications
+    public boolean valeursPlausible(int lineCase, int columnCase){
+        
+        boolean valeurBonne = this.valeurPlausibleColonne(lineCase, columnCase);
+        if(this.valeurPlausibleColonne(lineCase, columnCase) == true){
+            valeurBonne = this.valeurPlausibleColonne(lineCase, columnCase);
+            if (this.valeurPlausibleLigne(lineCase, columnCase) == true){
+                valeurBonne = this.valeurPlausibleLigne(lineCase, columnCase);
+                if(this.valeurPlausibleBloc(lineCase, columnCase) == true){
+                    valeurBonne = this.valeurPlausibleBloc(lineCase, columnCase);
+                }
+            }
+        }
+         return valeurBonne;
+    }
+     
+    public boolean valeurPlausibleColonne (int lineCase, int columnCase){
+        boolean valeurBonneDansColonne = true;
+        ArrayList<Case> column = this.getColumn(columnCase);
+        int i = 0;
+        while(i<column.size() && valeurBonneDansColonne == true){
+            if(i!=(lineCase)){
+                valeurBonneDansColonne = !column.get(lineCase).equals(column.get(i));
+                //System.out.println(i);
+            } i++;
+        }System.out.println("valeurBonneDansColonne "+valeurBonneDansColonne);
+        return valeurBonneDansColonne;
+    }
+    
+    public boolean valeurPlausibleLigne(int lineCase, int columnCase){
+        boolean valeurBonneDansLigne = true;
+        ArrayList<Case> line = this.getLine(lineCase);
+        int i = 0;
+        while(i<line.size() && valeurBonneDansLigne == true){
+            if(i!=(columnCase)){
+                valeurBonneDansLigne = !line.get(columnCase).equals(line.get(i));
+                System.out.println(i);
+            }i++;
+        }System.out.println("valeurBonneDansLigne "+valeurBonneDansLigne);
+        return valeurBonneDansLigne;
+    }
+    
+    public boolean valeurPlausibleBloc(int lineCase, int columnCase){
+        boolean valeurBonneDansBloc = true;
+        int bloc = ((lineCase)/taille)*taille + (columnCase)/taille;
+        System.out.println("bloc "+bloc);
+        ArrayList<Case> block = this.getBlock(bloc);
+        int lignePremiereCaseBloc = ((lineCase)/taille)*taille;
+        System.out.println("lignePremiereCaseBloc "+lignePremiereCaseBloc);
+        
+        int colonnePremiereCaseBloc = ((columnCase)/taille)*taille;
+        System.out.println("colonnePremiereCaseBloc "+colonnePremiereCaseBloc);
+        
+        int positionCaseDansBloc = ((lineCase)-lignePremiereCaseBloc)*taille + (columnCase)-colonnePremiereCaseBloc;
+        System.out.println("positionCaseDansBloc "+positionCaseDansBloc);
+        int i = 0;
+        while(i<block.size() && valeurBonneDansBloc == true){
+            if(i!=positionCaseDansBloc){
+                valeurBonneDansBloc = !block.get(positionCaseDansBloc).equals(block.get(i));
+                System.out.println(i);
+            }
+            i++;
+        }System.out.println("valeurBonneDansBloc "+valeurBonneDansBloc);
+        return valeurBonneDansBloc;
+    }
+    
+    public ArrayList<Integer> candidatsEnTropColonne (int lineCase, int columnCase){
+        ArrayList<Integer> candidatsEnTrop = new ArrayList<Integer>();
+        //int position_case = taille*taille*lineCase + columnCase;
+        //ArrayList<Integer> candidatsCourant = this.getEnsembleCases().get(position_case).getCandidats();
+        //boolean valeurBonneDansColonne = true;
+        ArrayList<Case> column = this.getColumn(columnCase);
+        int i = 0;
+            while(i<column.size()){
+                if(i!=(lineCase)){
+                    candidatsEnTrop.add(this.getEnsembleCases().get(lineCase).candidatDejaPresent(this.getEnsembleCases().get(i)));
+                    System.out.println("candidats en trop colonne "+this.getEnsembleCases().get(lineCase).candidatDejaPresent(this.getEnsembleCases().get(i)));
+                } i++;
+            }System.out.println("candidats en trop colonne "+candidatsEnTrop);
+            
+        return candidatsEnTrop;
+    }
+
+    public ArrayList<Integer> candidatsEnTropLigne (int lineCase, int columnCase){
+        ArrayList<Integer> candidatsEnTrop = new ArrayList<Integer>();
+        int position_case = taille*taille*lineCase + columnCase;
+        boolean valeurBonneDansLigne = true;
+        ArrayList<Case> line = this.getLine(lineCase);
+        int i = 0;
+        while(i<line.size()){
+            if(i!=(columnCase)){
+                candidatsEnTrop.add(this.getEnsembleCases().get(columnCase).candidatDejaPresent(this.getEnsembleCases().get(i)));  
+            }i++;
+        }System.out.println("candidats en trop ligne "+candidatsEnTrop);
+        return candidatsEnTrop;
+    }
+    
+    public ArrayList<Integer> candidatsEnTropBloc (int lineCase, int columnCase){
+        ArrayList<Integer> candidatsEnTrop = new ArrayList<Integer>();
+        //int position_case = taille*taille*lineCase + columnCase;
+        //boolean valeurBonneDansBloc = true;
+        int bloc = ((lineCase)/taille)*taille + (columnCase)/taille;
+        System.out.println("bloc "+bloc);
+        ArrayList<Case> block = this.getBlock(bloc);
+        int lignePremiereCaseBloc = ((lineCase)/taille)*taille;
+        System.out.println("lignePremiereCaseBloc "+lignePremiereCaseBloc);
+        
+        int colonnePremiereCaseBloc = ((columnCase)/taille)*taille;
+        System.out.println("colonnePremiereCaseBloc "+colonnePremiereCaseBloc);
+        
+        int positionCaseDansBloc = ((lineCase)-lignePremiereCaseBloc)*taille + (columnCase)-colonnePremiereCaseBloc;
+        System.out.println("positionCaseDansBloc "+positionCaseDansBloc);
+        int i = 0;
+        while(i<block.size()){
+            if(i!=positionCaseDansBloc){
+                candidatsEnTrop.add(this.getEnsembleCases().get(positionCaseDansBloc).candidatDejaPresent(this.getEnsembleCases().get(i)));
+            }
+            i++;
+        }System.out.println("candidats en trop bloc "+candidatsEnTrop);
+        return candidatsEnTrop;
+    }
+    
+    public ArrayList<Integer> candidatsEnTrop(int lineCase, int columnCase){
+        ArrayList<Integer> candidatsAEnlever1 = this.candidatsEnTropColonne(lineCase, columnCase);
+        ArrayList<Integer> candidatsAEnlever2 = this.candidatsEnTropLigne(lineCase, columnCase);
+        ArrayList<Integer> candidatsAEnlever3 = this.candidatsEnTropBloc(lineCase, columnCase);
+        for (int i = 0; i<candidatsAEnlever2.size(); i++){
+            if(candidatsAEnlever1.contains(candidatsAEnlever2.get(i))){
+                candidatsAEnlever1.add(candidatsAEnlever2.get(i));
+            }
+        }
+        for (int j = 0; j<candidatsAEnlever3.size(); j++){
+            if(candidatsAEnlever1.contains(candidatsAEnlever3.get(j))){
+                candidatsAEnlever1.add(candidatsAEnlever3.get(j));
+            }
+        }System.out.println("candidats a enlever1 "+candidatsAEnlever1);
+        return candidatsAEnlever1;
+    }
+
+    
 }
     
       
