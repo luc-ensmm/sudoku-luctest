@@ -29,11 +29,11 @@ public class Case {
     
     public Case(int taille, int valeur, boolean estModifiable){
         ArrayList<Integer> c = new ArrayList<>();
-        for (int i = 1; i <= taille*taille; i++){
+        /*for (int i = 1; i <= taille*taille; i++){
             if (i != valeur) {
-                c.add(i);
+                c.add(0);
             }
-        }
+        }*/
         
         this.valeur = valeur;
         this.taille = taille;
@@ -102,7 +102,18 @@ public class Case {
         }
     }
     
-
+    public void addCandidat2(ArrayList<Integer> autreCandidats){
+        for(int i = 0; i<autreCandidats.size(); i++){
+            Integer candidat = autreCandidats.get(i);
+            this.addCandidat(candidat);
+        }
+    }
+    
+    public void resteUnCandidat(){
+        if (this.candidats.size() == 1){
+            this.setValeur(candidats.get(0));
+        }
+    }
     public boolean estModifiable() {
         return estModifiable;
     }
@@ -147,7 +158,19 @@ public class Case {
     public Case clone(){
         return new Case(taille,valeur,candidats,estModifiable);
     }
-   
     
-    
+    public int candidatDejaPresent (Case other) { 
+        Integer candidatEnTrop = 0;
+        if(other.estModifiable() == false){
+        //while (i<other.candidats.size() && egale == false){
+            for (int i = 0; i<this.getCandidats().size(); i++){
+                if (this.getCandidats().get(i) == other.getValeur()) {
+                    System.out.print("candidat deja présent "+this.getCandidats().get(i));
+                    candidatEnTrop = this.getCandidats().get(i);
+                }   
+            }//System.out.println("candidats en trop "+candidatEnTrop);
+        }return candidatEnTrop;    
+    }
+    //on compare les candidats d'une case proposés par un joueur à une autre case non modifiable donc sa valeur est fixe
+    //ainsi il ne peut y avoir des candidats de même valeur car cette case non modifiable provient de la grille de départ
 }

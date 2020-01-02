@@ -5,6 +5,8 @@
  */
 package sudoku;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author yannE
@@ -18,11 +20,17 @@ public class TestCase {
         // TODO code application logic here
         
         int taille = 3;
-        Case c1 = new Case(taille,2,true);
+        Case c1 = new Case(taille,2,false);
         System.out.println(c1.getCandidats());
         Case c2 = new Case(taille,0,true);
         System.out.println(c2.getCandidats());
-        
+        ArrayList<Integer> lesCandidats = new ArrayList<Integer>();
+        lesCandidats.add(6);
+        lesCandidats.add(4);
+        lesCandidats.add(2);
+        c2.addCandidat2(lesCandidats);
+        System.out.println(c2.getCandidats());
+        c2.candidatDejaPresent(c1);
     }
     
 }
