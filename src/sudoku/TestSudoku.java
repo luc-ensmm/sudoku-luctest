@@ -18,7 +18,7 @@ public class TestSudoku {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        test_sudokuSauvegarde();
+        test_sudokuJouable2();
     }
     
     
@@ -65,6 +65,34 @@ public class TestSudoku {
         Joueur j = new Joueur("Nom",0);
         Sudoku s = new Sudoku(j,uneGrille,grilleSolution);
         s.play();
+    }
+    
+    public static void test_sudokuJouable2(){
+        ArrayList<Case> testList = new ArrayList<>();
+        int taille = 2;
+        testList.add(new Case(taille,1,new ArrayList<Integer>(),false));
+        testList.add(new Case(taille,0,new ArrayList<Integer>(),true));
+        testList.add(new Case(taille,0,new ArrayList<Integer>(),true));
+        testList.add(new Case(taille,2,new ArrayList<Integer>(),false));
+        testList.add(new Case(taille,0,new ArrayList<Integer>(),true));
+        testList.add(new Case(taille,4,new ArrayList<Integer>(),false));
+        testList.add(new Case(taille,3,new ArrayList<Integer>(),false));
+        testList.add(new Case(taille,1,new ArrayList<Integer>(),false));
+        testList.add(new Case(taille,4,new ArrayList<Integer>(),false));
+        testList.add(new Case(taille,1,new ArrayList<Integer>(),false));
+        testList.add(new Case(taille,2,new ArrayList<Integer>(),false));
+        testList.add(new Case(taille,0,new ArrayList<Integer>(),true));
+        testList.add(new Case(taille,3,new ArrayList<Integer>(),false));
+        testList.add(new Case(taille,0,new ArrayList<Integer>(),true));
+        testList.add(new Case(taille,0,new ArrayList<Integer>(),true));
+        testList.add(new Case(taille,4,new ArrayList<Integer>(),false));
+        
+        Grille laGrille = new Grille(taille,testList);
+        Grille laSolution = Grille.resolutionHasardeuse(laGrille, 0);
+        Joueur j = new Joueur("No name");
+        Sudoku s = new Sudoku(j,laGrille,laSolution);
+        s.play();
+        
     }
     
     public static void test_sudokuSauvegarde(){

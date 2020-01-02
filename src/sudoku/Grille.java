@@ -585,11 +585,7 @@ public class Grille {
         
         //Application du singleton caché à toutes les cases de la grille
         
-        for (int i = 0; i < g.getEnsembleCases().size(); i++){
-            if (g.ensembleCases.get(i).estModifiable()){
-                g.singletonCache(i);
-            }
-        }
+        
         
         // Singleton nu 
         int utilisationSingletonNu = 0;
@@ -603,6 +599,7 @@ public class Grille {
         Inutile de faire le reste si la grille est déjà correctement rempli.
         On peut directement la renvoyer
         */
+        System.out.println("Utilisation du singleton nu = " + utilisationSingletonNu);
         if(!g.correcteEtPleine()){
             
             if(utilisationSingletonNu == 0){
@@ -658,6 +655,17 @@ public class Grille {
                     }
                 }
                
+            }
+        }
+        
+        g.showGrille();
+        System.out.println("\nEtat des cases après une étape");
+        for(Case c: g.getEnsembleCases()){
+            System.out.println(c);
+        }
+        for (int i = 0; i < g.getEnsembleCases().size(); i++){
+            if (g.ensembleCases.get(i).estModifiable()){
+                g.singletonCache(i);
             }
         }
         
@@ -739,8 +747,19 @@ public class Grille {
     
     // fonctionne seulement si tous les valeurs correctes des cases modifiables sont présentes
     // parmi les candidats !!!!!!!!!!!!!!!!!!!
-    
     public static Grille resolutionHasardeuse(Grille g,int indexDepart){
+        
+        // assure que toutes les cases aient l'ensemble des candidats pour s'assurer du
+        // bon fonctionnement de la méthode 
+        if (indexDepart == 0){
+            ArrayList<Integer> allCandidates = new ArrayList<>();
+            for (int i = 0; i < g.getTaille() * g.getTaille(); i++) {
+                allCandidates.add(i + 1);
+            }
+            for (int i = 0; i < g.getEnsembleCases().size(); i++) {
+                g.setCandidatCase(i, allCandidates);
+            }
+        }
         
         if(!g.correcteEtPleine()){
             if (indexDepart < g.getEnsembleCases().size()){
@@ -772,9 +791,8 @@ public class Grille {
         return g;
         
     }
-
     
-    
+   
     public boolean correcteEtPleine() { // fonctionne
         boolean estCorrecte = true;
         if (this.pleine()) {

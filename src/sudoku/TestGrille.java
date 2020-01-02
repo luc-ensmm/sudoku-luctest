@@ -23,7 +23,7 @@ public class TestGrille {
    
     public static void main(String[] args) {
         // TODO code application logic here
-        test_solution();
+        test_solutionAlgorithmique();
         //ldfklgjfgvfjgviojfgofhghfughdfuioghfduifhgifhfkj
    
     }
@@ -56,8 +56,8 @@ public class TestGrille {
         return retour;
     }
     
-    // à faire
-    public static void test_solution(){
+    
+    public static void test_solutionHasardeuse(){
         
         
         ArrayList<Case> listetest = new ArrayList<>();
@@ -85,7 +85,43 @@ public class TestGrille {
         g = Grille.resolutionHasardeuse(g, 0);
         g.showGrille();
         
-        //g = Grille.resolutionAlgorithmique(g);
+        
+    }
+    
+    public static void test_solutionAlgorithmique(){
+        
+        
+        ArrayList<Case> listetest = new ArrayList<>();
+        listetest.add(new Case(2,0,stringToArray("3 4"," "),true));
+        listetest.add(new Case(2,0,stringToArray("3 4"," "),true));
+        listetest.add(new Case(2,0,stringToArray("1 2 4"," "),true));
+        listetest.add(new Case(2,1,stringToArray(""," "),false));
+        listetest.add(new Case(2,2,stringToArray(""," "),false));
+        listetest.add(new Case(2,0,stringToArray("1 3 4"," "),true));
+        listetest.add(new Case(2,0,stringToArray("3 4"," "),true));
+        listetest.add(new Case(2,0,stringToArray("4"," "),true));
+        listetest.add(new Case(2,0,stringToArray("4"," "),true));
+        listetest.add(new Case(2,0,stringToArray("2"," "),true));
+        listetest.add(new Case(2,0,stringToArray("1 2 4"," "),true));
+        listetest.add(new Case(2,3,stringToArray(""," "),false));
+        listetest.add(new Case(2,1,stringToArray(""," "),false));
+        listetest.add(new Case(2,0,stringToArray("2 3 4"," "),true));
+        listetest.add(new Case(2,0,stringToArray("2 4"," "),true));
+        listetest.add(new Case(2,0,stringToArray("2 4"," "),true));
+        
+        
+        Grille g = new Grille(2,listetest); 
+        //g.showGrille();
+        System.out.println("\n");
+        g = Grille.resolutionAlgorithmique(g);
+        g.showGrille();
+        System.out.println("Etat des cases après la résolution");
+        for(Case c: g.getEnsembleCases()){
+            System.out.println(c);
+        }
+        
+        
+        
         //System.out.println("\nGrille après l'application de la résolution hasardeuse");
         
         

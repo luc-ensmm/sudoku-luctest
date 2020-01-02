@@ -18,6 +18,11 @@ public class Joueur {
         this.nom = nom;
         this.score = score;
     }
+    
+    public Joueur(String nom){
+        this.nom = nom;
+        this.score = 0;
+    }
 
     public String getNom() {
         return nom;
