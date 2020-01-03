@@ -81,7 +81,7 @@ public class Grille {
         
         for (Integer j: randomIndex){
             
-            Case c = g.ensembleCases.get(j);
+            Case c = g.ensembleCases.get(j); //peut être préciser si j représent la position de la case
             ArrayList<Integer> candidats = c.getCandidats();
             Collections.shuffle(candidats);
             int valeur_c = candidats.remove(0);
@@ -268,7 +268,7 @@ public class Grille {
         
         int tailleAuCarree = taille*taille;
         int t = taille*tailleAuCarree;
-        
+        System.out.println("___________");
         for (int i = 0; i < taille; i++) {
             for (int k = i*t; k<(i+1)*t; k++){
                 if ((k+1)%(taille*taille)==0){
@@ -278,7 +278,7 @@ public class Grille {
                     System.out.print(this.ensembleCases.get(k).getValeur()+" |");
                 }
             }
-            System.out.println("-------------------------");
+            System.out.println("___________");
         }
     
     }
@@ -297,7 +297,7 @@ public class Grille {
         
         return estPleine;
     }
-
+    
     @Override
     public int hashCode() {
         int hash = 7;
@@ -884,17 +884,13 @@ public class Grille {
     
     public ArrayList<Integer> candidatsEnTropColonne (int lineCase, int columnCase){
         ArrayList<Integer> candidatsEnTrop = new ArrayList<Integer>();
-        //int position_case = taille*taille*lineCase + columnCase;
-        //ArrayList<Integer> candidatsCourant = this.getEnsembleCases().get(position_case).getCandidats();
-        //boolean valeurBonneDansColonne = true;
         ArrayList<Case> column = this.getColumn(columnCase);
         int i = 0;
             while(i<column.size()){
-                if(i!=(lineCase)){
-                    candidatsEnTrop.add(this.getEnsembleCases().get(lineCase).candidatDejaPresent(this.getEnsembleCases().get(i)));
-                    System.out.println("candidats en trop colonne "+this.getEnsembleCases().get(lineCase).candidatDejaPresent(this.getEnsembleCases().get(i)));
+                if(i!=(lineCase) && column.get(lineCase).candidatDejaPresent(column.get(i)) != 0 ){
+                    candidatsEnTrop.add(column.get(lineCase).candidatDejaPresent(column.get(i)));
                 } i++;
-            }System.out.println("candidats en trop colonne "+candidatsEnTrop);
+            }//System.out.println("candidats en trop colonne "+candidatsEnTrop);
             
         return candidatsEnTrop;
     }
@@ -906,35 +902,33 @@ public class Grille {
         ArrayList<Case> line = this.getLine(lineCase);
         int i = 0;
         while(i<line.size()){
-            if(i!=(columnCase)){
-                candidatsEnTrop.add(this.getEnsembleCases().get(columnCase).candidatDejaPresent(this.getEnsembleCases().get(i)));  
+            if(i!=(columnCase) && line.get(columnCase).candidatDejaPresent(line.get(i)) != 0){
+                candidatsEnTrop.add(line.get(columnCase).candidatDejaPresent(line.get(i)));
             }i++;
-        }System.out.println("candidats en trop ligne "+candidatsEnTrop);
+        }//System.out.println("candidats en trop ligne "+candidatsEnTrop);
         return candidatsEnTrop;
     }
     
     public ArrayList<Integer> candidatsEnTropBloc (int lineCase, int columnCase){
         ArrayList<Integer> candidatsEnTrop = new ArrayList<Integer>();
-        //int position_case = taille*taille*lineCase + columnCase;
-        //boolean valeurBonneDansBloc = true;
         int bloc = ((lineCase)/taille)*taille + (columnCase)/taille;
-        System.out.println("bloc "+bloc);
+        //System.out.println("bloc "+bloc);
         ArrayList<Case> block = this.getBlock(bloc);
         int lignePremiereCaseBloc = ((lineCase)/taille)*taille;
-        System.out.println("lignePremiereCaseBloc "+lignePremiereCaseBloc);
+        //System.out.println("lignePremiereCaseBloc "+lignePremiereCaseBloc);
         
         int colonnePremiereCaseBloc = ((columnCase)/taille)*taille;
-        System.out.println("colonnePremiereCaseBloc "+colonnePremiereCaseBloc);
+        //System.out.println("colonnePremiereCaseBloc "+colonnePremiereCaseBloc);
         
         int positionCaseDansBloc = ((lineCase)-lignePremiereCaseBloc)*taille + (columnCase)-colonnePremiereCaseBloc;
-        System.out.println("positionCaseDansBloc "+positionCaseDansBloc);
+        //System.out.println("positionCaseDansBloc "+positionCaseDansBloc);
         int i = 0;
         while(i<block.size()){
-            if(i!=positionCaseDansBloc){
-                candidatsEnTrop.add(this.getEnsembleCases().get(positionCaseDansBloc).candidatDejaPresent(this.getEnsembleCases().get(i)));
+            if(i!=positionCaseDansBloc && block.get(positionCaseDansBloc).candidatDejaPresent(block.get(i)) != 0){
+                candidatsEnTrop.add(block.get(positionCaseDansBloc).candidatDejaPresent(block.get(i)));  
             }
             i++;
-        }System.out.println("candidats en trop bloc "+candidatsEnTrop);
+        }//System.out.println("candidats en trop bloc "+candidatsEnTrop);
         return candidatsEnTrop;
     }
     
@@ -943,15 +937,15 @@ public class Grille {
         ArrayList<Integer> candidatsAEnlever2 = this.candidatsEnTropLigne(lineCase, columnCase);
         ArrayList<Integer> candidatsAEnlever3 = this.candidatsEnTropBloc(lineCase, columnCase);
         for (int i = 0; i<candidatsAEnlever2.size(); i++){
-            if(candidatsAEnlever1.contains(candidatsAEnlever2.get(i))){
+            if(!candidatsAEnlever1.contains(candidatsAEnlever2.get(i))){
                 candidatsAEnlever1.add(candidatsAEnlever2.get(i));
             }
         }
         for (int j = 0; j<candidatsAEnlever3.size(); j++){
-            if(candidatsAEnlever1.contains(candidatsAEnlever3.get(j))){
+            if(!candidatsAEnlever1.contains(candidatsAEnlever3.get(j))){
                 candidatsAEnlever1.add(candidatsAEnlever3.get(j));
             }
-        }System.out.println("candidats a enlever1 "+candidatsAEnlever1);
+        }System.out.println("candidats a enlever (candidats non valide) "+candidatsAEnlever1);
         return candidatsAEnlever1;
     }
 

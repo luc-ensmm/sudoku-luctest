@@ -10,6 +10,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 
 /**
  *
@@ -45,6 +47,10 @@ public class Sudoku {
     
     public Grille getGrille() {
         return g;
+    }
+    
+    public Grille getSolution(){
+        return solution;
     }
     
     public void jouerUnCoup(){
@@ -85,19 +91,13 @@ public class Sudoku {
                     cases.get(position_case).setValeur(valeur);
                     g.setEnsembleCases(cases);
                     listeCoup.push(new Coup(position_case, valeurAvant , valeur));
-                    //System.out.println((ligne/taille)*taille+colonne/taille);
-                    System.out.println("ligne "+ligne);
-                    System.out.println("colonne "+colonne);
-                    g.valeursPlausible(ligne, colonne);
-                    /*if(g.valeursPlausible(ligne, colonne) == true){
-                        listeCoup.push(new Coup(position_case,taille, valeur));
-                    } else {
-                        //cases.get(position_case).setValeur(valeurInitiale);
-                        //g.setEnsembleCases(cases);
-                        System.out.println("la valeur proposée n'est pas possible");
-                    }*/
-                    
-                    
+                    //System.out.println("ligne "+ligne);
+                    //System.out.println("colonne "+colonne);
+                    //g.valeursPlausible(ligne, colonne);
+                    if(g.valeursPlausible(ligne, colonne) == false){
+                        System.out.println("la valeur proposée n'est pas possible veuillez changer la valeur");
+                    } 
+    
                 }
             }
         
@@ -246,6 +246,10 @@ public class Sudoku {
     public void afficheSudoku(){
         this.g.afficheGrille();
     }
+    
+    public void afficheSolution(){
+        this.solution.afficheGrille();
+    }
         
     public void revenirEnArriere(int nbCoupsJoues){
         System.out.println(listeCoup.size());
@@ -265,13 +269,131 @@ public class Sudoku {
         } this.afficheSudoku();
     }
         
-     public void jouerUnCoupAvecCandidats(){ //a finir
+     public void jouerUnCoupAvecCandidats(){
         
         int taille = g.getTaille();
         int ligne = -1;
         int colonne = -1;
         
-            //System.out.println("Veuillez entrer la ligne et la colonne de votre case:");
+            System.out.println("Veuillez entrer la ligne et la colonne de votre case:");
+            while (ligne < 1 || ligne > taille*taille) {
+            
+                System.out.print("Ligne(1 à " + taille*taille + "):");
+                ligne = Clavier.Clavier.getInt();
+            }
+        ligne-=1;
+            while(colonne < 1 || colonne > taille*taille) {
+        
+                System.out.print("Colonne(1 à " + taille*taille + "):");
+                colonne = Clavier.Clavier.getInt();
+        
+            }
+        colonne-=1;
+        String mot = "oui";
+        ArrayList<Integer> lesCandidats = new ArrayList<Integer>();
+        int unCandidat;
+        int position_case = taille*taille*ligne + colonne;
+        if(this.getGrille().getEnsembleCases().get(position_case).estModifiable() == true){
+            while (mot.equals("oui") && lesCandidats.size()<taille*taille) {
+                System.out.print("Entrer la valeur d'un candidat de la case (1 à " + taille*taille +"):");
+                unCandidat = Clavier.Clavier.getInt();
+                if(!lesCandidats.contains(unCandidat) && unCandidat<=taille*taille && !this.g.getEnsembleCases().get(position_case).getCandidats().contains(unCandidat)){
+                    lesCandidats.add(unCandidat);
+                    
+                    System.out.println("Voulez vous ajouter d'autres candidats ? (oui ou non)");
+                    mot = Clavier.Clavier.getString();
+                    
+                } else{
+                    System.out.println("le candidat proposé fait déjà parti des candidats de la case ou sa valeur n'est pas valide");
+                }
+            } 
+        this.g.getEnsembleCases().get(position_case).addCandidat2(lesCandidats);
+        System.out.println("candidats de la case "+this.g.getEnsembleCases().get(position_case).getCandidats());
+        this.getGrille().candidatsEnTrop(ligne, colonne);
+        //this.supprimerCandidatsEnTrop(ligne, colonne); //méthode qu'il convient d'utiliser sur une grille de taille 3 minimum sinon pas d'intérêt
+        this.g.getEnsembleCases().get(position_case).resteUnCandidat();
+        
+        } else {
+            System.out.println("la case sélectionnée n'est pas modifiable");
+        }
+    }
+     
+    public void enleverCandidat(){
+        int taille = g.getTaille();
+        int ligne = -1;
+        int colonne = -1;
+        int indiceCandidatEnlever;
+            System.out.println("enlever candidat(s)");
+            System.out.println("Veuillez entrer la ligne et la colonne de votre case:");
+            while (ligne < 1 || ligne > taille*taille) {
+            
+                System.out.print("Ligne(1 à " + taille*taille + "):");
+                ligne = Clavier.Clavier.getInt();
+            }
+        ligne-=1;
+            while(colonne < 1 || colonne > taille*taille) {
+        
+                System.out.print("Colonne(1 à " + taille*taille + "):");
+                colonne = Clavier.Clavier.getInt();
+        
+            }
+        colonne-=1;
+        String mot = "oui";
+        ArrayList<Integer> lesCandidats = new ArrayList<Integer>();
+        int unCandidat;
+        int position_case = taille*taille*ligne + colonne;
+        if(this.getGrille().getEnsembleCases().get(position_case).estModifiable() == true){
+            while (mot.equals("oui") && lesCandidats.size()<taille*taille) {
+                System.out.print("Entrer la valeur d'un candidat de la case (1 à " + taille*taille +"):");
+                unCandidat = Clavier.Clavier.getInt();
+                if(unCandidat<=taille*taille && this.g.getEnsembleCases().get(position_case).getCandidats().contains(unCandidat)){
+                    indiceCandidatEnlever = this.g.getEnsembleCases().get(position_case).getCandidats().indexOf(unCandidat);
+                    this.g.getEnsembleCases().get(position_case).getCandidats().remove(indiceCandidatEnlever);
+                    
+                    System.out.println("Voulez vous enlever d'autres candidats ? (oui ou non)");
+                    mot = Clavier.Clavier.getString();
+                    
+                } else{
+                    System.out.println("le candidat proposé ne fait pas parti des candidats de la case ou sa valeur n'est pas valide");
+                }
+            }
+        System.out.println("candidats de la case "+this.g.getEnsembleCases().get(position_case).getCandidats());
+        this.g.getEnsembleCases().get(position_case).resteUnCandidat();
+        
+        } else {
+            System.out.println("la case sélectionnée n'est pas modifiable");
+        }
+    }
+    
+    public void playGameWithCandidat(){
+        g.afficheGrille();
+        while(!g.pleine()){
+            this.jouerUnCoupAvecCandidats();
+            g.afficheGrille();
+        }
+        
+        if (g.equals(solution)){
+            System.out.println("Vous avez trouvé la bonne solution !");
+        } 
+        else {
+            System.out.println("Faux !");
+        }
+               
+    }
+    
+    public void supprimerCandidatsEnTrop(int lineCase, int columnCase){
+        if(!this.getGrille().candidatsEnTrop(lineCase, columnCase).isEmpty());
+            this.enleverCandidat();
+    }
+     
+    public void help1(){ //permet de savoir si la solution d'une case spécifique se trouve parmi les candidats de cette case
+        int j = 0;
+        boolean candidatBon = false;
+        int taille = this.getGrille().getTaille();
+        int ligne = -1;
+        int colonne = -1;
+        
+            System.out.println("Veuillez entrer la ligne et la colonne de votre case:");
             while (ligne < 1 || ligne > taille*taille) {
             
                 System.out.print("Ligne(1 à " + taille*taille + "):");
@@ -286,75 +408,66 @@ public class Sudoku {
         
             }
         colonne-=1;
-        String mot = "oui";
-        ArrayList<Integer> lesCandidats = new ArrayList<Integer>();
-        int unCandidat;
-        int position_case = taille*taille*ligne + colonne;
-        if(this.getGrille().getEnsembleCases().get(position_case).estModifiable() == true){
-            while (mot.equals("oui") && lesCandidats.size()<taille*taille) {
-            System.out.print("Entrer la valeur d'un candidat de la case (1 à " + taille*taille +"):");
-            unCandidat = Clavier.Clavier.getInt();
-            if(!lesCandidats.contains(unCandidat)){
-            lesCandidats.add(unCandidat);
-            System.out.println("Voulez vous ajouter d'autres candidats ?");
-            mot = Clavier.Clavier.getString();
-            System.out.println("les candidats size "+lesCandidats.size()+" taille*taille "+taille*taille);
-            
-            } else{
-                System.out.println("le candidat proposé fait déjà parti des candidats de la case");
-            }
-        } System.out.println("les candidats "+lesCandidats);
-        this.g.getEnsembleCases().get(position_case).addCandidat2(lesCandidats);
-        System.out.println("candidats de la case "+this.g.getEnsembleCases().get(position_case).getCandidats());
-        this.g.getEnsembleCases().get(position_case).resteUnCandidat();
-        System.out.println(this.g.getEnsembleCases().get(position_case).getValeur());
-        } else {
-            System.out.println("la case sélectionnée n'est pas modifiable");
-        }
-        /*int position_case = taille*taille*ligne + colonne;
-        ArrayList<Case> cases = g.getEnsembleCases();
-        int valeur = -1;
-        int valeurInitiale = cases.get(position_case).getValeur();
-        if (cases.get(position_case).estModifiable()){
-            
-            while (valeur < 1 || valeur > taille*taille) {
-                System.out.print("Entrer la valeur de la case (1 à " + taille*taille +"):");
-                valeur = Clavier.Clavier.getInt();
-                if (valeur < 1 || valeur > taille*taille){
-                    System.out.println("Valeur hors de la plage d'utilisation !");
-                }
-                else {
-                    int valeurAvant = cases.get(position_case).getValeur();
-                    cases.get(position_case).setValeur(valeur);
-                    g.setEnsembleCases(cases);
-                    listeCoup.push(new Coup(position_case, valeurAvant , valeur));
-                    //System.out.println((ligne/taille)*taille+colonne/taille);
-                    System.out.println("ligne "+ligne);
-                    System.out.println("colonne "+colonne);
-                    g.valeursPlausible(ligne, colonne);
-                    /*if(g.valeursPlausible(ligne, colonne) == true){
-                        listeCoup.push(new Coup(position_case,taille, valeur));
-                    } else {
-                        //cases.get(position_case).setValeur(valeurInitiale);
-                        //g.setEnsembleCases(cases);
-                        System.out.println("la valeur proposée n'est pas possible");
-                    }
-                    
-                    
-                }
+        int positionCase = taille*taille*ligne + colonne;
+            Case caseCourante = this.getGrille().getEnsembleCases().get(positionCase);
+            while(j<caseCourante.getCandidats().size() && candidatBon == false){
+                if (caseCourante.getCandidats().get(j) == this.getSolution().getValeurCase(positionCase) || caseCourante.getValeur() == this.getSolution().getValeurCase(positionCase)){
+                    System.out.println("la solution de la case se trouve parmi les candidats proposés ");
+                    candidatBon = true;
+                } else {
+                    System.out.println("La solution de la case ne se trouve pas parmi les candidats proposés");
+                }j++;
             }
         
-        }
-        else {
-            System.out.println("La case choisie n'est pas modifiable");
-        }*/
-       
+    }
     
+    public void help2(){ //si la case ne contient pas la bonne valeur dans ces candidats ou dans sa propre valeur elle est écrite en rouge
+        int taille = this.getGrille().getTaille();
+        int ligne;
+        int colonne;
+        for(int i = 0; i<this.getGrille().getEnsembleCases().size(); i++){
+            Case caseCourante = this.getGrille().getEnsembleCases().get(i);
+            if(!caseCourante.getCandidats().contains(this.getSolution().getValeurCase(i)) && caseCourante.getValeur() != this.getSolution().getValeurCase(i)){
+                String candidatsFaux = "\033[31m";
+                candidatsFaux+= Integer.toString(caseCourante.getValeur());
+                ligne = i/(taille*taille);
+                colonne = i-ligne*(taille*taille);
+                System.out.println("Aucun des candidats de la case ligne "+ligne+" colonne "+colonne+" ne convient. Valeur de la case en question "+candidatsFaux);
+            }  
+        }
+    }
+        
+    
+    public void help3(){ //supprime aléatoirement des candidats faux
+        int nbCandidatsSupprime;
+        int indiceCandidatSupprime;
+        int valeurBonne = 0;
+        for(int i = 0; i<this.getGrille().getEnsembleCases().size(); i++){
+            Case caseCourante = this.getGrille().getEnsembleCases().get(i);
+            if (this.getGrille().getEnsembleCases().get(i).estModifiable() == true && !caseCourante.getCandidats().isEmpty()){
+                if (caseCourante.getCandidats().contains(this.getSolution().getValeurCase(i))){
+                    valeurBonne = caseCourante.getCandidats().remove(caseCourante.getCandidats().indexOf(this.getSolution().getValeurCase(i)));
+                    //System.out.println("valeur bonne "+valeurBonne);
+                    System.out.println("candidat - valeur "+caseCourante.getCandidats());
+                }
+                Random ran1 = new Random();
+                nbCandidatsSupprime = ran1.nextInt(caseCourante.getCandidats().size()+1);
+                System.out.println("size "+caseCourante.getCandidats().size());
+                System.out.println("nbCandidatsSupprime "+nbCandidatsSupprime);
+                for(int j = 0; j<nbCandidatsSupprime; j++){
+                    Random ran2 = new Random();
+                    indiceCandidatSupprime = ran2.nextInt(caseCourante.getCandidats().size());
+                    System.out.println("indiceCandidatSupprime "+indiceCandidatSupprime);
+                    caseCourante.getCandidats().remove(indiceCandidatSupprime);
+                } 
+                if (valeurBonne != 0){
+                    caseCourante.getCandidats().add(valeurBonne);
+                    valeurBonne = 0;
+                    Collections.sort(caseCourante.getCandidats());
+                    System.out.println("caseCourante.getCandidats()"+caseCourante.getCandidats());
+                }
+            }
+        }
     }
  
-
- 
 }
-    
-    
-

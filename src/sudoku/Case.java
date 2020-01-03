@@ -96,13 +96,13 @@ public class Case {
         }
     }
     
-    public void addCandidat(ArrayList<Integer> autreCandidats){
+    public void addCandidat(ArrayList<Integer> autreCandidats){ // pas sur qu'elle marche 
         for (Integer candidat: candidats){
             this.addCandidat(candidat);
         }
     }
     
-    public void addCandidat2(ArrayList<Integer> autreCandidats){
+    public void addCandidat2(ArrayList<Integer> autreCandidats){ // celle ci fonctionne
         for(int i = 0; i<autreCandidats.size(); i++){
             Integer candidat = autreCandidats.get(i);
             this.addCandidat(candidat);
@@ -165,7 +165,7 @@ public class Case {
         //while (i<other.candidats.size() && egale == false){
             for (int i = 0; i<this.getCandidats().size(); i++){
                 if (this.getCandidats().get(i) == other.getValeur()) {
-                    System.out.print("candidat deja présent "+this.getCandidats().get(i));
+                    //System.out.print("candidat deja présent "+this.getCandidats().get(i));
                     candidatEnTrop = this.getCandidats().get(i);
                 }   
             }//System.out.println("candidats en trop "+candidatEnTrop);
@@ -173,4 +173,12 @@ public class Case {
     }
     //on compare les candidats d'une case proposés par un joueur à une autre case non modifiable donc sa valeur est fixe
     //ainsi il ne peut y avoir des candidats de même valeur car cette case non modifiable provient de la grille de départ
+    
+    /*public static String getRouge() {
+        return "\033[31m";
+    }
+ 
+    public static String getVert() {
+        return "\033[32m";
+    }*/
 }

@@ -6,6 +6,7 @@
 package sudoku;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *
@@ -18,7 +19,7 @@ public class TestSudoku {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        test_sudokuJouable2();
+        test_jouerAvecUnCandidat();
     }
     
     
@@ -148,14 +149,27 @@ public class TestSudoku {
         //s1.getGrille().valeurPlausibleBloc(2, 1);
         //s1.revenirEnArriere(1);
         //s1.jouerUnCoup();
+        //s1.play();
         //Calendar cal = Calendar.getInstance();
         //System.out.println(cal.get(Calendar.HOUR_OF_DAY)+"h "+cal.get(Calendar.MINUTE)+"m et "+cal.get(Calendar.SECOND)+"s"); 
     }
     
     public static void test_jouerAvecUnCandidat(){
         Sudoku s1 = Sudoku.chargerGrille("nouvelle_grille");
-        s1.afficheSudoku();
-        s1.jouerUnCoupAvecCandidats();
-        s1.getGrille().candidatsEnTropColonne(3, 2);
+        //s1.afficheSudoku();
+        //s1.jouerUnCoupAvecCandidats();
+        //s1.getGrille().candidatsEnTropColonne(2, 1);
+        //System.out.println("column "+s1.getGrille().getColumn(2));
+        //System.out.println("line "+s1.getGrille().getLine(2));
+        //s1.getGrille().candidatsEnTropLigne(2, 1);
+        //System.out.println("block "+s1.getGrille().getBlock(2));
+        //s1.getGrille().candidatsEnTropBloc(2, 1);
+        //s1.getGrille().candidatsEnTrop(2, 1);
+        //s1.afficheSolution();
+        //s1.help1();
+        //s1.help2();
+        //s1.help3();
+        //s1.enleverCandidat();
+        //s1.playGameWithCandidat();
     }
 }
