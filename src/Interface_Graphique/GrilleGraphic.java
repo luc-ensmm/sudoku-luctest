@@ -5,19 +5,40 @@
  */
 package Interface_Graphique;
 
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+
 /**
  *
  * @author yannE
  */
-public class Grille extends javax.swing.JFrame {
+public class GrilleGraphic extends javax.swing.JFrame {
 
     /**
      * Creates new form Grille
      */
-    public Grille() {
+    public GrilleGraphic() {
         initComponents();
+        //jTable1.setPreferredScrollableViewportSize(jTable1.getPreferredSize());
+        //jTable1.setFillsViewportHeight(true);
+        
+        System.out.println("Done");
+        
+        jTable1.setRowHeight(this.rowHeight());
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+        for (int i = 0; i < jTable1.getRowCount(); i++) {
+            jTable1.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+       
+        System.out.println(""+this.jScrollPane1.getHeight());
+        System.out.println(""+this.jTable1.getRowCount());
+        System.out.println(""+this.jScrollPane1.getHeight()/this.jTable1.getRowCount());
     }
-
+    
+    public int rowHeight(){
+        return this.jScrollPane1.getHeight()/this.jTable1.getRowCount();
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -44,7 +65,6 @@ public class Grille extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         jPanel4 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
-        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -80,32 +100,53 @@ public class Grille extends javax.swing.JFrame {
 
         jPanel3.setBackground(new java.awt.Color(153, 153, 255));
 
+        jTable1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jTable1.setForeground(new java.awt.Color(15, 0, 0));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                { new Integer(0),  new Integer(0),  new Integer(0),  new Integer(0)},
+                { new Integer(0),  new Integer(0),  new Integer(0),  new Integer(0)},
+                { new Integer(0),  new Integer(0),  new Integer(0),  new Integer(0)},
+                { new Integer(0),  new Integer(0),  new Integer(0),  new Integer(0)}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Column 1", "Column 2", "Column 3", "Column 4"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jTable1.setToolTipText("");
+        jTable1.setFillsViewportHeight(true);
+        jTable1.setPreferredSize(jScrollPane1.getPreferredSize());
+        jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jTable1.setTableHeader(null);
         jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setHeaderValue("Title 1");
+            jTable1.getColumnModel().getColumn(1).setHeaderValue("Title 2");
+            jTable1.getColumnModel().getColumn(2).setHeaderValue("null");
+            jTable1.getColumnModel().getColumn(3).setHeaderValue("Title 4");
+        }
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(61, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(156, 156, 156)
+                .addComponent(jScrollPane1)
+                .addGap(166, 166, 166))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -114,11 +155,10 @@ public class Grille extends javax.swing.JFrame {
         jPanel4.setBackground(new java.awt.Color(0, 204, 204));
         jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.LINE_AXIS));
 
-        jButton1.setText("jButton1");
+        jButton1.setText("Solution");
         jPanel4.add(jButton1);
 
         jPanel1.add(jPanel4);
-        jPanel1.add(filler6);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -128,7 +168,7 @@ public class Grille extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 493, Short.MAX_VALUE)
         );
 
         pack();
@@ -151,20 +191,24 @@ public class Grille extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Grille.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GrilleGraphic.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Grille.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GrilleGraphic.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Grille.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GrilleGraphic.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Grille.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GrilleGraphic.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Grille().setVisible(true);
+                new GrilleGraphic().setVisible(true);
+                
             }
         });
     }
@@ -177,7 +221,6 @@ public class Grille extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
-    private javax.swing.Box.Filler filler6;
     private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

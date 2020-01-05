@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+import Interface_Graphique.Menu_Principal;
+
 /**
  *
  * @author smoukoka
@@ -28,6 +30,13 @@ public class Sudoku {
         this.j = j;
         this.g = g;
         this.solution = solution;
+        this.listeCoup = new Pile();
+    }
+    
+    public Sudoku(Joueur j, Grille g){
+        this.j = j;
+        this.g  = g;
+        this.solution = Grille.resolutionHasardeuse(g, 0);
         this.listeCoup = new Pile();
     }
     
@@ -124,6 +133,16 @@ public class Sudoku {
             System.out.println("Faux !");
         }
                
+    }
+    
+    public void playInConsole(){
+        
+    }
+    
+    public void playInGraphics(){
+        
+        new Menu_Principal(this).setVisible(true);
+           
     }
     
     

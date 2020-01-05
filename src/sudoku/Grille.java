@@ -674,21 +674,21 @@ public class Grille {
     }
     
     /* Introduit pour alléger l'écriture dans certaines méthodes.
-    A usage interne uniquement.
+    
     */
     public void setCase(int index, Case c){
         ensembleCases.set(index, c);
     }
     
     /* Introduit pour alléger l'écriture dans certaines méthodes.
-    A usage interne uniquement.
+    
     */
     public Case getCase(int index){
         return ensembleCases.get(index);
     }
     
     /* Introduit pour alléger l'écriture dans certaines méthodes.
-    A usage interne uniquement.
+   
     */
     public void setValeurCase(int index, int valeur){
         Case c = ensembleCases.get(index);
@@ -697,14 +697,14 @@ public class Grille {
     }
     
     /* Introduit pour alléger l'écriture dans certaines méthodes.
-    A usage interne uniquement.
+    
     */
     public int getValeurCase(int index){
         return ensembleCases.get(index).getValeur();
     }
     
     /* Introduit pour alléger l'écriture dans certaines méthodes.
-    A usage interne uniquement.
+   
     */
     public void setCandidatCase(int index, ArrayList<Integer> candidats){
         
@@ -721,7 +721,7 @@ public class Grille {
     }
     
     /* Introduit pour alléger l'écriture dans certaines méthodes.
-    A usage interne uniquement.
+   
     */
     public void removeCandidatCase(int index, int candidat){
         Case c = ensembleCases.get(index);
@@ -730,7 +730,7 @@ public class Grille {
     }
     
     /* Introduit pour alléger l'écriture dans certaines méthodes.
-    A usage interne uniquement.
+    
     */
     public void addCandidatCase(int index, int candidat){
         Case c = ensembleCases.get(index);
@@ -739,7 +739,7 @@ public class Grille {
     }
     
     /* Introduit pour alléger l'écriture dans certaines méthodes.
-    A usage interne uniquement.
+   .
     */
     public ArrayList<Integer> getCandidatCase(int index){
         return ensembleCases.get(index).getCandidats();

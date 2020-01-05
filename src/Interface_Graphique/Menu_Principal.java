@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package Interface_Graphique;
+import sudoku.Sudoku;
 
 /**
  *
@@ -14,8 +15,14 @@ public class Menu_Principal extends javax.swing.JFrame {
     /**
      * Creates new form Menu_Principal
      */
-    public Menu_Principal() {
+    public Menu_Principal(Sudoku s) {
         initComponents();
+        this.sudoku = s;
+    }
+    
+    public Menu_Principal(){
+        initComponents();
+        this.sudoku = new Sudoku();
     }
 
     /**
@@ -36,18 +43,27 @@ public class Menu_Principal extends javax.swing.JFrame {
         jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setSize(preferredSize());
         getContentPane().setLayout(new java.awt.GridLayout());
 
         jPanel2.setBackground(new java.awt.Color(102, 204, 255));
+        jPanel2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 100, 100));
 
+        jPanel1.setPreferredSize(jPanel2.getPreferredSize());
         jPanel1.setLayout(new java.awt.GridLayout(0, 1, 1, 10));
 
-        jLabel1.setText("            SUDOKU");
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("SUDOKU");
         jLabel1.setToolTipText("");
         jPanel1.add(jLabel1);
         jLabel1.getAccessibleContext().setAccessibleName("SudokuLabel");
 
         jButton1.setText("Jouer !");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButton1);
         jButton1.getAccessibleContext().setAccessibleName("playButton");
 
@@ -64,28 +80,21 @@ public class Menu_Principal extends javax.swing.JFrame {
         jPanel1.add(jButton4);
         jButton4.getAccessibleContext().setAccessibleName("scoreButton");
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(233, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(227, 227, 227))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(77, 77, 77)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(84, Short.MAX_VALUE))
-        );
+        jPanel2.add(jPanel1);
 
         getContentPane().add(jPanel2);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        new GrilleGraphic().setVisible(true);
+        this.setVisible(false);
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -116,6 +125,7 @@ public class Menu_Principal extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                
                 new Menu_Principal().setVisible(true);
             }
         });
@@ -130,4 +140,8 @@ public class Menu_Principal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
+    
+    // More variables declaration
+    private Sudoku sudoku;
+    
 }
