@@ -19,7 +19,7 @@ public class TestSudoku {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        testSudokuGraphique();
+        test_jouerAvecUnCandidat();
     }
     
     
@@ -183,8 +183,8 @@ public class TestSudoku {
     
     public static void test_jouerAvecUnCandidat(){
         Sudoku s1 = Sudoku.chargerGrille("nouvelle_grille");
-        //s1.afficheSudoku();
-        //s1.jouerUnCoupAvecCandidats();
+        s1.afficheSudoku();
+        s1.jouerUnCoupAvecCandidats();
         //s1.getGrille().candidatsEnTropColonne(2, 1);
         //System.out.println("column "+s1.getGrille().getColumn(2));
         //System.out.println("line "+s1.getGrille().getLine(2));

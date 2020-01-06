@@ -313,7 +313,7 @@ public class Sudoku {
         int unCandidat;
         int position_case = taille*taille*ligne + colonne;
         if(this.getGrille().getEnsembleCases().get(position_case).estModifiable() == true){
-            while (mot.equals("oui") && lesCandidats.size()<taille*taille) {
+            while (mot.toLowerCase().equals("oui") && lesCandidats.size()<taille*taille) {
                 System.out.print("Entrer la valeur d'un candidat de la case (1 à " + taille*taille +"):");
                 unCandidat = Clavier.Clavier.getInt();
                 if(!lesCandidats.contains(unCandidat) && unCandidat<=taille*taille && !this.g.getEnsembleCases().get(position_case).getCandidats().contains(unCandidat)){
@@ -371,6 +371,7 @@ public class Sudoku {
                     
                     System.out.println("Voulez vous enlever d'autres candidats ? (oui ou non)");
                     mot = Clavier.Clavier.getString();
+                    mot = mot.toLowerCase();
                     
                 } else{
                     System.out.println("le candidat proposé ne fait pas parti des candidats de la case ou sa valeur n'est pas valide");

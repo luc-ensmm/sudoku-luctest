@@ -28,7 +28,7 @@ public class TestCase {
         lesCandidats.add(6);
         lesCandidats.add(4);
         lesCandidats.add(2);
-        c2.addCandidat2(lesCandidats);
+        c2.addCandidat(lesCandidats);
         System.out.println(c2.getCandidats());
         c2.candidatDejaPresent(c1);
     }

@@ -28,16 +28,9 @@ public class Case {
    
     
     public Case(int taille, int valeur, boolean estModifiable){
-        ArrayList<Integer> c = new ArrayList<>();
-        /*for (int i = 1; i <= taille*taille; i++){
-            if (i != valeur) {
-                c.add(0);
-            }
-        }*/
-        
         this.valeur = valeur;
         this.taille = taille;
-        this.candidats = c;
+        this.candidats = new ArrayList<Integer>();
         this.estModifiable = estModifiable;
     }
     
@@ -96,8 +89,8 @@ public class Case {
         }
     }
     
-    public void addCandidat(ArrayList<Integer> autreCandidats){ // pas sur qu'elle marche 
-        for (Integer candidat: candidats){
+    public void addCandidat(ArrayList<Integer> autreCandidats){  
+        for (Integer candidat: autreCandidats){
             this.addCandidat(candidat);
         }
     }
@@ -174,11 +167,4 @@ public class Case {
     //on compare les candidats d'une case proposés par un joueur à une autre case non modifiable donc sa valeur est fixe
     //ainsi il ne peut y avoir des candidats de même valeur car cette case non modifiable provient de la grille de départ
     
-    /*public static String getRouge() {
-        return "\033[31m";
-    }
- 
-    public static String getVert() {
-        return "\033[32m";
-    }*/
 }
