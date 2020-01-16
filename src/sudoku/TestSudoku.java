@@ -19,7 +19,7 @@ public class TestSudoku {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        test_jouerAvecUnCandidat();
+        test_sudokuSauvegarde();
     }
     
     

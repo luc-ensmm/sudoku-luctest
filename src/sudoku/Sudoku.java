@@ -40,18 +40,11 @@ public class Sudoku {
         this.listeCoup = new Pile();
     }
     
-    public Sudoku(Joueur j, Grille g, Pile listeCoup, Grille solution){
+    public Sudoku(Joueur j, Grille g, Grille solution, Pile listeCoup){
         this.j = j;
         this.g = g;
         this.listeCoup = listeCoup;
         this.solution = solution;
-    }
-    
-    public Sudoku(){
-        Joueur j = new Joueur("Nom",0);
-        Grille g = new Grille(0);
-        Pile listeCoup = new Pile();
-        Grille solution = new Grille(0);
     }
     
     public Grille getGrille() {
@@ -189,7 +182,7 @@ public class Sudoku {
         ArrayList<Case> ensembleDesCases = new ArrayList<Case>();
         Pile listeDesCoups = new Pile();
         ArrayList<Case> ensembleSolutionCase = new ArrayList<Case>();
-        Sudoku s = new Sudoku();
+        
         //lecture du fichier
         try{
             BufferedReader fichier = new BufferedReader (new FileReader(nomDuFichier+".txt"));//rajouter condition si txt déjà dans nom du fichier
@@ -256,10 +249,14 @@ public class Sudoku {
             Joueur joueurCourant = new Joueur(name,scoreCourant); 
             Grille grilleCourante = new Grille(taille,ensembleDesCases);
             Grille laSolution = new Grille(taille,ensembleSolutionCase);
-            s = new Sudoku(joueurCourant,grilleCourante,listeDesCoups,laSolution);
+            
         }catch (IOException e){
             e.printStackTrace();
-        } return s;
+        } 
+        
+        return new Sudoku(new Joueur(name,scoreCourant),new Grille(taille,ensembleDesCases),
+                new Grille(taille,ensembleSolutionCase),listeDesCoups);
+        
     }
     
     public void afficheSudoku(){

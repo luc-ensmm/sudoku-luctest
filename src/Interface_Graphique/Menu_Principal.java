@@ -5,6 +5,8 @@
  */
 package Interface_Graphique;
 import java.awt.event.WindowEvent;
+import sudoku.Algorithm;
+import sudoku.Joueur;
 import sudoku.Sudoku;
 
 /**
@@ -23,7 +25,7 @@ public class Menu_Principal extends javax.swing.JFrame {
     
     public Menu_Principal(){
         initComponents();
-        this.sudoku = new Sudoku();
+        this.sudoku = new Sudoku(new Joueur("Unknown"), Algorithm.randomInitialization(18, 3));
     }
 
     /**
