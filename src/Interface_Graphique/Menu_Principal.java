@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package Interface_Graphique;
+import java.awt.event.WindowEvent;
 import sudoku.Sudoku;
 
 /**
@@ -89,8 +90,9 @@ public class Menu_Principal extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        new GrilleGraphic().setVisible(true);
+        new MenuChoixGrille().setVisible(true);
         this.setVisible(false);
+        //this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         
     }//GEN-LAST:event_jButton1ActionPerformed
     

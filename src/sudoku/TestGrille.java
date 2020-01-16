@@ -23,7 +23,7 @@ public class TestGrille {
    
     public static void main(String[] args) {
         // TODO code application logic here
-        test_solutionAlgorithmique();
+        test_initialisationAleatoire();
         //ldfklgjfgvfjgviojfgofhghfughdfuioghfduifhgifhfkj
    
     }
@@ -252,11 +252,14 @@ public class TestGrille {
     //fonctionnelle
     public static void test_initialisationAleatoire(){
     
+        
         int taille = 3;
         int nbCasesImmuables = 40;
-        Grille g = Grille.randomInitialization(nbCasesImmuables,taille);
+        Grille g = Algorithm.randomInitialization(nbCasesImmuables, taille);
         System.out.println("\n\nGrille après initialisation aléatoire:");
         g.showGrille();
+
+   
         
     }
     

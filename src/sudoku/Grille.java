@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Random;
-
+import java.lang.IllegalArgumentException;
 /**
  *
  * @author smoukoka
@@ -55,68 +55,17 @@ public class Grille {
         this.taille = taille;
         ensembleCases = new ArrayList<>();
         int tailleAuCarre = taille*taille;
+        ArrayList<Integer> allCandidates = new ArrayList<>();
+        for (int i = 1; i <=tailleAuCarre; i++){
+            allCandidates.add(i);
+        }
         for (int i = 0; i < tailleAuCarre*tailleAuCarre; i++){
-            ensembleCases.add(new Case(taille,0,true));
+            ensembleCases.add(new Case(taille,0,(ArrayList<Integer>)allCandidates.clone(),true));
         }
         this.estInitialiser = false;
         
     }
-        
-    public static Grille randomInitialization(int nbCasesReveles, int taille){
-        
-        int tailleAuCarree = taille*taille;
-        Grille g = new Grille(taille);
-        ArrayList<Integer> randomIndex = new ArrayList<>();
-        int i = 0;
-        int index;
-        Random ran = new Random();
-        while (i < nbCasesReveles){
-            index = ran.nextInt(tailleAuCarree*tailleAuCarree);
-            if (!randomIndex.contains(index)){
-                randomIndex.add(index);
-                i++;
-            }
-             
-        }
-        
-        for (Integer j: randomIndex){
-            
-            Case c = g.ensembleCases.get(j); //peut être préciser si j représent la position de la case
-            ArrayList<Integer> candidats = c.getCandidats();
-            Collections.shuffle(candidats);
-            int valeur_c = candidats.remove(0);
-            c.setValeur(valeur_c);
-            c.estModifiable(false);
-            int ligne = j/tailleAuCarree;
-            int colonne = j-ligne*tailleAuCarree;
-            int bloc = (ligne/taille)*taille + colonne/taille;
-            ArrayList<Case> cLine = g.getLine(ligne); 
-            ArrayList<Case> cColumn = g.getColumn(colonne);
-            ArrayList<Case> cBlock = g.getBlock(bloc);
-            
-            for (Case d : cLine){
-                d.removeCandidat(valeur_c);
-            }
-            for (Case d : cColumn){
-                d.removeCandidat(valeur_c);
-            }
-            for (Case d : cBlock){
-                d.removeCandidat(valeur_c);
-            
-            }
-            
-            g.setLine(ligne, cLine);
-            g.setColumn(colonne,cColumn);
-            g.setBlock(bloc, cBlock); 
-            g.ensembleCases.set(j, c);
-            
-            
-        }
-        
-        return g;
-      
-    }
-    
+          
     public void singletonNuVersbose(int indexCase){
        
        Case c = ensembleCases.get(indexCase);
@@ -263,6 +212,7 @@ public class Grille {
         }
     }
     
+
   
     public void afficheGrille(){
         
@@ -581,7 +531,6 @@ public class Grille {
     */
     
     public static Grille resolutionAlgorithmique(Grille g){
-        // Algorithmes permettant de simplifier les candidats des cases
         
         //Application du singleton caché à toutes les cases de la grille
         
@@ -743,6 +692,12 @@ public class Grille {
     */
     public ArrayList<Integer> getCandidatCase(int index){
         return ensembleCases.get(index).getCandidats();
+    }
+    
+    public void setModifiableCase(int index, boolean estModifiable){
+        Case c = ensembleCases.get(index);
+        c.estModifiable(estModifiable);
+        ensembleCases.set(index, c);
     }
     
     // fonctionne seulement si tous les valeurs correctes des cases modifiables sont présentes

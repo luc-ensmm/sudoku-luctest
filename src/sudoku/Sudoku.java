@@ -326,7 +326,7 @@ public class Sudoku {
                     System.out.println("le candidat proposé fait déjà parti des candidats de la case ou sa valeur n'est pas valide");
                 }
             } 
-        this.g.getEnsembleCases().get(position_case).addCandidat2(lesCandidats);
+        this.g.getEnsembleCases().get(position_case).addCandidat(lesCandidats);
         System.out.println("candidats de la case "+this.g.getEnsembleCases().get(position_case).getCandidats());
         this.getGrille().candidatsEnTrop(ligne, colonne);
         //this.supprimerCandidatsEnTrop(ligne, colonne); //méthode qu'il convient d'utiliser sur une grille de taille 3 minimum sinon pas d'intérêt

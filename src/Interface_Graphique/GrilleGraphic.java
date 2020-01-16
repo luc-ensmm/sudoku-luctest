@@ -7,6 +7,8 @@ package Interface_Graphique;
 
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import sudoku.Sudoku;
 
 /**
  *
@@ -24,16 +26,45 @@ public class GrilleGraphic extends javax.swing.JFrame {
         
         System.out.println("Done");
         
+        // adapte la taille des colonnes 
         jTable1.setRowHeight(this.rowHeight());
+        // centre les valeurs des cases dans chaque cellule
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
         for (int i = 0; i < jTable1.getRowCount(); i++) {
             jTable1.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
        
+        
         System.out.println(""+this.jScrollPane1.getHeight());
         System.out.println(""+this.jTable1.getRowCount());
         System.out.println(""+this.jScrollPane1.getHeight()/this.jTable1.getRowCount());
+    }
+    
+    public GrilleGraphic(Sudoku s){
+        initComponents();
+         
+        sudoku = s;
+        int tailleAuCarree = s.getGrille().getTaille();
+        tailleAuCarree*=tailleAuCarree;
+        DefaultTableModel model = new DefaultTableModel(tailleAuCarree,tailleAuCarree);
+        
+        for (int i = 0; i < tailleAuCarree; i++){
+            for(int j = 0; j < tailleAuCarree; j++){
+                model.setValueAt(s.getGrille().getCase(i+j*tailleAuCarree),i,j);
+            }
+        }
+        
+        // adapte la taille des colonnes
+        jTable1.setRowHeight(this.rowHeight());
+        // centre les valeurs des cases dans chaque cellule
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+        for (int i = 0; i < jTable1.getRowCount(); i++) {
+            jTable1.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+
+        
     }
     
     public int rowHeight(){
@@ -232,4 +263,7 @@ public class GrilleGraphic extends javax.swing.JFrame {
     private javax.swing.JButton quitter;
     private javax.swing.JLabel scoreLabel;
     // End of variables declaration//GEN-END:variables
+    // Other variables declaration
+    private Sudoku sudoku;
+
 }
