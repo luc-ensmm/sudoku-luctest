@@ -18,13 +18,23 @@ import java.lang.IllegalArgumentException;
 /*
 JavaDoc à faire absolument !
 */
+
+/**
+ * Classe représentant la grille contenant les cases du sudoku
+ * @author yannE
+ */
 public class Grille {
     
     private ArrayList<Case> ensembleCases;
     private int taille;
-    private boolean estInitialiser; // peut-être supprimable plus tard
-
+    
+    /**
+     * Constructeur général
+     * @param taille
+     * @param ensembleCases 
+     */
     public Grille(int taille, ArrayList<Case> ensembleCases) {
+        
         // il faut vérifier que le nombre d'objets dans les ArrayList et cohérent avec la taille 
         // précisé !
         try {
@@ -36,13 +46,6 @@ public class Grille {
                 this.taille = taille;
                 this.ensembleCases = ensembleCases;
 
-                this.estInitialiser = false;
-                for (Case c : ensembleCases) {
-                    if (c.getValeur() != 0) { // s'il y a au moins une case non vide
-                        estInitialiser = true;
-                    }
-
-                }
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -50,7 +53,11 @@ public class Grille {
 
     }
     
-    
+    /**
+     * Constructeur qui génère une grille "vide" (valeur des cases = 0)
+     * à la taille spécifiée
+     * @param taille 
+     */
     public Grille(int taille){
         this.taille = taille;
         ensembleCases = new ArrayList<>();
@@ -62,7 +69,6 @@ public class Grille {
         for (int i = 0; i < tailleAuCarre*tailleAuCarre; i++){
             ensembleCases.add(new Case(taille,0,(ArrayList<Integer>)allCandidates.clone(),true));
         }
-        this.estInitialiser = false;
         
     }
           
@@ -83,6 +89,12 @@ public class Grille {
     
     }
     
+    /**
+     * 
+     * @param indexCase
+     *      Index de la case sur laquelle on applique la méthode
+     * @return Un boolean qui indique si la méthode a été appliqué càd la case n'a qu'un candidat
+     */
     public boolean singletonNu (int indexCase){
        
        boolean aEteAppliquer = false;
@@ -100,7 +112,7 @@ public class Grille {
        return aEteAppliquer;
        
     }
-
+    
     public ArrayList<Case> getEnsembleCases() {
         return ensembleCases;
     }
@@ -113,11 +125,11 @@ public class Grille {
         return taille;
     }
 
-    public void setTaille(int taille) {
-        this.taille = taille;
-    }
-
-
+    /**
+     * 
+     * @param i
+     * @return 
+     */
     public ArrayList<Case> getLine(int i) {
         
         ArrayList<Case> line = new ArrayList<>();
@@ -168,7 +180,13 @@ public class Grille {
         }
     }
     
-    public ArrayList<Case> getBlock(int b){ //b = numero du block
+    /**
+     * 
+     * @param b
+     *      Numéro du bloc
+     * @return 
+     */
+    public ArrayList<Case> getBlock(int b){ 
     
         ArrayList<Case> block = new ArrayList<>();
         int tailleAuCarree = taille*taille; // introduit pour plus de clarté dans le code
@@ -202,6 +220,10 @@ public class Grille {
         }
     }
     
+    /**
+     * Affiche la grille (valeurs des cases) dans la console 
+     * sans afficher les lignes formant les cases
+     */
     public void showGrille(){
         for (int i = 0; i < (int) Math.pow(taille, 4); i++){
             if (i%(taille*taille) == 0) {
@@ -213,7 +235,10 @@ public class Grille {
     }
     
 
-  
+    /**
+     * Affiche la grille (valeurs des cases) dans la console
+     * avec les lignes formant les cases
+     */
     public void afficheGrille(){
         
         int tailleAuCarree = taille*taille;
@@ -233,6 +258,11 @@ public class Grille {
     
     }
     
+    /**
+     * Indique si la grille est remplie càd que les valeurs de toutes
+     * les cases sont non nulles.
+     * @return 
+     */
     public boolean pleine(){
         int i = 0;
         boolean estPleine = true;
@@ -255,6 +285,11 @@ public class Grille {
     }
 
     @Override
+    /**
+     * Egalité basée sur les attributs taille et ensembleCases
+     * sachant que l'égalité entre cases se fait uniquement 
+     * par rapport à la valeur des cases
+     */
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -276,7 +311,10 @@ public class Grille {
     }
     
     
-    
+    /**
+     * Applique la technique du singleton caché à une case
+     * @param indexCase 
+     */
     public void singletonCache(int indexCase){
         /*
         1) On récupère les candidats de la case
@@ -318,6 +356,23 @@ public class Grille {
         
     }
     
+    /**
+     * Applique la technique du singleton caché à une case pour un candidat
+     * Cette méthode est exclusivement utilisé dans la méthode singletonCache
+     * @param indexCase
+     * @param candidat
+     * @param ligne
+     *        La ligne doit contenir la case précisée par indexCase pour 
+     *        le bon fonctionnement de la méthode
+     * @param colonne
+     *        La colonne doit contenir la case précisée par indexCase pour 
+     *        le bon fonctionnement de la méthode
+     * @param bloc
+     *        La bloc doit contenir la case précisée par indexCase pour 
+     *        le bon fonctionnement de la méthode
+     * 
+     * @return 
+     */
     private boolean singletonCacheOneCandidate(int indexCase, int candidat,
         ArrayList<Case> ligne, ArrayList<Case> colonne, ArrayList<Case> bloc){
         /*

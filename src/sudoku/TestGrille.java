@@ -259,7 +259,7 @@ public class TestGrille {
         System.out.println("\n\nGrille après initialisation aléatoire:");
         g.showGrille();
 
-   
+        
         
     }
     
