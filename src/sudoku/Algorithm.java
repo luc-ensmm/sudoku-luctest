@@ -54,20 +54,20 @@ public class Algorithm {
 
         }
 
-        int compteur = 0;
+        
         for (Integer j : randomIndex) {
 
              
             ArrayList<Integer> candidats = g.getCandidatCase(j);
             //System.out.println("Candidats de la case d'index " + j +": " + candidats);
             
-            System.out.println("\nCandidats de la case " + j + ": " + candidats);
+            //System.out.println("\nCandidats de la case " + j + ": " + candidats);
             
             Collections.shuffle(candidats);
             
             int candidatAEnlever = candidats.get(0);
             g.setValeurCase(j,candidats.get(0));
-            System.out.println("Valeur de la case d'index " + j + ": " + candidatAEnlever);
+            //System.out.println("Valeur de la case d'index " + j + ": " + candidatAEnlever);
             int ligne = j/tailleAuCarree;
             int colonne = j-ligne*tailleAuCarree;
             int bloc = (ligne/taille)*taille + colonne/taille;
@@ -105,15 +105,131 @@ public class Algorithm {
             //g.setLine(ligne, cLine);
             //g.setColumn(colonne, cColumn);
             //g.setBlock(bloc, cBlock);
-            g.setModifiableCase(j, false);
+            //g.setModifiableCase(j, false);
             
 
+        }
+        
+        for (Integer j: randomIndex){
+            g.setModifiableCase(j, false);
+        }
+        
+        return g;
+    
+    }
+  
+    
+        public static Grille randomInitialization2(int nbCasesReveles, int taille){
+        
+        int tailleAuCarree = taille * taille;
+        
+        try {
+            if (nbCasesReveles > tailleAuCarree*tailleAuCarree){
+                String errorMessage = "Le nombre de cases à révéler (" + nbCasesReveles 
+                        + ") n'est pas compatibles avec la taille précisée (" + taille +
+                        ")";
+                throw new IllegalArgumentException(errorMessage);
+            }
+        }
+        catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+        
+        
+        Grille g = new Grille(taille);
+        ArrayList<Integer> randomIndex = new ArrayList<>();
+        int i = 0;
+        int index;
+        Random ran = new Random();
+        while (i < nbCasesReveles) {
+            index = ran.nextInt(tailleAuCarree * tailleAuCarree);
+            if (!randomIndex.contains(index)) {
+                randomIndex.add(index);
+                i++;
+            }
+
+        }
+
+        
+        ArrayList <Integer> randomIndex2 = new ArrayList<>();
+        for (Integer j : randomIndex) {
+                
+                boolean singletonNuAEteAppliquer = false;
+                for (int k = 0; k < tailleAuCarree * tailleAuCarree; k++) {
+                    if (g.singletonNu(k)) {
+
+                        singletonNuAEteAppliquer = true;
+                        randomIndex2.add(k);
+
+                        int ligne = k / tailleAuCarree;
+                        int colonne = k - ligne * tailleAuCarree;
+                        int bloc = (ligne / taille) * taille + colonne / taille;
+                        ArrayList<Case> cLine = g.getLine(ligne);
+                        ArrayList<Case> cColumn = g.getColumn(colonne);
+                        ArrayList<Case> cBlock = g.getBlock(bloc);
+                        int candidatAEnlever = g.getValeurCase(k);
+
+                        for (Case c : cLine) {
+                            c.removeCandidat(candidatAEnlever);
+                        }
+
+                        for (Case c : cColumn) {
+                            c.removeCandidat(candidatAEnlever);
+                        }
+
+                        for (Case c : cBlock) {
+                            c.removeCandidat(candidatAEnlever);
+                        }
+
+                        g.setLine(ligne, cLine);
+                        g.setColumn(colonne, cColumn);
+                        g.setBlock(bloc, cBlock);
+                        break;
+                    }
+                
+                }
+                if (g.getValeurCase(j) == 0 && !singletonNuAEteAppliquer) {
+                    ArrayList<Integer> candidats = g.getCandidatCase(j);
+
+                    Collections.shuffle(candidats);
+
+                    int candidatAEnlever = candidats.get(0);
+                    g.setValeurCase(j, candidats.get(0));
+                    //System.out.println("Valeur de la case d'index " + j + ": " + candidatAEnlever);
+                    int ligne = j / tailleAuCarree;
+                    int colonne = j - ligne * tailleAuCarree;
+                    int bloc = (ligne / taille) * taille + colonne / taille;
+                    ArrayList<Case> cLine = g.getLine(ligne);
+                    ArrayList<Case> cColumn = g.getColumn(colonne);
+                    ArrayList<Case> cBlock = g.getBlock(bloc);
+
+                    for (Case c : cLine) {
+                        c.removeCandidat(candidatAEnlever);
+                    }
+
+                    for (Case c : cColumn) {
+                        c.removeCandidat(candidatAEnlever);
+                    }
+
+                    for (Case c : cBlock) {
+                        c.removeCandidat(candidatAEnlever);
+                    }
+
+                    g.setLine(ligne, cLine);
+                    g.setColumn(colonne, cColumn);
+                    g.setBlock(bloc, cBlock);
+                    randomIndex2.add(j);
+                }
+            }
+        
+        
+        for (Integer j: randomIndex2){
+            g.setModifiableCase(j, false);
         }
 
         return g;
     
     }
-    
     
     
 }

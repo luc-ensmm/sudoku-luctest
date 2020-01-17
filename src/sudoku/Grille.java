@@ -153,6 +153,12 @@ public class Grille {
     }
     
     
+    /**
+     * Remplace la ligne i par celle en argument
+     * Attention, modifie aussi les cases dites non modifiables
+     * @param i
+     * @param line 
+     */
     public void setLine(int i, ArrayList<Case> line){ 
         int tailleAuCarre = taille*taille;
         if (line.size() != tailleAuCarre){
@@ -585,6 +591,13 @@ public class Grille {
     
     */
     
+    /**
+     * Résout la grille en utilisant des algorithmes de résolution
+     * Permet de générer une solution plus rapidement que la résolution
+     * hasardeuse
+     * @param g
+     * @return une Grille dont toutes les valeurs sont non nulles et correctes
+     */ 
     public static Grille resolutionAlgorithmique(Grille g){
         
         //Application du singleton caché à toutes les cases de la grille
@@ -736,6 +749,14 @@ public class Grille {
     /* Introduit pour alléger l'écriture dans certaines méthodes.
     
     */
+    
+    /**
+     * Rajoute 1 candidat aux candidats de la case index
+     * Pour rajouter plusieurs candidats simultanement, utiliser
+     * la méthode @see Grille#setCandidatCase(int,ArrayList)
+     * @param index
+     * @param candidat 
+     */
     public void addCandidatCase(int index, int candidat){
         Case c = ensembleCases.get(index);
         c.addCandidat(candidat);
@@ -755,8 +776,12 @@ public class Grille {
         ensembleCases.set(index, c);
     }
     
-    // fonctionne seulement si tous les valeurs correctes des cases modifiables sont présentes
-    // parmi les candidats !!!!!!!!!!!!!!!!!!!
+    /**
+     * Résout la grille par force brute
+     * @param g
+     * @param indexDepart
+     * @return une Grille pleine et correcte
+     */
     public static Grille resolutionHasardeuse(Grille g,int indexDepart){
         
         // assure que toutes les cases aient l'ensemble des candidats pour s'assurer du

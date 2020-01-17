@@ -34,21 +34,7 @@ public class Case {
         this.estModifiable = estModifiable;
     }
     
-    public Case(int taille){ // utiliser pour initialiser aléatoirement la valeur d'une case non vide 
-        int v = (int)(Math.random() * (taille*taille+1));
-        ArrayList<Integer> c = new ArrayList<>();
-        for (int i = 1; i <= taille*taille; i++){
-            if (i != v) {
-                c.add(i);
-            }
-        }
-        
-        this.valeur = v;
-        this.taille = taille;
-        this.candidats = c;
-        this.estModifiable = true;
-         
-    }
+  
     
     public int getTaille() {
         return taille;
