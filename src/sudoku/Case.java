@@ -82,12 +82,21 @@ public class Case {
         }
     }
     
+    public void addCandidat2(ArrayList<Integer> autreCandidats){
+        for(int i = 0; i<autreCandidats.size(); i++){
+            Integer candidat = autreCandidats.get(i);
+            this.addCandidat(candidat);
+        }
+    }
     
     public void resteUnCandidat(){
         if (this.candidats.size() == 1){
             this.setValeur(candidats.get(0));
+        } else {
+            this.setValeur(0);
         }
     }
+    
     public boolean estModifiable() {
         return estModifiable;
     }

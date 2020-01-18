@@ -995,7 +995,43 @@ public class Grille {
         return new Grille(taille, cloneEnsembleCases);
     }
 
-    
+    public static  int niveauGrille(String niveauDifficulte, int taille){ //a finir
+        int nbCasesRevelees;
+        niveauDifficulte.toLowerCase();
+        int taillePuissance4 = taille*taille*taille*taille;
+        double nbMinimum = (17.0/81.0)*taillePuissance4;
+        System.out.println("nb minimum "+nbMinimum);
+        Math.floor(nbMinimum);
+        System.out.println("math floor "+nbMinimum);
+        double facile = (34.0/81.0)*taillePuissance4;
+        System.out.println("facile "+facile);
+        Math.floor(facile);
+         System.out.println("math floor facile "+facile);
+        double moyen = (30.0/81.0)*taillePuissance4;
+        System.out.println("moyen "+moyen);
+        Math.floor(moyen);
+        System.out.println("math floor moyen "+moyen);
+        double difficile = (28.0/81.0)*taillePuissance4;
+        System.out.println("difficile "+difficile);
+        Math.floor(difficile);
+         System.out.println("math floor difficile "+difficile);
+        if(niveauDifficulte == "facile"){
+            Random ran1 = new Random();
+            nbCasesRevelees = ran1.nextInt((int)facile-(int)nbMinimum+1);
+            nbCasesRevelees +=(int)nbMinimum;
+            System.out.println("nbCasesRevelees "+nbCasesRevelees);
+        } else if (niveauDifficulte == "moyen"){
+            Random ran1 = new Random();
+            nbCasesRevelees = ran1.nextInt((int)moyen-(int)nbMinimum+1);
+            nbCasesRevelees +=(int)nbMinimum;
+            System.out.println("nbCasesRevelees "+nbCasesRevelees);
+        } else {
+            Random ran1 = new Random();
+            nbCasesRevelees = ran1.nextInt((int)difficile-(int)nbMinimum+1);
+            nbCasesRevelees +=(int)nbMinimum;
+            System.out.println("nbCasesRevelees "+nbCasesRevelees);
+        } return nbCasesRevelees;
+    }
 }
     
       
