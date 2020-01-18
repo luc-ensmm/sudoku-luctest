@@ -114,7 +114,7 @@ public class Grille {
     }
     
     public ArrayList<Case> getEnsembleCases() {
-        return ensembleCases;
+        return (ArrayList<Case>)ensembleCases.clone();
     }
 
     public void setEnsembleCases(ArrayList<Case> ensembleCases) {
@@ -792,14 +792,16 @@ public class Grille {
                 allCandidates.add(i + 1);
             }
             for (int i = 0; i < g.getEnsembleCases().size(); i++) {
-                g.setCandidatCase(i, allCandidates);
+                if (g.getCase(i).estModifiable()){
+                    g.setCandidatCase(i, allCandidates);
+                }
             }
         }
         
         if(!g.correcteEtPleine()){
             if (indexDepart < g.getEnsembleCases().size()){
-                if (g.getEnsembleCases().get(indexDepart).estModifiable()) {
-                    Grille g1 = new Grille(g.getTaille(),g.getEnsembleCases());
+                if (g.getCase(indexDepart).estModifiable()) {
+                    Grille g1 = g.clone();
                     /*
                     La ligne ci-dessus est très importante car elle permet de sauvegarder l'état
                     de la grille avant modification et donc assure que l'on puisse backtrack
@@ -982,6 +984,15 @@ public class Grille {
             }
         }System.out.println("candidats a enlever (candidats non valide) "+candidatsAEnlever1);
         return candidatsAEnlever1;
+    }
+    
+    public Grille clone(){
+        
+        ArrayList<Case> cloneEnsembleCases = new ArrayList<>();
+        for (Case c: ensembleCases){
+            cloneEnsembleCases.add(c.clone());
+        }
+        return new Grille(taille, cloneEnsembleCases);
     }
 
     

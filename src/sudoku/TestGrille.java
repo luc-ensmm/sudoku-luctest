@@ -23,7 +23,7 @@ public class TestGrille {
    
     public static void main(String[] args) {
         // TODO code application logic here
-            test_initialisationAleatoire();
+            test_solutionHasardeuse();
        
    
     }
@@ -80,10 +80,14 @@ public class TestGrille {
         
         
         Grille g = new Grille(2,listetest); 
+        System.out.println("Grille initiale avant la résolution\n");
         g.showGrille();
         System.out.println("\n");
-        g = Grille.resolutionHasardeuse(g, 0);
+        Grille solution = Grille.resolutionHasardeuse(g, 0);
+        System.out.println("Grille initiale après la résolution\n");
         g.showGrille();
+        System.out.println("\n\nGrille solution\n");
+        solution.showGrille();
         
         
     }

@@ -71,7 +71,8 @@ public class Case {
             }
         }
         else{
-            System.out.println("La case n'est pas modifiable. Modification des candidats impossible");
+            System.out.println("La case n'est pas modifiable. Modification des candidats impossible"
+                    + "(Valeur de la case = " + valeur + ")");
         }
     }
     
@@ -129,7 +130,12 @@ public class Case {
     
     @Override
     public Case clone(){
-        return new Case(taille,valeur,candidats,estModifiable);
+        
+        ArrayList<Integer> cloneCandidats = new ArrayList<>();
+        for (Integer i: candidats){
+            cloneCandidats.add(i);
+        }
+        return new Case(taille,valeur,cloneCandidats,estModifiable);
     }
     
     public int candidatDejaPresent (Case other) { 
