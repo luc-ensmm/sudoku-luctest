@@ -120,7 +120,7 @@ public class TestSudoku {
         Grille laSolution = Grille.resolutionHasardeuse(laGrille, 0);
         Joueur j = new Joueur("No name");
         Sudoku s = new Sudoku(j,laGrille,laSolution);
-        s.playInGraphics();
+       
     }
     
     public static void test_sudokuSauvegarde(){

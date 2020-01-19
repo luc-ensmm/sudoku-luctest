@@ -97,9 +97,12 @@ public class GenAlea_tailleEtDifficulte extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         
-        Sudoku s = new Sudoku(new Joueur("No name"),Algorithm.randomInitialization(17,3));
-        new GrilleGraphic(s).setVisible(true);
+        Grille g = Algorithm.genereGrille_Dessai(1);
+        Sudoku s = new Sudoku(new Joueur("No name"),g,g);
+        System.out.println("Done 0");
         this.setVisible(false);
+        new GrilleGraphic(s).setVisible(true);
+        
         
         
         //System.out.println(Integer.parseInt(jTextField1.getText()));

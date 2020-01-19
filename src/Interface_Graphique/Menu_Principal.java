@@ -18,14 +18,10 @@ public class Menu_Principal extends javax.swing.JFrame {
     /**
      * Creates new form Menu_Principal
      */
-    public Menu_Principal(Sudoku s) {
-        initComponents();
-        this.sudoku = s;
-    }
     
     public Menu_Principal(){
         initComponents();
-        this.sudoku = new Sudoku(new Joueur("Unknown"), Algorithm.randomInitialization(18, 3));
+        
     }
 
     /**
@@ -92,8 +88,9 @@ public class Menu_Principal extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        new MenuChoixGrille().setVisible(true);
         this.setVisible(false);
+        new MenuChoixGrille().setVisible(true);
+        
         //this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -131,6 +128,7 @@ public class Menu_Principal extends javax.swing.JFrame {
             public void run() {
                 
                 new Menu_Principal().setVisible(true);
+                
             }
         });
     }
@@ -146,6 +144,5 @@ public class Menu_Principal extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
     
     // More variables declaration
-    private Sudoku sudoku;
     
 }

@@ -136,15 +136,6 @@ public class Sudoku {
                
     }
     
-    public void playInConsole(){
-        
-    }
-    
-    public void playInGraphics(){
-        
-        new Menu_Principal(this).setVisible(true);
-           
-    }
     
     
     public void saveGame (){
@@ -376,7 +367,7 @@ public class Sudoku {
                     }
                 }
             }this.calculScore(nbHelp1, nbHelp2, nbHelp3, nbHelp4);
-            this.g.getEnsembleCases().get(position_case).addCandidat2(lesCandidats);
+            this.g.getEnsembleCases().get(position_case).addCandidat(lesCandidats);
             System.out.println("candidats de la case "+this.g.getEnsembleCases().get(position_case).getCandidats());
             //this.getGrille().candidatsEnTrop(ligne, colonne);
             //this.supprimerCandidatsEnTrop(ligne, colonne); //méthode qu'il convient d'utiliser sur une grille de taille 3 minimum sinon pas d'intérêt

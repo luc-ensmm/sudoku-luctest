@@ -6,6 +6,8 @@
 package Interface_Graphique;
 
 import javax.swing.SwingConstants;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import sudoku.Sudoku;
@@ -45,16 +47,8 @@ public class GrilleGraphic extends javax.swing.JFrame {
         initComponents();
          
         sudoku = s;
-        int tailleAuCarree = s.getGrille().getTaille();
-        tailleAuCarree*=tailleAuCarree;
-        DefaultTableModel model = new DefaultTableModel(tailleAuCarree,tailleAuCarree);
-        
-        for (int i = 0; i < tailleAuCarree; i++){
-            for(int j = 0; j < tailleAuCarree; j++){
-                model.setValueAt(s.getGrille().getCase(i+j*tailleAuCarree),i,j);
-            }
-        }
-        
+        jTable1.setModel(new GrilleTableModel(s));
+        System.out.println("Done 1");
         // adapte la taille des colonnes
         jTable1.setRowHeight(this.rowHeight());
         // centre les valeurs des cases dans chaque cellule
@@ -63,13 +57,15 @@ public class GrilleGraphic extends javax.swing.JFrame {
         for (int i = 0; i < jTable1.getRowCount(); i++) {
             jTable1.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
-
+        jTable1.setTableHeader(null);
+        System.out.println("Done 2");
         
     }
     
     public int rowHeight(){
         return this.jScrollPane1.getHeight()/this.jTable1.getRowCount();
     }
+     
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -133,37 +129,17 @@ public class GrilleGraphic extends javax.swing.JFrame {
 
         jTable1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jTable1.setForeground(new java.awt.Color(15, 0, 0));
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                { new Integer(0),  new Integer(0),  new Integer(0),  new Integer(0)},
-                { new Integer(0),  new Integer(0),  new Integer(0),  new Integer(0)},
-                { new Integer(0),  new Integer(0),  new Integer(0),  new Integer(0)},
-                { new Integer(0),  new Integer(0),  new Integer(0),  new Integer(0)}
-            },
-            new String [] {
-                "Column 1", "Column 2", "Column 3", "Column 4"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
         jTable1.setToolTipText("");
+        jTable1.setAutoscrolls(false);
+        jTable1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jTable1.setFillsViewportHeight(true);
         jTable1.setPreferredSize(jScrollPane1.getPreferredSize());
+        jTable1.setSelectionBackground(new java.awt.Color(0, 204, 255));
         jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jTable1.setShowGrid(true);
         jTable1.setTableHeader(null);
         jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setHeaderValue("Title 1");
-            jTable1.getColumnModel().getColumn(1).setHeaderValue("Title 2");
-            jTable1.getColumnModel().getColumn(2).setHeaderValue("null");
-            jTable1.getColumnModel().getColumn(3).setHeaderValue("Title 4");
-        }
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -266,4 +242,6 @@ public class GrilleGraphic extends javax.swing.JFrame {
     // Other variables declaration
     private Sudoku sudoku;
 
-}
+    }
+
+

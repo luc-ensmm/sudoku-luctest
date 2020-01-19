@@ -8,6 +8,7 @@ package sudoku;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
+import static sudoku.TestGrille.stringToArray;
 
 /**
  *
@@ -230,6 +231,50 @@ public class Algorithm {
         return g;
     
     }
-    
+        
+    public static Grille genereGrille_Dessai(int i){
+        
+        Grille g = new Grille(3);
+        if(i == 1){
+                ArrayList<Case> listetest = new ArrayList<>();
+                listetest.add(new Case(2, 0, stringToArray("3 4", " "), true));
+                listetest.add(new Case(2, 0, stringToArray("3 4", " "), true));
+                listetest.add(new Case(2, 0, stringToArray("1 2 4", " "), true));
+                listetest.add(new Case(2, 1, stringToArray("", " "), false));
+                listetest.add(new Case(2, 2, stringToArray("", " "), false));
+                listetest.add(new Case(2, 0, stringToArray("1 3 4", " "), true));
+                listetest.add(new Case(2, 0, stringToArray("3 4", " "), true));
+                listetest.add(new Case(2, 0, stringToArray("4", " "), true));
+                listetest.add(new Case(2, 0, stringToArray("4", " "), true));
+                listetest.add(new Case(2, 0, stringToArray("2", " "), true));
+                listetest.add(new Case(2, 0, stringToArray("1 2 4", " "), true));
+                listetest.add(new Case(2, 3, stringToArray("", " "), false));
+                listetest.add(new Case(2, 1, stringToArray("", " "), false));
+                listetest.add(new Case(2, 0, stringToArray("2 3 4", " "), true));
+                listetest.add(new Case(2, 0, stringToArray("2 4", " "), true));
+                listetest.add(new Case(2, 0, stringToArray("2 4", " "), true));
+
+                g = new Grille(2, listetest);
+            }
+        else if (i == 2){
+            ArrayList<Case> listetest = new ArrayList<>();
+            int tailleAuCarre = 3*3;
+            ArrayList<Integer> allCandidates = new ArrayList<>();
+            for (int j = 1; j <= tailleAuCarre; j++) {
+                allCandidates.add(j);
+            }
+            for (int j = 0; j < tailleAuCarre * tailleAuCarre; j++) {
+                Collections.shuffle(allCandidates);
+                listetest.add(new Case(3, allCandidates.get(0), (ArrayList<Integer>) allCandidates.clone(), true));
+            }
+            
+            g = new Grille(3,listetest);
+
+        }
+            
+               
+        return g;
+       
+    }
     
 }
