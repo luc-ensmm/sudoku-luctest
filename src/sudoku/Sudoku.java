@@ -638,8 +638,8 @@ public void help3(int lineCase, int columnCase ){
             nbCasesRevelees = Grille.niveauGrille(niveau, taille);
             Grille laGrille = Algorithm.randomInitialization(nbCasesRevelees, taille);
             Grille laSolution = Grille.resolutionHasardeuse(laGrille, 0);
-            laGrille.afficheGrille();
-            laSolution.afficheGrille();
+            //laGrille.afficheGrille();
+            //laSolution.afficheGrille();
             Pile p = new Pile();
             s = new Sudoku(joueur, laGrille, laSolution, p);
             
