@@ -638,7 +638,7 @@ public void help3(int lineCase, int columnCase ){
             nbCasesRevelees = Grille.niveauGrille(niveau, taille);
             Grille laGrille = Algorithm.randomInitialization(nbCasesRevelees, taille);
             Grille laSolution = Grille.resolutionHasardeuse(laGrille, 0);
-            //laGrille.afficheGrille();
+            laGrille.videLesCandidats();
             //laSolution.afficheGrille();
             Pile p = new Pile();
             s = new Sudoku(joueur, laGrille, laSolution, p);
@@ -647,17 +647,7 @@ public void help3(int lineCase, int columnCase ){
             String nomDeLaPartie = "partie_"+ name;
             System.out.println("nom de la partie "+nomDeLaPartie);
             s = Sudoku.chargerGrille(nomDeLaPartie);
-        } /*System.out.println("Voici quelques commandes disponibles pendant la partie:"
-                + "\ntaper s sauvegardera la partie"
-                + "\ntaper c vous affichera les candidats de la case sélectionnée"
-                + "\ntaper sc vous affichera votre score"
-                + "\ntaper r vous permettra de revenir en arrière"
-                + "\ntaper h vous proposera les différentes aides disponibles qui sont:"
-                + "\n  a)Aide 1 vous indique si la solution d'une case se trouve parmi les candidats que vous avez proposés (taper a)"
-                + "\n  b)Aide 2 vous indique toutes les cases dont aucun des candidats n'est solution taper b)"
-                + "\n  c)Aide 3 vous indique les candidats à enlever dans la case sélectionnée car des cases non modifiables possèdent déjà cette valeur "
-                + "soit dans la ligne,soit dans la colonne, soit dans le bloc (taper c)"
-                + "\n  d)Aide 4 supprime un candidats faux dans chaque cases modifiables (taper d)");*/
+        } 
         System.out.print("A vous de jouer !\n");
         s.playGameWithCandidat();
         s.scoreFinale(niveau, cal);

@@ -1040,6 +1040,12 @@ public class Grille {
             System.out.println("nbCasesRevelees "+nbCasesRevelees);
         } return nbCasesRevelees;
     }
+    
+    public void videLesCandidats(){
+        for (int i = 0; i<this.ensembleCases.size(); i++){
+             this.getCase(i).getCandidats().clear();
+        }
+    }
 }
     
       
