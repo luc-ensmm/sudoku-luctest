@@ -54,7 +54,11 @@ public class Case {
     }
 
     public ArrayList<Integer> getCandidats() {
-        return candidats;
+        ArrayList<Integer> retour = new ArrayList<>();
+        for (Integer c: candidats){
+            retour.add(c);
+        }
+        return retour;
     }
 
     

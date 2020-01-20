@@ -55,6 +55,10 @@ public class Sudoku {
         Grille solution = Grille.resolutionHasardeuse(g, 0);
     }*/
     
+    /**
+     * Retourne la grille par référence
+     * @return La grille de l'objet et non un clone
+     */
     public Grille getGrille() {
         return g;
     }

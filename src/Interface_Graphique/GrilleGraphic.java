@@ -5,11 +5,15 @@
  */
 package Interface_Graphique;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import javax.swing.SwingConstants;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import sudoku.Algorithm;
+import sudoku.Joueur;
 import sudoku.Sudoku;
 
 /**
@@ -23,48 +27,24 @@ public class GrilleGraphic extends javax.swing.JFrame {
      */
     public GrilleGraphic() {
         initComponents();
-        //jTable1.setPreferredScrollableViewportSize(jTable1.getPreferredSize());
-        //jTable1.setFillsViewportHeight(true);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenHeight = screenSize.height;
+        int screenWidth = screenSize.width;
+        this.setSize(new Dimension(3*screenHeight/4,3*screenHeight/4));
+        this.sudoku = new Sudoku(new Joueur("Unknown"),Algorithm.genereGrille_Dessai(1));
+        this.jPanel3 = new PanelGrille(sudoku,jPanel3.getWidth(),jPanel3.getHeight());
         
-        System.out.println("Done");
         
-        // adapte la taille des colonnes 
-        jTable1.setRowHeight(this.rowHeight());
-        // centre les valeurs des cases dans chaque cellule
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
-        for (int i = 0; i < jTable1.getRowCount(); i++) {
-            jTable1.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-        }
-       
         
-        System.out.println(""+this.jScrollPane1.getHeight());
-        System.out.println(""+this.jTable1.getRowCount());
-        System.out.println(""+this.jScrollPane1.getHeight()/this.jTable1.getRowCount());
     }
     
     public GrilleGraphic(Sudoku s){
         initComponents();
          
-        sudoku = s;
-        jTable1.setModel(new GrilleTableModel(s));
-        System.out.println("Done 1");
-        // adapte la taille des colonnes
-        jTable1.setRowHeight(this.rowHeight());
-        // centre les valeurs des cases dans chaque cellule
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
-        for (int i = 0; i < jTable1.getRowCount(); i++) {
-            jTable1.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-        }
-        jTable1.setTableHeader(null);
-        System.out.println("Done 2");
+
         
     }
     
-    public int rowHeight(){
-        return this.jScrollPane1.getHeight()/this.jTable1.getRowCount();
-    }
      
     /**
      * This method is called from within the constructor to initialize the form.
@@ -82,18 +62,17 @@ public class GrilleGraphic extends javax.swing.JFrame {
         aide = new javax.swing.JToggleButton();
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         menu_principal = new javax.swing.JButton();
+        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        jButton1 = new javax.swing.JButton();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         quitter = new javax.swing.JButton();
         filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         scoreLabel = new javax.swing.JLabel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0));
         jPanel3 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jPanel4 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(51, 153, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -113,6 +92,10 @@ public class GrilleGraphic extends javax.swing.JFrame {
 
         menu_principal.setText("Menu principal");
         jPanel2.add(menu_principal);
+        jPanel2.add(filler6);
+
+        jButton1.setText("Solution");
+        jPanel2.add(jButton1);
         jPanel2.add(filler3);
 
         quitter.setText("Quitter");
@@ -125,47 +108,20 @@ public class GrilleGraphic extends javax.swing.JFrame {
 
         jPanel1.add(jPanel2);
 
-        jPanel3.setBackground(new java.awt.Color(153, 153, 255));
-
-        jTable1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jTable1.setForeground(new java.awt.Color(15, 0, 0));
-        jTable1.setToolTipText("");
-        jTable1.setAutoscrolls(false);
-        jTable1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jTable1.setFillsViewportHeight(true);
-        jTable1.setPreferredSize(jScrollPane1.getPreferredSize());
-        jTable1.setSelectionBackground(new java.awt.Color(0, 204, 255));
-        jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jTable1.setShowGrid(true);
-        jTable1.setTableHeader(null);
-        jScrollPane1.setViewportView(jTable1);
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(156, 156, 156)
-                .addComponent(jScrollPane1)
-                .addGap(166, 166, 166))
+            .addGap(0, 579, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addGap(0, 468, Short.MAX_VALUE)
         );
 
         jPanel1.add(jPanel3);
-
-        jPanel4.setBackground(new java.awt.Color(0, 204, 204));
-        jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.LINE_AXIS));
-
-        jButton1.setText("Solution");
-        jPanel4.add(jButton1);
-
-        jPanel1.add(jPanel4);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -175,7 +131,7 @@ public class GrilleGraphic extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 493, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -228,13 +184,11 @@ public class GrilleGraphic extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
+    private javax.swing.Box.Filler filler6;
     private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JButton menu_principal;
     private javax.swing.JButton quitter;
     private javax.swing.JLabel scoreLabel;

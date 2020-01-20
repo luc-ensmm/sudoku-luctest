@@ -237,6 +237,11 @@ public class Algorithm {
         Grille g = new Grille(3);
         if(i == 1){
                 ArrayList<Case> listetest = new ArrayList<>();
+                ArrayList<Integer> allCandidates = new ArrayList<>();
+                for (int j= 1; j < 4; j++){
+                    allCandidates.add(j);
+                }
+                /*
                 listetest.add(new Case(2, 0, stringToArray("3 4", " "), true));
                 listetest.add(new Case(2, 0, stringToArray("3 4", " "), true));
                 listetest.add(new Case(2, 0, stringToArray("1 2 4", " "), true));
@@ -253,7 +258,25 @@ public class Algorithm {
                 listetest.add(new Case(2, 0, stringToArray("2 3 4", " "), true));
                 listetest.add(new Case(2, 0, stringToArray("2 4", " "), true));
                 listetest.add(new Case(2, 0, stringToArray("2 4", " "), true));
-
+                */
+                
+                listetest.add(new Case(2, 0, allCandidates, true));
+                listetest.add(new Case(2, 0, allCandidates, true));
+                listetest.add(new Case(2, 0, allCandidates, true));
+                listetest.add(new Case(2, 1, allCandidates, false));
+                listetest.add(new Case(2, 2, allCandidates, false));
+                listetest.add(new Case(2, 0, allCandidates, true));
+                listetest.add(new Case(2, 0, allCandidates, true));
+                listetest.add(new Case(2, 0, allCandidates, true));
+                listetest.add(new Case(2, 0, allCandidates, true));
+                listetest.add(new Case(2, 0, allCandidates, true));
+                listetest.add(new Case(2, 0, allCandidates, true));
+                listetest.add(new Case(2, 3, allCandidates, false));
+                listetest.add(new Case(2, 1, allCandidates, false));
+                listetest.add(new Case(2, 0, allCandidates, true));
+                listetest.add(new Case(2, 0, allCandidates, true));
+                listetest.add(new Case(2, 0, allCandidates, true));
+                
                 g = new Grille(2, listetest);
             }
         else if (i == 2){
@@ -264,8 +287,8 @@ public class Algorithm {
                 allCandidates.add(j);
             }
             for (int j = 0; j < tailleAuCarre * tailleAuCarre; j++) {
-                Collections.shuffle(allCandidates);
-                listetest.add(new Case(3, allCandidates.get(0), (ArrayList<Integer>) allCandidates.clone(), true));
+                //Collections.shuffle(allCandidates);
+                listetest.add(new Case(3, (j+1)/tailleAuCarre, (ArrayList<Integer>) allCandidates.clone(), true));
             }
             
             g = new Grille(3,listetest);
