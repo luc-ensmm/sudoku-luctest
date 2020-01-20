@@ -249,17 +249,25 @@ public class Grille {
         
         int tailleAuCarree = taille*taille;
         int t = taille*tailleAuCarree;
-        System.out.println("___________");
+        for (int j = 0; j<tailleAuCarree+1; j++){
+            System.out.print("__");
+        }
+        System.out.print("\n");
         for (int i = 0; i < taille; i++) {
             for (int k = i*t; k<(i+1)*t; k++){
                 if ((k+1)%(taille*taille)==0){
                     System.out.println( this.ensembleCases.get(k).getValeur());
+                } else if ((k+1)%taille == 0){
+                    System.out.print(this.ensembleCases.get(k).getValeur()+" ||");
                 }
                 else {
-                    System.out.print(this.ensembleCases.get(k).getValeur()+" |");
+                    System.out.print(this.ensembleCases.get(k).getValeur()+" ");
                 }
-            }
-            System.out.println("___________");
+            } for (int j = 0; j<tailleAuCarree+1; j++){
+                System.out.print("__");
+              }
+              System.out.print("\n");
+              //System.out.println("___________");
         }
     
     }
@@ -1031,6 +1039,12 @@ public class Grille {
             nbCasesRevelees +=(int)nbMinimum;
             System.out.println("nbCasesRevelees "+nbCasesRevelees);
         } return nbCasesRevelees;
+    }
+    
+    public void videLesCandidats(){
+        for (int i = 0; i<this.ensembleCases.size(); i++){
+             this.getCase(i).getCandidats().clear();
+        }
     }
 }
     
