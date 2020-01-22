@@ -53,7 +53,7 @@ public class PanelGrille extends JPanelImage implements MouseListener{
         //Lignes de la grille
         
         setCouleur(Color.BLUE);
-       
+        resetLineThickness();
         for (int i = 1; i < tailleAuCarree; i++){
             if (i%taille != 0){
             this.getGraphics2D().drawLine(0, i*(height/tailleAuCarree), width, i*(height/tailleAuCarree)); //y
@@ -112,10 +112,6 @@ public class PanelGrille extends JPanelImage implements MouseListener{
             }
         } 
         
-        
-        for (Case c: g.getEnsembleCases()){
-            System.out.println(c);
-        }
         
         this.repaint();
         

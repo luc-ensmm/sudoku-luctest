@@ -24,6 +24,7 @@ public class TestGrille {
     public static void main(String[] args) {
         // TODO code application logic here
             test_solutionHasardeuse();
+            //test_solutionAlgorithmique();
        
    
     }
@@ -120,13 +121,15 @@ public class TestGrille {
         //g.showGrille();
         System.out.println("\n");
         g = Grille.resolutionAlgorithmique(g);
+        System.out.println("\nGrille après résolution");
         g.showGrille();
-        System.out.println("Etat des cases après la résolution");
+        /*
+        System.out.println("\nEtat des cases après la résolution");
         for(Case c: g.getEnsembleCases()){
             System.out.println(c);
         }
         
-        
+        */
         
         //System.out.println("\nGrille après l'application de la résolution hasardeuse");
         
@@ -255,19 +258,6 @@ public class TestGrille {
         
     }
     
-    //fonctionnelle
-    public static void test_initialisationAleatoire(){
-    
-        
-        int taille = 3;
-        int nbCasesImmuables = 81;
-        Grille g = Algorithm.randomInitialization2(nbCasesImmuables, taille);
-        System.out.println("\n\nGrille après initialisation aléatoire:");
-        g.showGrille();
-        
-        
-        
-    }
     
     //fonctionnelle
     public static void test_get(){ 

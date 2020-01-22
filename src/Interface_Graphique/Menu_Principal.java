@@ -43,7 +43,7 @@ public class Menu_Principal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setSize(preferredSize());
-        getContentPane().setLayout(new java.awt.GridLayout());
+        getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
         jPanel2.setBackground(new java.awt.Color(102, 204, 255));
         jPanel2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 100, 100));
@@ -71,6 +71,11 @@ public class Menu_Principal extends javax.swing.JFrame {
         jButton2.getAccessibleContext().setAccessibleName("loadButton");
 
         jButton3.setText("Entrer une grille");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButton3);
         jButton3.getAccessibleContext().setAccessibleName("inputGrilleButton");
         jButton3.getAccessibleContext().setAccessibleDescription("");
@@ -94,6 +99,12 @@ public class Menu_Principal extends javax.swing.JFrame {
         //this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_jButton3ActionPerformed
+    
     
     
     /**

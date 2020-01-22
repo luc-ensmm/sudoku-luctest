@@ -6,7 +6,9 @@
 package sudoku;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 import static sudoku.TestGrille.stringToArray;
 
@@ -23,214 +25,193 @@ de sudoku
 */
 public class Algorithm {
     
-    // fonctionnelle mais à peaufiner s'il reste du temps
-    public static Grille randomInitialization(int nbCasesReveles, int taille){
-        
-        int tailleAuCarree = taille * taille;
-        
-        try {
-            if (nbCasesReveles > tailleAuCarree*tailleAuCarree){
-                String errorMessage = "Le nombre de cases à révéler (" + nbCasesReveles 
-                        + ") n'est pas compatibles avec la taille précisée (" + taille +
-                        ")";
+    /**
+     * Un générateur de grille qui retourne une grille valide et complète 
+     * de taille précisé
+     * @param taille Pour l'instant 1 < taille < 5
+     * @return une Grille complète et correcte
+     */
+    public static Grille randomSolutionGenerator(int taille){
+       
+        try{
+            if (taille < 2){
+                String errorMessage = "La taille de la grille ne peut pas être" +
+                        " inférieur à 2";
                 throw new IllegalArgumentException(errorMessage);
             }
-        }
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e){
             System.out.println(e.getMessage());
         }
         
+        ArrayList<Integer> sourceOfValues = new ArrayList<>();
+        int tailleAuCarree = taille*taille;
+        int i = 1;
+        int j = 0;
+        int k = 0;
+        int valeur;
+        while (i < taille + 1){
+            while (j < taille){
+                while (k < tailleAuCarree){
+                    valeur = (i+j*taille + k)%tailleAuCarree;
+                    if (valeur == 0){
+                        valeur = tailleAuCarree;
+                    }
+                    sourceOfValues.add(valeur);
+                    k++;
+                }
+                k = 0;
+                j++;
+            }
+            j = 0;
+            i++;
+        }
         
-        Grille g = new Grille(taille);
+        ArrayList<Case> ensembleCases = new ArrayList<>();
+        for (Integer valeurCase: sourceOfValues){
+            ensembleCases.add(new Case(taille,valeurCase, new ArrayList<>(),true));
+        }
+        
+        Grille g = new Grille(taille,ensembleCases);
+        Random ran = new Random();
+        
+        // au minimum taille échanges de ligne et colonne et maximum tailleAuCarree échanges
+        int lineSwap = taille + ran.nextInt(tailleAuCarree-taille);
+        int columnSwap = taille + ran.nextInt(tailleAuCarree-taille);
+        
+        for (i = 0; i < lineSwap; i++){
+            int indexLine1 = ran.nextInt(tailleAuCarree);
+            int indexLine2 = ran.nextInt(tailleAuCarree);
+            ArrayList<Case> line1 = g.getLine(indexLine1);
+            g.setLine(indexLine1, g.getLine(indexLine2));
+            g.setLine(indexLine2, line1);
+            
+        }
+        
+        for (i = 0; i < columnSwap; i++){
+            int indexColumn1 = ran.nextInt(tailleAuCarree);
+            int indexColumn2 = ran.nextInt(tailleAuCarree);
+            ArrayList<Case> column1 = g.getLine(indexColumn1);
+            g.setLine(indexColumn1, g.getLine(indexColumn2));
+            g.setLine(indexColumn2, column1);  
+        }
+        
+        return g;
+            
+    
+    }
+    
+    /**
+     * Génère aléatoirement une grille de sudoku à partir d'une solution
+     * @param solution
+     * @param nbCasesReveles
+     * @return une Grille incomplète
+     */
+    public static Grille randomGrilleGenerator(Grille solution, int nbCasesReveles){
+        
+        
+        try {
+            String errorMessage;
+            if (nbCasesReveles > solution.getEnsembleCases().size()){
+                errorMessage = "Le nombre de cases à révéler (" + nbCasesReveles 
+                        + ") n'est pas compatibles avec la taille précisée (" + solution.getTaille() +
+                        ")";
+                throw new IllegalArgumentException(errorMessage);
+            }
+            else if (!solution.correcteEtPleine()){
+                errorMessage = "La grille en paramètre n'est pas une grille solution";
+                throw new IllegalArgumentException(errorMessage);
+            }
+            
+        }
+        catch (IllegalArgumentException e) {
+            throw new RuntimeException(e);
+ 
+        }
+        
+        for (int i  = 0; i < solution.getEnsembleCases().size(); i++){
+              if (!solution.getEnsembleCases().get(i).estModifiable()){
+                  solution.setModifiableCase(i, true);
+              }
+          }
+        
         ArrayList<Integer> randomIndex = new ArrayList<>();
         int i = 0;
         int index;
         Random ran = new Random();
         while (i < nbCasesReveles) {
-            index = ran.nextInt(tailleAuCarree * tailleAuCarree);
+            index = ran.nextInt(solution.getEnsembleCases().size());
             if (!randomIndex.contains(index)) {
                 randomIndex.add(index);
                 i++;
             }
 
         }
-
         
-        for (Integer j : randomIndex) {
-
-             
-            ArrayList<Integer> candidats = g.getCandidatCase(j);
-            //System.out.println("Candidats de la case d'index " + j +": " + candidats);
-            
-            //System.out.println("\nCandidats de la case " + j + ": " + candidats);
-            
-            Collections.shuffle(candidats);
-            
-            int candidatAEnlever = candidats.get(0);
-            g.setValeurCase(j,candidats.get(0));
-            //System.out.println("Valeur de la case d'index " + j + ": " + candidatAEnlever);
-            int ligne = j/tailleAuCarree;
-            int colonne = j-ligne*tailleAuCarree;
-            int bloc = (ligne/taille)*taille + colonne/taille;
-            //ArrayList<Case> cLine = g.getLine(ligne);
-            //ArrayList<Case> cColumn = g.getColumn(colonne);
-            //ArrayList<Case> cBlock = g.getBlock(bloc);
-            
-            
-            
-            for(int k = ligne*tailleAuCarree; k < ligne*tailleAuCarree + tailleAuCarree; k++){
-                if (g.getCandidatCase(k).contains(candidatAEnlever)){
-                    g.removeCandidatCase(k, candidatAEnlever);
-                }
+        Grille g = solution.clone();
+        g.videLesCandidats();
+        for (i = 0; i < g.getEnsembleCases().size(); i++){
+            if (randomIndex.contains(i)){
+                g.setModifiableCase(i, false);
             }
-            
-            
-            
-            for (int k = colonne; k < colonne + tailleAuCarree*tailleAuCarree; k+= tailleAuCarree) {
-                if (g.getCandidatCase(k).contains(candidatAEnlever)){
-                    g.removeCandidatCase(k, candidatAEnlever);
-                }
+            else{
+                g.setValeurCase(i,0);
             }
-            
-            
-            int depart = (bloc/taille)*(tailleAuCarree*taille) + taille*(bloc-(bloc/taille)*taille);
-            for (int k = depart; k < depart + taille * tailleAuCarree; k += tailleAuCarree) {
-                for (int m = k; m < k + taille; m++) {
-                    if (g.getCandidatCase(k).contains(candidatAEnlever)){
-                    g.removeCandidatCase(k, candidatAEnlever);
-                }
-                }
-            }
-            
-
-            //g.setLine(ligne, cLine);
-            //g.setColumn(colonne, cColumn);
-            //g.setBlock(bloc, cBlock);
-            //g.setModifiableCase(j, false);
-            
-
-        }
-        
-        for (Integer j: randomIndex){
-            g.setModifiableCase(j, false);
         }
         
         return g;
+        
+        
+    }
     
+    /**
+     * Génère une grille de sudoku à partir d'une solution
+     * @param solution
+     * @param indexCasesReveles Contient les indices des cases à révéler
+     * @return une Grille incomplète
+     */
+    public static Grille grilleGenerator(Grille solution, List<Integer> indexCasesReveles){
+        
+        
+        try {
+            String errorMessage = "";
+            if (indexCasesReveles.size() > solution.getEnsembleCases().size()){
+                errorMessage = "Le nombre de cases à révéler (" + indexCasesReveles.size()
+                        + ") n'est pas compatibles avec la taille précisée (" + solution.getTaille() +
+                        ")";
+                throw new IllegalArgumentException(errorMessage);
+            }
+            else if (!solution.correcteEtPleine()){
+                errorMessage = "La grille en paramètre n'est pas une grille solution";
+                throw new IllegalArgumentException(errorMessage);
+            }
+            
+        }
+        catch (IllegalArgumentException e) {
+            throw new RuntimeException(e);
+        }
+        
+        for (int i  = 0; i < solution.getEnsembleCases().size(); i++){
+              if (!solution.getEnsembleCases().get(i).estModifiable()){
+                  solution.setModifiableCase(i, true);
+              }
+          }
+        
+        Grille g = solution.clone();
+        g.videLesCandidats();
+        for (int i = 0; i < g.getEnsembleCases().size(); i++){
+            if (indexCasesReveles.contains(i)){
+                g.setModifiableCase(i, false);
+            }
+            else{
+                g.setValeurCase(i,0);
+            }
+        }
+        
+        return g;
+        
+        
     }
   
-    
-        public static Grille randomInitialization2(int nbCasesReveles, int taille){
-        
-        int tailleAuCarree = taille * taille;
-        
-        try {
-            if (nbCasesReveles > tailleAuCarree*tailleAuCarree){
-                String errorMessage = "Le nombre de cases à révéler (" + nbCasesReveles 
-                        + ") n'est pas compatibles avec la taille précisée (" + taille +
-                        ")";
-                throw new IllegalArgumentException(errorMessage);
-            }
-        }
-        catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
-        
-        
-        Grille g = new Grille(taille);
-        ArrayList<Integer> randomIndex = new ArrayList<>();
-        int i = 0;
-        int index;
-        Random ran = new Random();
-        while (i < nbCasesReveles) {
-            index = ran.nextInt(tailleAuCarree * tailleAuCarree);
-            if (!randomIndex.contains(index)) {
-                randomIndex.add(index);
-                i++;
-            }
-
-        }
-
-        
-        ArrayList <Integer> randomIndex2 = new ArrayList<>();
-        for (Integer j : randomIndex) {
-                
-                boolean singletonNuAEteAppliquer = false;
-                for (int k = 0; k < tailleAuCarree * tailleAuCarree; k++) {
-                    if (g.singletonNu(k)) {
-
-                        singletonNuAEteAppliquer = true;
-                        randomIndex2.add(k);
-
-                        int ligne = k / tailleAuCarree;
-                        int colonne = k - ligne * tailleAuCarree;
-                        int bloc = (ligne / taille) * taille + colonne / taille;
-                        ArrayList<Case> cLine = g.getLine(ligne);
-                        ArrayList<Case> cColumn = g.getColumn(colonne);
-                        ArrayList<Case> cBlock = g.getBlock(bloc);
-                        int candidatAEnlever = g.getValeurCase(k);
-
-                        for (Case c : cLine) {
-                            c.removeCandidat(candidatAEnlever);
-                        }
-
-                        for (Case c : cColumn) {
-                            c.removeCandidat(candidatAEnlever);
-                        }
-
-                        for (Case c : cBlock) {
-                            c.removeCandidat(candidatAEnlever);
-                        }
-
-                        g.setLine(ligne, cLine);
-                        g.setColumn(colonne, cColumn);
-                        g.setBlock(bloc, cBlock);
-                        break;
-                    }
-                
-                }
-                if (g.getValeurCase(j) == 0 && !singletonNuAEteAppliquer) {
-                    ArrayList<Integer> candidats = g.getCandidatCase(j);
-
-                    Collections.shuffle(candidats);
-
-                    int candidatAEnlever = candidats.get(0);
-                    g.setValeurCase(j, candidats.get(0));
-                    //System.out.println("Valeur de la case d'index " + j + ": " + candidatAEnlever);
-                    int ligne = j / tailleAuCarree;
-                    int colonne = j - ligne * tailleAuCarree;
-                    int bloc = (ligne / taille) * taille + colonne / taille;
-                    ArrayList<Case> cLine = g.getLine(ligne);
-                    ArrayList<Case> cColumn = g.getColumn(colonne);
-                    ArrayList<Case> cBlock = g.getBlock(bloc);
-
-                    for (Case c : cLine) {
-                        c.removeCandidat(candidatAEnlever);
-                    }
-
-                    for (Case c : cColumn) {
-                        c.removeCandidat(candidatAEnlever);
-                    }
-
-                    for (Case c : cBlock) {
-                        c.removeCandidat(candidatAEnlever);
-                    }
-
-                    g.setLine(ligne, cLine);
-                    g.setColumn(colonne, cColumn);
-                    g.setBlock(bloc, cBlock);
-                    randomIndex2.add(j);
-                }
-            }
-        
-        
-        for (Integer j: randomIndex2){
-            g.setModifiableCase(j, false);
-        }
-
-        return g;
-    
-    }
         
     public static Grille genereGrille_Dessai(int i){
         
@@ -241,7 +222,7 @@ public class Algorithm {
                 for (int j= 1; j < 4; j++){
                     allCandidates.add(j);
                 }
-                /*
+                
                 listetest.add(new Case(2, 0, stringToArray("3 4", " "), true));
                 listetest.add(new Case(2, 0, stringToArray("3 4", " "), true));
                 listetest.add(new Case(2, 0, stringToArray("1 2 4", " "), true));
@@ -258,8 +239,8 @@ public class Algorithm {
                 listetest.add(new Case(2, 0, stringToArray("2 3 4", " "), true));
                 listetest.add(new Case(2, 0, stringToArray("2 4", " "), true));
                 listetest.add(new Case(2, 0, stringToArray("2 4", " "), true));
-                */
                 
+                /*
                 listetest.add(new Case(2, 0, allCandidates, true));
                 listetest.add(new Case(2, 0, allCandidates, true));
                 listetest.add(new Case(2, 0, allCandidates, true));
@@ -276,7 +257,7 @@ public class Algorithm {
                 listetest.add(new Case(2, 0, allCandidates, true));
                 listetest.add(new Case(2, 0, allCandidates, true));
                 listetest.add(new Case(2, 0, allCandidates, true));
-                
+                */
                 g = new Grille(2, listetest);
             }
         else if (i == 2){

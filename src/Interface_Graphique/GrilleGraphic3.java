@@ -16,13 +16,13 @@ import sudoku.Sudoku;
  *
  * @author yannE
  */
-public class GrilleGraphic2 extends javax.swing.JFrame {
+public class GrilleGraphic3 extends javax.swing.JFrame {
     
     /**
      * Creates new form Grille
      */
     
-    public GrilleGraphic2() {
+    public GrilleGraphic3() {
         sudoku = new Sudoku(new Joueur("Inconnu"),Algorithm.genereGrille_Dessai(1),Algorithm.genereGrille_Dessai(1));
         initComponents();
         panelGrille.drawGrille();
@@ -31,7 +31,7 @@ public class GrilleGraphic2 extends javax.swing.JFrame {
        
     }
     
-    public GrilleGraphic2(Sudoku s){
+    public GrilleGraphic3(Sudoku s){
         sudoku = s;
         initComponents();
         panelGrille.drawGrille();
@@ -50,17 +50,17 @@ public class GrilleGraphic2 extends javax.swing.JFrame {
         
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        coup_precedent = new javax.swing.JButton();
+        ajouterGrille = new javax.swing.JButton();
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        aide = new javax.swing.JToggleButton();
+        
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         menu_principal = new javax.swing.JButton();
         filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        jButton1 = new javax.swing.JButton();
+
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        quitter = new javax.swing.JButton();
+       
         filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        scoreLabel = new javax.swing.JLabel();
+       
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0));
         
         panelGrille = new PanelGrille(sudoku,579,468);
@@ -76,29 +76,16 @@ public class GrilleGraphic2 extends javax.swing.JFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, null, java.awt.Color.lightGray, null, null));
         jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.LINE_AXIS));
 
-        coup_precedent.setText("Coup précedent");
-        jPanel2.add(coup_precedent);
+        ajouterGrille.setText("Ajouter la grille");
+        
+        jPanel2.add(ajouterGrille);
         jPanel2.add(filler4);
-
-        aide.setText("Aide");
-        jPanel2.add(aide);
-        jPanel2.add(filler2);
 
         menu_principal.setText("Menu principal");
         jPanel2.add(menu_principal);
         jPanel2.add(filler6);
 
-        jButton1.setText("Solution");
-        jPanel2.add(jButton1);
-        jPanel2.add(filler3);
-
-        quitter.setText("Quitter");
-        jPanel2.add(quitter);
-        jPanel2.add(filler5);
-
-        scoreLabel.setText("Score:");
-        jPanel2.add(scoreLabel);
-        jPanel2.add(filler1);
+   
 
         jPanel1.add(jPanel2);
 
@@ -129,7 +116,20 @@ public class GrilleGraphic2 extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>                        
+    }// </editor-fold>
+    
+    private void ajouterGrilleActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        // TODO add your handling code here:
+        /* l'idée c'est d'utiliser la méthode de sauvegarde saveGame de sudoku
+        et d'utiliser le nom du joueur comme code. Comme il sera possible
+        d'enchainer les sauvegardes de grilles, il faudra donc dans cette
+        méthode recréer un objet sudoku ayant la même grille que celui qui
+        est affiché et un ayant un joueur avec un nom de code qui n'a pas 
+        encore été utilisé.
+        */
+    } 
+    
+    
 
     /**
      * @param args the command line arguments
@@ -164,28 +164,27 @@ public class GrilleGraphic2 extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new GrilleGraphic2().setVisible(true);
+                new GrilleGraphic3().setVisible(true);
                 
             }
         });
     }
 
     // Variables declaration - do not modify                     
-    private javax.swing.JToggleButton aide;
-    private javax.swing.JButton coup_precedent;
+  
+    private javax.swing.JButton ajouterGrille;
     private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler6;
-    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private PanelGrille panelGrille;
     private javax.swing.JButton menu_principal;
-    private javax.swing.JButton quitter;
-    private javax.swing.JLabel scoreLabel;
+
+   
     // End of variables declaration                   
     // Other variables declaration
     private Sudoku sudoku;

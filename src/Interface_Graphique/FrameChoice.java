@@ -56,7 +56,13 @@ public class FrameChoice extends javax.swing.JFrame implements ActionListener {
             }
             else{
                 g.removeCandidatCase(currentIndex,valeur);
+                if (g.getCandidatCase(currentIndex).size() == 1){
+                    int valeurCase = g.getCandidatCase(currentIndex).get(0);
+                    g.setValeurCase(currentIndex,valeurCase);
+                    g.removeCandidatCase(currentIndex,valeurCase);
             }
+            }
+            
         }
         else { // Case avec valeur
             int valeurDeLaCase = g.getValeurCase(currentIndex);

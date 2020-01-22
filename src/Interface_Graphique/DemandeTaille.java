@@ -5,7 +5,9 @@
  */
 package Interface_Graphique;
 
+import java.util.ArrayList;
 import sudoku.Algorithm;
+import sudoku.Case;
 import sudoku.Grille;
 import sudoku.Joueur;
 import sudoku.Sudoku;
@@ -14,12 +16,12 @@ import sudoku.Sudoku;
  *
  * @author yannE
  */
-public class GenAlea_tailleEtDifficulte extends javax.swing.JFrame {
+public class DemandeTaille extends javax.swing.JFrame {
 
     /**
      * Creates new form GenAlea_tailleEtDifficulte
      */
-    public GenAlea_tailleEtDifficulte() {
+    public DemandeTaille() {
         initComponents();
     }
 
@@ -38,8 +40,6 @@ public class GenAlea_tailleEtDifficulte extends javax.swing.JFrame {
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 50), new java.awt.Dimension(0, 32767));
         jLabel1 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
         jPanel3 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), filler3.getPreferredSize(), new java.awt.Dimension(0, 32767));
@@ -64,13 +64,6 @@ public class GenAlea_tailleEtDifficulte extends javax.swing.JFrame {
 
         jTextField1.setText("3");
         jPanel2.add(jTextField1);
-
-        jLabel2.setText("Difficulté de la grille:");
-        jPanel2.add(jLabel2);
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Facile", "Moyen", "Difficile" }));
-        jComboBox1.setSelectedIndex(1);
-        jPanel2.add(jComboBox1);
 
         jPanel3.setPreferredSize(new java.awt.Dimension(50, 50));
         jPanel3.setLayout(new java.awt.GridBagLayout());
@@ -97,11 +90,16 @@ public class GenAlea_tailleEtDifficulte extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         
-        Grille g = Algorithm.genereGrille_Dessai(1);
-        Sudoku s = new Sudoku(new Joueur("No name"),g,g);
-        System.out.println("Done 0");
-        this.setVisible(false);
-        new GrilleGraphic2(s).setVisible(true);
+        
+        int taille = Integer.parseInt(jTextField1.getText());
+        if (taille > 1){
+            int tailleAuCarree = taille*taille;
+            ArrayList<Case> listeCase = new ArrayList<>();
+            for (int i = 0; i < tailleAuCarree; i++){
+                listeCase.add(new Case(taille,0,new ArrayList<Integer>(),true));
+            }
+           
+        }
         
         
         
@@ -149,9 +147,7 @@ public class GenAlea_tailleEtDifficulte extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

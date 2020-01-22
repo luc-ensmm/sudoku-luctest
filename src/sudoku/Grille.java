@@ -612,6 +612,7 @@ public class Grille {
         
         
         
+        
         // Singleton nu 
         int utilisationSingletonNu = 0;
         for (int i = 0; i < g.getEnsembleCases().size(); i++){
@@ -684,6 +685,7 @@ public class Grille {
         }
         
         g.showGrille();
+        /*
         System.out.println("\nEtat des cases après une étape");
         for(Case c: g.getEnsembleCases()){
             System.out.println(c);
@@ -693,7 +695,7 @@ public class Grille {
                 g.singletonCache(i);
             }
         }
-        
+        */
         return g;
     
     }
@@ -994,6 +996,10 @@ public class Grille {
         return candidatsAEnlever1;
     }
     
+    /**
+     * Retourne un clone parfait de this, complètement indépendant de this
+     * @return 
+     */
     public Grille clone(){
         
         ArrayList<Case> cloneEnsembleCases = new ArrayList<>();

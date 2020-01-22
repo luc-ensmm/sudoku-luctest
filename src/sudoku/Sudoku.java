@@ -640,8 +640,9 @@ public void help3(int lineCase, int columnCase ){
             System.out.println("niveau de difficulté: facile, moyen, difficile");
             niveau = Clavier.Clavier.getString();
             nbCasesRevelees = Grille.niveauGrille(niveau, taille);
-            Grille laGrille = Algorithm.randomInitialization(nbCasesRevelees, taille);
-            Grille laSolution = Grille.resolutionHasardeuse(laGrille, 0);
+            Grille laSolution = Algorithm.randomSolutionGenerator(taille);
+            Grille laGrille = Algorithm.randomGrilleGenerator(laSolution,nbCasesRevelees);
+            
             laGrille.videLesCandidats();
             //laSolution.afficheGrille();
             Pile p = new Pile();
