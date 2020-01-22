@@ -17,7 +17,7 @@ import static sudoku.TestGrille.stringToArray;
  * @author yannE
  */
 
-/*
+/**
  Le but de cette classe est d'alléger la classe Grille. Elle contiendra
 tous les algorithmes de résolution ou de génération particulière de grille
 de sudoku
@@ -25,10 +25,14 @@ de sudoku
 */
 public class Algorithm {
     
+    
+    
+    
+    
     /**
      * Un générateur de grille qui retourne une grille valide et complète 
      * de taille précisé
-     * @param taille Pour l'instant 1 < taille < 5
+     * @param taille 
      * @return une Grille complète et correcte
      */
     public static Grille randomSolutionGenerator(int taille){
@@ -40,7 +44,7 @@ public class Algorithm {
                 throw new IllegalArgumentException(errorMessage);
             }
         } catch (IllegalArgumentException e){
-            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
         }
         
         ArrayList<Integer> sourceOfValues = new ArrayList<>();
@@ -74,25 +78,34 @@ public class Algorithm {
         Grille g = new Grille(taille,ensembleCases);
         Random ran = new Random();
         
-        // au minimum taille échanges de ligne et colonne et maximum tailleAuCarree échanges
-        int lineSwap = taille + ran.nextInt(tailleAuCarree-taille);
-        int columnSwap = taille + ran.nextInt(tailleAuCarree-taille);
+        // au minimum tailleAuCaree échanges de ligne/colonne et maximum 2*tailleAuCarree échanges
+        int lineSwap = tailleAuCarree + ran.nextInt(tailleAuCarree);
+        int columnSwap = tailleAuCarree + ran.nextInt(tailleAuCarree);
         
+        int indexLine1;
+        int indexLine2;
         for (i = 0; i < lineSwap; i++){
-            int indexLine1 = ran.nextInt(tailleAuCarree);
-            int indexLine2 = ran.nextInt(tailleAuCarree);
-            ArrayList<Case> line1 = g.getLine(indexLine1);
-            g.setLine(indexLine1, g.getLine(indexLine2));
-            g.setLine(indexLine2, line1);
+            indexLine1 = ran.nextInt(tailleAuCarree);
+            indexLine2 = (indexLine1/taille)*taille + ran.nextInt(taille);
+            if (indexLine1 != indexLine2){
+                ArrayList<Case> line1 = g.getLine(indexLine1);
+                g.setLine(indexLine1, g.getLine(indexLine2));
+                g.setLine(indexLine2, line1);
+            }
             
         }
         
+        
+        int indexColumn1;
+        int indexColumn2;
         for (i = 0; i < columnSwap; i++){
-            int indexColumn1 = ran.nextInt(tailleAuCarree);
-            int indexColumn2 = ran.nextInt(tailleAuCarree);
-            ArrayList<Case> column1 = g.getLine(indexColumn1);
-            g.setLine(indexColumn1, g.getLine(indexColumn2));
-            g.setLine(indexColumn2, column1);  
+            indexColumn1 = ran.nextInt(tailleAuCarree);
+            indexColumn2 = (indexColumn1/taille)*taille + ran.nextInt(taille);
+            if (indexColumn1 != indexColumn2){
+                ArrayList<Case> column1 = g.getLine(indexColumn1);
+                g.setLine(indexColumn1, g.getLine(indexColumn2));
+                g.setLine(indexColumn2, column1);  
+            }
         }
         
         return g;
@@ -275,8 +288,7 @@ public class Algorithm {
             g = new Grille(3,listetest);
 
         }
-            
-               
+                  
         return g;
        
     }

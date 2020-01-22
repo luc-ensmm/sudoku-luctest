@@ -7,6 +7,7 @@ package sudoku;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 /**
  *
@@ -25,6 +26,7 @@ public class TestAlgorithm {
     
     public static void test_generators(){
         
+        
         Grille solution = Algorithm.randomSolutionGenerator(3);
         System.out.println("Une grille solution:\n");
         //solution.setValeurCase(0, 0);
@@ -41,6 +43,9 @@ public class TestAlgorithm {
         aReveles.stream().forEach(n->System.out.print(n + " "));
         System.out.print("\n");
         g3.showGrille();
+        
+        
+     
         
     }
     
