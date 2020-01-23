@@ -23,6 +23,11 @@ public class PanelGrille extends JPanelImage implements MouseListener{
     private int taille;
     private int tailleAuCarree;
     private FrameChoice fenetreChoix;
+   
+    
+    public enum Draw{
+        GRILLE,SOLUTION;
+    }
     
     public PanelGrille(Sudoku s,int width, int height){
         super(width,height);
@@ -43,7 +48,29 @@ public class PanelGrille extends JPanelImage implements MouseListener{
         return tailleAuCarree;
     }
     
-    public void drawGrille(){
+    
+    public void drawGrille(PanelGrille.Draw toDraw){
+        
+        Grille g = null;
+        try {
+            switch(toDraw){
+                case GRILLE:
+                    g = sudoku.getGrille();
+                    break;
+                
+                case SOLUTION:
+                    g = sudoku.getSolution();
+                    g.videLesCandidats();
+                    break;
+                
+                default:
+                    throw new IllegalArgumentException("L'argument n'est pas dans PanelGrille.Draw");       
+            }
+            
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException(e);
+        }
+        
         int height = this.getHeight();
         int width = this.getWidth();
         
@@ -68,8 +95,6 @@ public class PanelGrille extends JPanelImage implements MouseListener{
             this.getGraphics2D().drawLine(i*(width/taille),0,i*(width/taille),height);
         }
         
-        
-        Grille g = this.getGrille();
         
         // Valeurs et candidats
         for (int i = 0; i < g.getEnsembleCases().size(); i++){
@@ -121,9 +146,14 @@ public class PanelGrille extends JPanelImage implements MouseListener{
         this.getGraphics2D().setColor(couleur);
     }
     
-    public Grille getGrille(){
-        return sudoku.getGrille();
+    /**
+     * Existe car utilisée dans la classe FrameChoice
+     * @return l'objet Sudoku (!= copie du Sudoku, = référence à l'objet)
+     */
+    public Sudoku getSudoku(){
+        return sudoku;
     }
+    
     
     @Override
         public void mouseClicked(MouseEvent e) {

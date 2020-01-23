@@ -9,11 +9,17 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionListener;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import sudoku.Coup;
 import sudoku.Grille;
 import sudoku.Sudoku;
 
 /**
  *
+ * @author yannE
+ */
+
+/**
+ * Fenêtre représentant le "pad numérique"
  * @author yannE
  */
 public class FrameChoice extends javax.swing.JFrame implements ActionListener {
@@ -44,8 +50,10 @@ public class FrameChoice extends javax.swing.JFrame implements ActionListener {
     public void actionPerformed(java.awt.event.ActionEvent evt){
         int valeur = Integer.parseInt(evt.getActionCommand()); 
                                                                   
-        Grille g = pg.getGrille();
+        Grille g = pg.getSudoku().getGrille();
+        int valeurDeLaCaseAvant = g.getValeurCase(currentIndex);
         // Case sans valeur, ni candidats
+        
         if (g.getValeurCase(currentIndex) == 0 && g.getCandidatCase(currentIndex).isEmpty()){
             g.setValeurCase(currentIndex, valeur);
         }
@@ -65,16 +73,21 @@ public class FrameChoice extends javax.swing.JFrame implements ActionListener {
             
         }
         else { // Case avec valeur
-            int valeurDeLaCase = g.getValeurCase(currentIndex);
+            
             g.setValeurCase(currentIndex, 0);
-            if (valeurDeLaCase != valeur && valeurDeLaCase != 0) {
-                g.addCandidatCase(currentIndex, valeurDeLaCase);
-                pg.drawGrille();
+            if (valeurDeLaCaseAvant != valeur && valeurDeLaCaseAvant != 0) {
+                g.addCandidatCase(currentIndex, valeurDeLaCaseAvant);
+                pg.drawGrille(PanelGrille.Draw.GRILLE);
                 g.addCandidatCase(currentIndex,valeur);
             }
         }
         
-        pg.drawGrille();
+        
+        pg.drawGrille(PanelGrille.Draw.GRILLE);
+        // ON RAJOUTE L'EVOLUTION DES COUPS ICI
+        pg.getSudoku().addCoup(new Coup(currentIndex,valeurDeLaCaseAvant,g.getValeurCase(currentIndex)));
+        
+        
         
         
     }

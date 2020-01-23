@@ -5,15 +5,20 @@
  */
 package sudoku;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author smoukoka
  */
 public class Coup {
+    
     private int position;
     private int valeurApres;
     private int valeurAvant;
-
+    private ArrayList<Integer> candidatsAvant;
+    private ArrayList<Integer> candidatsApres;
+    
     public Coup(int position,int valeurAvant, int valeurApres) {
         this.position = position;
         this.valeurApres = valeurApres;

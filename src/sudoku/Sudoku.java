@@ -34,12 +34,14 @@ public class Sudoku {
         this.listeCoup = new Pile();
     }
     
+    /*
     public Sudoku(Joueur j, Grille g){
         this.j = j;
         this.g  = g;
         this.solution = Grille.resolutionHasardeuse(g, 0);
         this.listeCoup = new Pile();
     }
+    */
     
     public Sudoku(Joueur j, Grille g, Grille solution, Pile listeCoup){
         this.j = j;
@@ -65,6 +67,14 @@ public class Sudoku {
     
     public Grille getSolution(){
         return solution;
+    }
+    
+    public void setJoueurName(String name){
+        j.setNom(name);
+    }
+    
+    public void setJoueurScore(int score){
+        j.setScore(score);
     }
     
     public void jouerUnCoup(){
@@ -269,7 +279,16 @@ public class Sudoku {
     public void afficheSolution(){
         this.solution.afficheGrille();
     }
-        
+    
+
+    public void addCoup(Coup coup){
+        listeCoup.push(coup);
+    }
+    
+    public Pile getListeCoup(){
+        return listeCoup;
+    }
+    
     public void revenirEnArriere(int nbCoupsJoues){
         System.out.println(listeCoup.size());
         if (nbCoupsJoues > listeCoup.size()){
@@ -288,10 +307,7 @@ public class Sudoku {
         } this.afficheSudoku();
     }
         
-     
-    
-    
-    
+       
  public void jouerUnCoupAvecCandidats(){
         
         int taille = g.getTaille();

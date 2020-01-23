@@ -25,7 +25,7 @@ public class GrilleGraphic3 extends javax.swing.JFrame {
     public GrilleGraphic3() {
         sudoku = new Sudoku(new Joueur("Inconnu"),Algorithm.genereGrille_Dessai(1),Algorithm.genereGrille_Dessai(1));
         initComponents();
-        panelGrille.drawGrille();
+        panelGrille.drawGrille(PanelGrille.Draw.GRILLE);
         //this.setSize(new Dimension(frameWidth,frameHeight));
         //System.out.println("A dessiner");
        
@@ -34,7 +34,7 @@ public class GrilleGraphic3 extends javax.swing.JFrame {
     public GrilleGraphic3(Sudoku s){
         sudoku = s;
         initComponents();
-        panelGrille.drawGrille();
+        panelGrille.drawGrille(PanelGrille.Draw.GRILLE);
            
     }
     
@@ -148,13 +148,13 @@ public class GrilleGraphic3 extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GrilleGraphic.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GrilleGraphic3.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GrilleGraphic.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GrilleGraphic3.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GrilleGraphic.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GrilleGraphic3.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GrilleGraphic.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GrilleGraphic3.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>

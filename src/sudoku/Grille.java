@@ -1047,11 +1047,19 @@ public class Grille {
         } return nbCasesRevelees;
     }
     
-    public void videLesCandidats(){
-        for (int i = 0; i<this.ensembleCases.size(); i++){
-             this.getCase(i).getCandidats().clear();
+    public void videLesCandidats() {
+
+        for (int i = 0; i < this.ensembleCases.size(); i++) {
+            if (!this.getCase(i).getCandidats().isEmpty()) {
+                this.getCase(i).getCandidats().clear();
+            }
         }
     }
+    
+    
+    
+    
+    
 }
     
       

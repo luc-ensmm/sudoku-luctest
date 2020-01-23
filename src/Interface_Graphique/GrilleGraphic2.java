@@ -8,7 +8,13 @@ package Interface_Graphique;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.NoSuchElementException;
+import javax.swing.JOptionPane;
 import sudoku.Algorithm;
+import sudoku.Coup;
 import sudoku.Joueur;
 import sudoku.Sudoku;
 
@@ -25,7 +31,7 @@ public class GrilleGraphic2 extends javax.swing.JFrame {
     public GrilleGraphic2() {
         sudoku = new Sudoku(new Joueur("Inconnu"),Algorithm.genereGrille_Dessai(1),Algorithm.genereGrille_Dessai(1));
         initComponents();
-        panelGrille.drawGrille();
+        panelGrille.drawGrille(PanelGrille.Draw.GRILLE);
         //this.setSize(new Dimension(frameWidth,frameHeight));
         //System.out.println("A dessiner");
        
@@ -34,7 +40,7 @@ public class GrilleGraphic2 extends javax.swing.JFrame {
     public GrilleGraphic2(Sudoku s){
         sudoku = s;
         initComponents();
-        panelGrille.drawGrille();
+        panelGrille.drawGrille(PanelGrille.Draw.GRILLE);
            
     }
     
@@ -56,7 +62,7 @@ public class GrilleGraphic2 extends javax.swing.JFrame {
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         menu_principal = new javax.swing.JButton();
         filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        jButton1 = new javax.swing.JButton();
+        solutionButton = new javax.swing.JButton();
         filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         quitter = new javax.swing.JButton();
         filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
@@ -88,8 +94,8 @@ public class GrilleGraphic2 extends javax.swing.JFrame {
         jPanel2.add(menu_principal);
         jPanel2.add(filler6);
 
-        jButton1.setText("Solution");
-        jPanel2.add(jButton1);
+        solutionButton.setText("Solution");
+        jPanel2.add(solutionButton);
         jPanel2.add(filler3);
 
         quitter.setText("Quitter");
@@ -127,10 +133,117 @@ public class GrilleGraphic2 extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
+        
+        
+        // Actions des boutons
+        
+        quitter.addActionListener(new java.awt.event.ActionListener(){
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt){
+                
+                quitterActionPerformed();
+            }
+        });
+        
+        menu_principal.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                menuPrincipalActionPerformed();
+            }
+        });
+        
+        solutionButton.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                 solutionButtonActionPerformed();
+            }
+        });
+        
+        coup_precedent.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                coup_precedentActionPerformed();
+            }
+        });
+        
+        
 
         pack();
     }// </editor-fold>                        
 
+    
+    public void quitterActionPerformed(){
+        // J'assume que le joueur n'as pas donner son nom 
+        
+        String nomJoueur = (String) JOptionPane.showInputDialog(
+                        this,"Votre nom:",
+                        "Voulez-vous sauvegardez ?",
+                        JOptionPane.WARNING_MESSAGE
+                        );
+        if ((nomJoueur != null) && nomJoueur.length() > 0) {
+            sudoku.setJoueurName(nomJoueur);
+            sudoku.saveGame();
+            
+        }
+        
+        this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+    }
+    
+    public void menuPrincipalActionPerformed(){
+        String nomJoueur = (String) JOptionPane.showInputDialog(
+                        this,"Votre nom:",
+                        "Voulez-vous sauvegardez ?",
+                        JOptionPane.WARNING_MESSAGE
+                        );
+        if ((nomJoueur != null) && nomJoueur.length() > 0) {
+            sudoku.setJoueurName(nomJoueur);
+            sudoku.saveGame();
+            
+        }
+        
+        new Menu_Principal().setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }
+    
+    public void solutionButtonActionPerformed(){
+        int response = JOptionPane.showConfirmDialog(
+                this,
+                "Voir la solution met fin à la partie et annule votre score\n"+
+                        "Voulez-vous quand même voir la solution ?",
+                "",
+                JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        
+        if (response == 0){
+            panelGrille.drawGrille(PanelGrille.Draw.SOLUTION);
+            sudoku.setJoueurScore(0);
+            aide.setEnabled(false);
+            coup_precedent.setEnabled(false);
+            solutionButton.setEnabled(false);
+        }
+        
+    }
+    
+    public void coup_precedentActionPerformed(){
+        
+        try {
+            Coup dernierCoup = sudoku.getListeCoup().pop();
+            sudoku.getGrille().setValeurCase(dernierCoup.getPosition(), dernierCoup.getValeurAvant());
+            // on vide les candidats par défault
+            sudoku.getGrille().setCandidatCase(dernierCoup.getPosition(), new ArrayList<>());
+            panelGrille.drawGrille(PanelGrille.Draw.GRILLE);
+
+        } catch (NoSuchElementException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Vous n'avez pas joué autant de coups !",
+                    "Liste de coup vide !",
+                    JOptionPane.ERROR_MESSAGE);
+
+        }
+        
+    }
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -148,13 +261,13 @@ public class GrilleGraphic2 extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GrilleGraphic.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GrilleGraphic2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GrilleGraphic.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GrilleGraphic2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GrilleGraphic.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GrilleGraphic2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GrilleGraphic.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GrilleGraphic2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -179,7 +292,7 @@ public class GrilleGraphic2 extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler6;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton solutionButton;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private PanelGrille panelGrille;

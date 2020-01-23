@@ -1,0 +1,7 @@
+#nom du joueur: Moi
+#score: 0
+#taille: 2
+#grille du joueur: 
+%;0;0;0;1;2;0;0;0;0;0;0;3;1;0;0;0;
+#solution de la partie: 
+$;0;0;0;1;2;0;0;0;0;0;0;3;1;0;0;0;

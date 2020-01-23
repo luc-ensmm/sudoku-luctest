@@ -23,6 +23,11 @@ public class Pile {
         this.pile.addLast(c);
     }
     
+    /**
+     * Supprime et retourne le dernier objet Coup de la pile
+     * @throws NoSuchElementException
+     * @return le dernier objet Coup de la pile 
+     */
     public Coup pop (){
         return this.pile.removeLast();
     }
