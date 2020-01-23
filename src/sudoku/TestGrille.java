@@ -23,7 +23,7 @@ public class TestGrille {
    
     public static void main(String[] args) {
         // TODO code application logic here
-            test_solutionHasardeuse();
+            test_clean();
             //test_solutionAlgorithmique();
        
    
@@ -365,5 +365,28 @@ public class TestGrille {
         }
         
         
+    }
+    
+    public static void test_clean(){
+        ArrayList<Integer> a = new ArrayList<Integer>();
+        a.add(1);
+        a.add(2);
+        a.add(3);
+        a.add(1);
+        a.add(4);
+        a.add(3);
+        a.add(1);
+        a.add(1);
+        a.add(6);
+        a.add(7);
+        a.add(6);
+        a.add(8);
+        a.add(2);
+        a.add(1);
+        
+        System.out.println("a "+a);
+        //a.remove(1);
+        //System.out.println("a "+a);
+        Grille.clean(a);
     }
 }

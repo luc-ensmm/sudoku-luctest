@@ -600,37 +600,26 @@ public void help3(int lineCase, int columnCase ){
         }
     } 
     
-    /*public void help5(){ //supprime aléatoirement des candidats faux
-        int nbCandidatsSupprime;
-        int indiceCandidatSupprime;
-        int valeurBonne = 0;
-        for(int i = 0; i<this.getGrille().getEnsembleCases().size(); i++){
+    public void help5(){
+        ArrayList<Integer> listeCasesModifiables = new ArrayList<Integer>();
+        int indice;
+        int indiceCaseRevele;
+        Case solutionCase;
+        for (int i = 0; i<this.getGrille().getEnsembleCases().size(); i++){
             Case caseCourante = this.getGrille().getEnsembleCases().get(i);
-            if (this.getGrille().getEnsembleCases().get(i).estModifiable() == true && !caseCourante.getCandidats().isEmpty()){
-                if (caseCourante.getCandidats().contains(this.getSolution().getValeurCase(i))){
-                    valeurBonne = caseCourante.getCandidats().remove(caseCourante.getCandidats().indexOf(this.getSolution().getValeurCase(i)));
-                    //System.out.println("valeur bonne "+valeurBonne);
-                    System.out.println("candidat - valeur "+caseCourante.getCandidats());
-                }
-                Random ran1 = new Random();
-                nbCandidatsSupprime = ran1.nextInt(caseCourante.getCandidats().size()+1);
-                System.out.println("size "+caseCourante.getCandidats().size());
-                System.out.println("nbCandidatsSupprime "+nbCandidatsSupprime);
-                for(int j = 0; j<nbCandidatsSupprime; j++){
-                    Random ran2 = new Random();
-                    indiceCandidatSupprime = ran2.nextInt(caseCourante.getCandidats().size());
-                    System.out.println("indiceCandidatSupprime "+indiceCandidatSupprime);
-                    caseCourante.getCandidats().remove(indiceCandidatSupprime);
-                } 
-                if (valeurBonne != 0){
-                    caseCourante.getCandidats().add(valeurBonne);
-                    valeurBonne = 0;
-                    Collections.sort(caseCourante.getCandidats());
-                    System.out.println("caseCourante.getCandidats()"+caseCourante.getCandidats());
-                }
+            if(caseCourante.estModifiable() == true){
+                listeCasesModifiables.add(i);
             }
         }
-    }*/
+        System.out.println("listeCasesModifiables "+listeCasesModifiables);
+        Random ran2 = new Random();
+        indice = ran2.nextInt(listeCasesModifiables.size());
+        System.out.println("indice "+indice);
+        indiceCaseRevele = listeCasesModifiables.get(indice);
+        System.out.println("indiceCaseRevele "+indiceCaseRevele);
+        solutionCase = this.getSolution().getCase(indiceCaseRevele);
+        this.getGrille().setCase(indiceCaseRevele, solutionCase);
+    }
     
     public static Sudoku playCommande(){
         String mot;
