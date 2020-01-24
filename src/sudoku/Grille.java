@@ -127,11 +127,6 @@ public class Grille {
         return taille;
     }
 
-    /**
-     * 
-     * @param i
-     * @return 
-     */
     public ArrayList<Case> getLine(int i) {
         
         ArrayList<Case> line = new ArrayList<>();
@@ -153,7 +148,6 @@ public class Grille {
         
         return column;
     }
-    
     
     /**
      * Remplace la ligne i par celle en argument
@@ -190,15 +184,15 @@ public class Grille {
     
     /**
      * 
-     * @param b
-     *      Numéro du bloc
+     * @param b 
+     * b = Numéro du bloc
      * @return 
      */
     public ArrayList<Case> getBlock(int b){ 
     
         ArrayList<Case> block = new ArrayList<>();
         int tailleAuCarree = taille*taille; // introduit pour plus de clarté dans le code
-        int depart = (b/taille)*(tailleAuCarree*taille) + taille*(b-(b/taille)*taille); //le premier terme donne la ligne et le deuxième terme donne la colonne
+        int depart = (b/taille)*(tailleAuCarree*taille) + taille*(b-(b/taille)*taille); 
         for (int k = depart; k < depart + taille*tailleAuCarree; k+=tailleAuCarree){
             for (int m = k; m < k + taille; m++){
                 block.add(ensembleCases.get(m));
@@ -208,10 +202,9 @@ public class Grille {
       
         return block;
     }
-    
-    
+
     public void setBlock(int b, ArrayList<Case> block){ 
-        int tailleAuCarree = taille*taille; // introduit pour plus de clarté dans le code
+        int tailleAuCarree = taille*taille; 
         if (block.size() != tailleAuCarree){
             System.out.println("La ligne mise en argument n'a pas le bon nombre d'élément:\nNombre d'élément de la ligne: " +
                     block.size() + "\nTaille au carrée de la grille: " + tailleAuCarree);
@@ -269,7 +262,6 @@ public class Grille {
                 System.out.print("__");
               }
               System.out.print("\n");
-              //System.out.println("___________");
         }
     
     }
@@ -939,7 +931,7 @@ public class Grille {
                 if(i!=(lineCase) && column.get(lineCase).candidatDejaPresent(column.get(i)) != 0 ){
                     candidatsEnTrop.add(column.get(lineCase).candidatDejaPresent(column.get(i)));
                 } i++;
-            }//System.out.println("candidats en trop colonne "+candidatsEnTrop);
+            }
             
         return candidatsEnTrop;
     }
@@ -980,7 +972,15 @@ public class Grille {
         }//System.out.println("candidats en trop bloc "+candidatsEnTrop);
         return candidatsEnTrop;
     }
-    
+    /**
+     * indique parmi les candidats d'une case lesquels ne sont pas possibles
+     * car d'autres cases non modifiables contiennent déjà ces valeurs 
+     * soit sur la ligne, soit sur la colonne, soit dans le bloc (généralisation
+     * de la méthode candidatDejaPresent de la clase Case
+     * @param lineCase
+     * @param columnCase
+     * @return 
+     */
     public ArrayList<Integer> candidatsEnTrop(int lineCase, int columnCase){
         ArrayList<Integer> candidatsAEnlever1 = this.candidatsEnTropColonne(lineCase, columnCase);
         ArrayList<Integer> candidatsAEnlever2 = this.candidatsEnTropLigne(lineCase, columnCase);
@@ -1011,7 +1011,7 @@ public class Grille {
         return new Grille(taille, cloneEnsembleCases);
     }
 
-    public static  int niveauGrille(String niveauDifficulte, int taille){ //a finir
+    public static  int niveauGrille(String niveauDifficulte, int taille){ //a supprimer
         int nbCasesRevelees;
         niveauDifficulte.toLowerCase();
         int taillePuissance4 = taille*taille*taille*taille;
@@ -1115,67 +1115,7 @@ public class Grille {
             }
             depart+=taille;*/    
         //}
-    }
-    
-    public void paireNue(ArrayList<Case> groupeEtudie){
-        ArrayList<Case> caseAvec2Candidats = new ArrayList<Case>();
-        ArrayList<Case> caseAvecPaireNue = new ArrayList<Case>();
-        ArrayList<Integer> candidatsCommuns = new ArrayList<Integer>();
-        ArrayList<Integer> position = new ArrayList<Integer>(); // position des cases ayant 2 candidats
-        ArrayList<Integer> position2 = new ArrayList<Integer>(); //position des cases dont il ne faudra pas supprimer les candidats
-        System.out.println("groupe etudie "+groupeEtudie);
-        for (int i = 0; i<groupeEtudie.size(); i++){
-            if(groupeEtudie.get(i).estModifiable() ==true && groupeEtudie.get(i).getCandidats().size() == 2){
-                caseAvec2Candidats.add(groupeEtudie.get(i)); //liste des cases qui ont 2 candidats  
-                position.add(i);
-                System.out.println("caseAvec2Candidats "+caseAvec2Candidats);
-                System.out.println("position "+position);
-            }
-        } 
-        int k = 0;
-        while(k<caseAvec2Candidats.size() && candidatsCommuns.size()<=2){
-            for(int j = k+1; j<caseAvec2Candidats.size(); j++){
-                if(caseAvec2Candidats.get(k).getCandidats().equals(caseAvec2Candidats.get(j).getCandidats())){
-                    candidatsCommuns = caseAvec2Candidats.get(j).getCandidats(); //liste des candidats qu'il faudra supprimer dans le bloc
-                    System.out.println("k "+k);
-                    System.out.println("j "+j);
-                    System.out.println("case k "+caseAvec2Candidats.get(k));
-                    System.out.println("case j "+caseAvec2Candidats.get(j));
-                    System.out.println("position 1er case "+groupeEtudie.indexOf(caseAvec2Candidats.get(k)));
-                    System.out.println("position 2eme case "+groupeEtudie.indexOf(caseAvec2Candidats.get(j)));
-                    position2.add(position.get(k));
-                    position2.add(position.get(j));
-                    //position.add(groupeEtudie.indexOf(caseAvec2Candidats.get(k)));
-                    //position.add(groupeEtudie.indexOf(caseAvec2Candidats.get(j))); 
-                    System.out.println("c "+candidatsCommuns);
-                    System.out.println("position2 "+position2);
-                }
-                
-            } k++;
-        }
-        System.out.println("position2.get(0) "+position2.get(0));
-        System.out.println("position2.get(1) "+position2.get(1));
-        System.out.println("candidatsCommuns.get(0) "+candidatsCommuns.get(0));
-        System.out.println("candidatsCommuns.get(1) "+candidatsCommuns.get(1));
-        for (int i = 0; i<groupeEtudie.size(); i++){
-            //System.out.println("i for "+i);
-            if(i!=position2.get(0) && i!=position2.get(1)){ //on enlève les candidats pour toutes les autres cases
-                //System.out.println("i if "+i);
-                if(groupeEtudie.get(i).getCandidats().contains(candidatsCommuns.get(0)) || groupeEtudie.get(i).getCandidats().contains(candidatsCommuns.get(1))){
-                    System.out.println("i if contains "+i);
-                    System.out.println("groupeEtudie.get(i).getCandidats() avant remove "+groupeEtudie.get(i).getCandidats());
-                    groupeEtudie.get(i).removeCandidat(candidatsCommuns.get(0));
-                    groupeEtudie.get(i).removeCandidat(candidatsCommuns.get(1));
-                    System.out.println("groupeEtudie.get(i).getCandidats() apres remove "+groupeEtudie.get(i).getCandidats());
-                }
-            }
-        } System.out.println("groupe etudie "+groupeEtudie);
-        
-    }
-    
-    
-    
-    
+    }    
 }
     
       
