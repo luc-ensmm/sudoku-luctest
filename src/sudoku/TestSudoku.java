@@ -19,7 +19,7 @@ public class TestSudoku {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        test_jouerUnePartie();
+        test_resolutionAlgorithmique();
     }
     
     
@@ -227,5 +227,41 @@ public class TestSudoku {
         System.out.println("contains "+a.equals(c));
         System.out.println("c "+c);
         System.out.println("a "+a);
+    }
+    
+    public static void test_resolutionAlgorithmique(){
+        Sudoku s1 = Sudoku.chargerGrille("partie_Luc");
+        s1.afficheSudoku();
+        s1.jouerUnCoupAvecCandidats();
+        s1.jouerUnCoupAvecCandidats();
+        s1.jouerUnCoupAvecCandidats();
+        s1.jouerUnCoupAvecCandidats();
+        s1.jouerUnCoupAvecCandidats();
+        s1.jouerUnCoupAvecCandidats();
+        /*s1.jouerUnCoupAvecCandidats();
+        s1.jouerUnCoupAvecCandidats();
+        s1.jouerUnCoupAvecCandidats();
+        s1.jouerUnCoupAvecCandidats();
+        s1.jouerUnCoupAvecCandidats();
+        s1.jouerUnCoupAvecCandidats();
+        s1.jouerUnCoupAvecCandidats();
+        s1.jouerUnCoupAvecCandidats();
+        s1.jouerUnCoupAvecCandidats();*/
+        s1.getGrille().candidatBloque(2);
+        //ArrayList<Case> c = s1.getGrille().getBlock(3);
+        //System.out.append("c "+c);
+        //s1.getGrille().paireNue(s1.getGrille().getBlock(2));
+        /*ArrayList<Integer> c = new ArrayList<Integer>();
+        c.add(1);
+        c.add(4);
+        ArrayList<Integer> a = new ArrayList<Integer>();
+        a.add(1);
+        a.add(3);
+        a.add(4);
+        System.out.println("contains "+a.equals(c));
+        System.out.println("c "+c);
+        System.out.println("a "+a);
+        a.remove(c.get(1));
+        System.out.println("a "+a);*/
     }
 }

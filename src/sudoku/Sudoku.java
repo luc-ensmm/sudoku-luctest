@@ -325,6 +325,7 @@ public class Sudoku {
         int nbHelp2 = 0;
         int nbHelp3 = 0;
         int nbHelp4 = 0;
+        int nbHelp5 = 0;
             System.out.println("Veuillez entrer la ligne et la colonne de votre case:");
             while (ligne < 1 || ligne > taille*taille) {
             
@@ -352,7 +353,8 @@ public class Sudoku {
                     + "\n  b)Aide 2 vous indique toutes les cases dont aucun des candidats n'est solution taper b)"
                     + "\n  c)Aide 3 vous indique les candidats à enlever dans la case sélectionnée car des cases non modifiables possèdent déjà cette valeur "
                     + "soit dans la ligne,soit dans la colonne, soit dans le bloc (taper c)\"" 
-                    + "\n  d)Aide 4 supprime un candidats faux dans chaque cases modifiables (taper d)");
+                    + "\n  d)Aide 4 supprime un candidats faux dans chaque cases modifiables (taper d)"
+                    + "\n  e)Aide 5 revele la valeur d'une case au hasard (taper e)");
             while (mot.equals("oui") && lesCandidats.size()<taille*taille) {
                 System.out.print("Entrer la valeur d'un candidat de la case (1 à " + taille*taille +") ou taper h:");
                 String reponse = Clavier.Clavier.getString();
@@ -383,18 +385,22 @@ public class Sudoku {
                             this.help3(ligne, colonne);
                             nbHelp3 += 1;
                             System.out.println("nbhelp3 "+nbHelp3);
-                        } else {
+                        } else if (aide.equals(("d"))){
                             this.help4();
                             nbHelp4 += 1;
                             System.out.println("nbhelp4 "+nbHelp4);
-                        } 
+                        } else {
+                            this.help5();
+                            nbHelp5 += 1;
+                            System.out.println("nbHelp5 "+nbHelp5);
+                        }
                           System.out.println("Voulez vous ajouter d'autres candidats ? (oui ou non)");
                           mot = Clavier.Clavier.getString();
                     } else {
                     System.out.println("Nous n'avons pas compris votre réponse");
                     }
                 }
-            }this.calculScore(nbHelp1, nbHelp2, nbHelp3, nbHelp4);
+            }this.calculScore(nbHelp1, nbHelp2, nbHelp3, nbHelp4, nbHelp5);
             this.g.getEnsembleCases().get(position_case).addCandidat(lesCandidats);
             System.out.println("candidats de la case "+this.g.getEnsembleCases().get(position_case).getCandidats());
             //this.getGrille().candidatsEnTrop(ligne, colonne);
@@ -408,6 +414,7 @@ public class Sudoku {
             System.out.println("la case sélectionnée n'est pas modifiable");
         }
     }
+ 
     public void enleverCandidat(){
         int taille = g.getTaille();
         int ligne = -1;
@@ -682,6 +689,7 @@ public void help3(int lineCase, int columnCase ){
         }
         return valeur;
     } 
+    
     public int scoreFinale(String niveauDeDifficulte, Calendar cal){
         Calendar ca2 = Calendar.getInstance();
         int duree;
@@ -694,16 +702,16 @@ public void help3(int lineCase, int columnCase ){
         duree = (h*360+m*60+s);
         if(niveauDeDifficulte.equals("moyen")){
             this.j.setScore(5);
-            ecart = (1500-duree)/30;
-            nbPoint = -5*ecart;
+            ecart = (1800-duree)/30;
+            nbPoint = -2*ecart;
         } else if (niveauDeDifficulte.equals("difficile")){
             this.j.setScore(10);
-            ecart = (2400-duree)/30;
-            nbPoint = -5*ecart;
+            ecart = (2700-duree)/30;
+            nbPoint = -2*ecart;
             
         } else {
-            ecart = (600-duree)/30;
-            nbPoint = -5*ecart;
+            ecart = (900-duree)/30;
+            nbPoint = -2*ecart;
             this.j.setScore(nbPoint);
         }
         //System.out.println("ecart "+ecart);
@@ -711,12 +719,13 @@ public void help3(int lineCase, int columnCase ){
         return this.j.getScore();
     }
     
-    public int calculScore(int nbHelp1, int nbHelp2, int nbHelp3, int nbHelp4){
-        int pointParNbHelp1 = -5*nbHelp1;
-        int pointParNbHelp2 = -10*nbHelp2;
+    public int calculScore(int nbHelp1, int nbHelp2, int nbHelp3, int nbHelp4,int nbHelp5){
+        int pointParNbHelp1 = -2*nbHelp1;
+        int pointParNbHelp2 = -5*nbHelp2;
         int pointParNbHelp3 = -15*nbHelp3;
         int pointParNbHelp4 = -20*nbHelp4;
-        this.j.setScore(pointParNbHelp1 + pointParNbHelp2 + pointParNbHelp3 + pointParNbHelp4);
-        return pointParNbHelp1 + pointParNbHelp2 + pointParNbHelp3 + pointParNbHelp4;
+        int pointParNbHelp5 = -10*nbHelp5;
+        this.j.setScore(pointParNbHelp1 + pointParNbHelp2 + pointParNbHelp3 + pointParNbHelp4+pointParNbHelp5);
+        return pointParNbHelp1 + pointParNbHelp2 + pointParNbHelp3 + pointParNbHelp4+pointParNbHelp5;
     }
 }
