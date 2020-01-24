@@ -678,6 +678,7 @@ public void help3(int lineCase, int columnCase ){
             seuilMinCasesRevelees = (int)(0.21*(tailleAuCarre*tailleAuCarre)+1);
             System.out.println("combien de cases souhaitez vous révéler ? (entre "+seuilMinCasesRevelees+" et "+tailleAuCarre*tailleAuCarre+")");
             nbCasesRevelees = Clavier.Clavier.getInt();
+            niveau = Grille.niveauGrille(nbCasesRevelees, taille);
             Grille laSolution = Algorithm.randomSolutionGenerator(taille);
             Grille laGrille = Algorithm.randomGrilleGenerator(laSolution,nbCasesRevelees);
             laGrille.videLesCandidats();
@@ -705,7 +706,12 @@ public void help3(int lineCase, int columnCase ){
         }
         return valeur;
     } 
-    
+    /**
+     * calcul le score en fonction de la difficulté et de la durée de la partie
+     * @param niveauDeDifficulte
+     * @param cal
+     * @return 
+     */
     public int scoreFinale(String niveauDeDifficulte, Calendar cal){
         Calendar ca2 = Calendar.getInstance();
         int duree;
@@ -730,8 +736,6 @@ public void help3(int lineCase, int columnCase ){
             nbPoint = -2*ecart;
             this.j.setScore(nbPoint);
         }
-        //System.out.println("ecart "+ecart);
-        //System.out.println("nb point "+nbPoint);
         return this.j.getScore();
     }
     
