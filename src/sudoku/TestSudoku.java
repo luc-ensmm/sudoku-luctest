@@ -183,7 +183,7 @@ public class TestSudoku {
     
     public static void test_jouerAvecUnCandidat() {
         Sudoku s1 = Sudoku.chargerGrille("nouvelle_grille");
-        //s1.afficheSudoku();
+        s1.afficheSudoku();
         //s1.jouerUnCoupAvecCandidats();
         //s1.getGrille().candidatsEnTropColonne(2, 1);
         //System.out.println("column "+s1.getGrille().getColumn(2));
@@ -197,12 +197,14 @@ public class TestSudoku {
         //s1.help2();
         //s1.help3(1,1);
         //s1.help4();
+        //s1.help5();
+        //s1.afficheSudoku();
         //s1.enleverCandidat();
         //s1.playGameWithCandidat();
     }
 
     public static void test_jouerUnePartie() {
-        Sudoku s1 = Sudoku.playCommande();
+        //Sudoku s1 = Sudoku.playCommande();
         //Joueur j = new Joueur("Nom",0);
         //Sudoku s = new Sudoku (j,30, 3);
         //s.afficheSudoku();
@@ -215,5 +217,15 @@ public class TestSudoku {
         int s = (ca2.get(Calendar.SECOND)+65)-cal.get(Calendar.SECOND);
         System.out.println("h "+h+"m "+m+"s "+s);
         System.out.println("seconde "+(h*360+m*60+s)/30);*/
+        ArrayList<Integer> c = new ArrayList<Integer>();
+        c.add(1);
+        c.add(2);
+        ArrayList<Integer> a = new ArrayList<Integer>();
+        a.add(1);
+        //a.add(3);
+        a.add(2);
+        System.out.println("contains "+a.equals(c));
+        System.out.println("c "+c);
+        System.out.println("a "+a);
     }
 }

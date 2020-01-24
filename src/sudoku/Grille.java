@@ -1064,6 +1064,104 @@ public class Grille {
         }
     }
     
+    public void candidatBloque(int block){
+        int tailleAuCarree = this.getTaille();
+        int depart = (block/taille)*(tailleAuCarree*taille) + taille*(block-(block/taille)*taille); //indice de la première case du bloc
+        ArrayList<Case> blocCourant = this.getBlock(block);
+        ArrayList<Case> ligneCourante;
+        ArrayList<Integer> c = new ArrayList<Integer>();
+        Case caseCourante;
+        for (int i = 0; i<taille; i++){
+            ligneCourante = this.getLine((block/taille)*(tailleAuCarree*taille));
+            for (int j =depart; j<depart+taille; j++){
+                caseCourante = ligneCourante.get(j);
+                ligneCourante.remove(caseCourante);
+                for(int k = 0; k<caseCourante.getCandidats().size(); k++){
+                    if (caseCourante.estModifiable() == true && !c.contains(caseCourante.getCandidats().get(k))){
+                        c.add(caseCourante.getCandidats().get(k));
+                    }
+                } 
+                
+            }
+            for (int m =0; m<ligneCourante.size()-depart; m++)
+            depart+=tailleAuCarree;    
+        }
+    }
+    
+    public static ArrayList<Integer> clean(ArrayList<Integer> liste){
+        int k = 0;
+        ArrayList<Integer> liste2 = new ArrayList<Integer>();
+        /*while(k+1<liste.size()){
+            int initial = liste.get(k);
+            for (int i = k+1; i<liste.size(); i++){
+                System.out.println("i for "+i);
+                if(initial == liste.get(i)){
+                    //System.out.println("i if"+i);
+                    //System.out.println("liste.get(i) "+liste.get(i));
+                    liste.remove(i);
+                    
+                } System.out.println("liste "+liste); /*else {
+                    k--;
+                } 
+            } k++;
+            System.out.println("k "+k);
+            System.out.println("liste.get(k) "+liste.get(k));
+        }*/
+        int a = liste.get(k);
+        liste.remove(liste.get(k));
+        while(liste.contains(a)){
+            liste.remove(a);
+        } liste.add(a);
+        System.out.println("liste "+liste);
+        return liste;
+    }
+    
+    public void paireNue(int bloc){
+        int tailleAuCarree = this.getTaille();
+        int depart = (bloc/taille)*(tailleAuCarree*taille) + taille*(bloc-(bloc/taille)*taille); //indice de la première case du bloc
+        
+        ArrayList<Case> blocCourant = this.getBlock(bloc);
+        //ArrayList<Case> ligneCourante;
+        ArrayList<Case> caseAvec2Candidats = new ArrayList<Case>();
+        ArrayList<Case> caseAvecPaireNue = new ArrayList<Case>();
+        ArrayList<Integer> c = new ArrayList<Integer>();
+        ArrayList<Integer> position = new ArrayList<Integer>();
+        ArrayList<Case> groupeEtudie;
+        for (int n = 0; n<3; n++){
+            if (n == 0){
+                groupeEtudie = this.getBlock(bloc);
+            } else if (n == 1){
+                //groupeEtudie = this.getLine((bloc/taille)*(tailleAuCarree*taille)t--)
+            }
+        for (int i = 0; i<blocCourant.size(); i++){
+            if(blocCourant.get(i).estModifiable() ==true && blocCourant.get(i).getCandidats().size() == 2){
+                caseAvec2Candidats.add(blocCourant.get(i)); //liste des cases qui ont 2 candidats  
+                System.out.println("caseAvec2Candidats "+caseAvec2Candidats);
+            }
+        } 
+        int k = 0;
+        while(k<caseAvec2Candidats.size() && c.size()<=2){
+            for(int j = k+1; j<caseAvec2Candidats.size(); j++){
+                if(caseAvec2Candidats.get(k).getCandidats().equals(caseAvec2Candidats.get(j).getCandidats())){
+                    c = caseAvec2Candidats.get(j).getCandidats(); //liste des candidats qu'il faudra supprimer dans le bloc
+                    position.add(blocCourant.indexOf(caseAvec2Candidats.get(k)));
+                    position.add(blocCourant.indexOf(caseAvec2Candidats.get(j))); 
+                    System.out.println("c "+c);
+                    System.out.println("position "+position);
+                }
+                
+            } k++;
+        }
+        
+        for (int i = 0; i<blocCourant.size(); i++){
+            if(i!=position.get(0) && i!=position.get(1)){
+                blocCourant.get(i).getCandidats().remove(c.get(0));
+                blocCourant.get(i).getCandidats().remove(c.get(1));
+            }
+        }
+        }
+    }
+    
     
     
     
