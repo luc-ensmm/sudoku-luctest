@@ -214,17 +214,6 @@ public class TestSudoku {
         s1.jouerUnCoupAvecCandidats();
         s1.jouerUnCoupAvecCandidats();
         s1.jouerUnCoupAvecCandidats();
-        /*s1.jouerUnCoupAvecCandidats();
-        s1.jouerUnCoupAvecCandidats();
-        s1.jouerUnCoupAvecCandidats();
-        s1.jouerUnCoupAvecCandidats();
-        s1.jouerUnCoupAvecCandidats();
-        s1.jouerUnCoupAvecCandidats();
-        s1.jouerUnCoupAvecCandidats();
-        s1.jouerUnCoupAvecCandidats();
-        s1.jouerUnCoupAvecCandidats();*/
-        //ArrayList<Case> c = s1.getGrille().getBlock(3);
-        //System.out.append("c "+c);
-        //s1.getGrille().paireNue(s1.getGrille().getBlock(2));
+        Algorithm.paireNue(s1.getGrille().getBlock(2));
     }
 }

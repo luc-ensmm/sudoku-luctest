@@ -354,6 +354,48 @@ public class Algorithm {
         
     }
     
+    public static void test_paireNue(){
+        ArrayList<Case> testList = new ArrayList<>();
+        int taille = 2;
+        testList.add(new Case(taille,1,new ArrayList<Integer>(),false));
+        testList.add(new Case(taille,0,new ArrayList<Integer>(),true));
+        testList.add(new Case(taille,0,new ArrayList<Integer>(),true));
+        testList.add(new Case(taille,2,new ArrayList<Integer>(),false));
+        testList.add(new Case(taille,0,new ArrayList<Integer>(),true));
+        testList.add(new Case(taille,4,new ArrayList<Integer>(),false));
+        testList.add(new Case(taille,3,new ArrayList<Integer>(),false));
+        testList.add(new Case(taille,1,new ArrayList<Integer>(),false));
+        testList.add(new Case(taille,4,new ArrayList<Integer>(),false));
+        testList.add(new Case(taille,1,new ArrayList<Integer>(),false));
+        testList.add(new Case(taille,2,new ArrayList<Integer>(),false));
+        testList.add(new Case(taille,0,new ArrayList<Integer>(),true));
+        testList.add(new Case(taille,3,new ArrayList<Integer>(),false));
+        testList.add(new Case(taille,0,new ArrayList<Integer>(),true));
+        testList.add(new Case(taille,0,new ArrayList<Integer>(),true));
+        testList.add(new Case(taille,4,new ArrayList<Integer>(),false));
+        
+        ArrayList<Case> solution = new ArrayList<>();
+        solution.add(new Case(taille,1,new ArrayList<Integer>(),true));
+        solution.add(new Case(taille,3,new ArrayList<Integer>(),true));
+        solution.add(new Case(taille,4,new ArrayList<Integer>(),true));
+        solution.add(new Case(taille,2,new ArrayList<Integer>(),true));
+        solution.add(new Case(taille,2,new ArrayList<Integer>(),true));
+        solution.add(new Case(taille,4,new ArrayList<Integer>(),true));
+        solution.add(new Case(taille,3,new ArrayList<Integer>(),true));
+        solution.add(new Case(taille,1,new ArrayList<Integer>(),true));
+        solution.add(new Case(taille,4,new ArrayList<Integer>(),true));
+        solution.add(new Case(taille,1,new ArrayList<Integer>(),true));
+        solution.add(new Case(taille,2,new ArrayList<Integer>(),true));
+        solution.add(new Case(taille,3,new ArrayList<Integer>(),true));
+        solution.add(new Case(taille,3,new ArrayList<Integer>(),true));
+        solution.add(new Case(taille,2,new ArrayList<Integer>(),true));
+        solution.add(new Case(taille,1,new ArrayList<Integer>(),true));
+        solution.add(new Case(taille,4,new ArrayList<Integer>(),true));
+        
+        Grille uneGrille = new Grille (taille, testList);
+        uneGrille.afficheGrille();
+    }
+    
      
     
 }
