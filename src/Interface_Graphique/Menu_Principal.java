@@ -33,6 +33,7 @@ public class Menu_Principal extends javax.swing.JFrame {
         this.setLocation(screenWidth/2-this.getWidth()/2, screenHeight/2-this.getHeight()/2);
         jButton3.setEnabled(false);
         jButton4.setEnabled(false);
+        setTitle("Sudoku by Luc and Steeven");
         
     }
 
