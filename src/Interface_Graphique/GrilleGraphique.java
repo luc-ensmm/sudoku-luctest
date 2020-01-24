@@ -42,6 +42,7 @@ public class GrilleGraphique extends javax.swing.JFrame implements GrilleListene
         int screenWidth = screenSize.width;
         this.setLocation(screenWidth/2-this.getWidth()/2, screenHeight/2-this.getHeight()/2);
         panelGrille.drawGrille(PanelGrille.Draw.GRILLE);
+        setTitle("Sudoku by Luc and Steeven");
            
     }
     
@@ -51,8 +52,15 @@ public class GrilleGraphique extends javax.swing.JFrame implements GrilleListene
         sudoku = s;
         sudoku.getGrille().addListener(this);
         
-        int widthPanel = (s.getGrille().getTaille()/2)*579;
-        int heightPanel = (s.getGrille().getTaille()/2)*468;
+        int widthPanel = 579;
+        int heightPanel = 468;
+        if (s.getGrille().getTaille() == 4){
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            int screenHeight = screenSize.height;
+            int screenWidth = screenSize.width;
+            widthPanel = 3*(screenWidth/4);
+            heightPanel = 3*(screenHeight/4);
+        }
         panelGrille = new PanelGrille(s,widthPanel,heightPanel);
         panelGrille.setNumericPad(new NumericPad(panelGrille));
         jPanel1 = new javax.swing.JPanel();
@@ -115,11 +123,11 @@ public class GrilleGraphique extends javax.swing.JFrame implements GrilleListene
         panelGrille.setLayout(panelGrilleLayout);
         panelGrilleLayout.setHorizontalGroup(
             panelGrilleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 579, Short.MAX_VALUE)
+            .addGap(0, widthPanel, Short.MAX_VALUE)
         );
         panelGrilleLayout.setVerticalGroup(
             panelGrilleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 468, Short.MAX_VALUE)
+            .addGap(0, heightPanel, Short.MAX_VALUE)
         );
 
         jPanel1.add(panelGrille);

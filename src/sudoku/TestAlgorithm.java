@@ -5,9 +5,11 @@
  */
 package sudoku;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import static sudoku.TestGrille.stringToArray;
 
 /**
  *
@@ -22,6 +24,8 @@ public class TestAlgorithm {
         // TODO code application logic here
         
        test_generators();
+       test_solutionHasardeuse();
+       test_solutionAlgorithmique();
     }
     
     public static void test_generators(){
@@ -44,8 +48,90 @@ public class TestAlgorithm {
         System.out.print("\n");
         g3.showGrille();
         
-        
+       
+    }
+    
      
+    public static void test_solutionHasardeuse(){
+        
+        
+        ArrayList<Case> listetest = new ArrayList<>();
+        listetest.add(new Case(2,0,stringToArray("3 4"," "),true));
+        listetest.add(new Case(2,0,stringToArray("3 4"," "),true));
+        listetest.add(new Case(2,0,stringToArray("1 2 4"," "),true));
+        listetest.add(new Case(2,1,stringToArray(""," "),false));
+        listetest.add(new Case(2,2,stringToArray(""," "),false));
+        listetest.add(new Case(2,0,stringToArray("1 3 4"," "),true));
+        listetest.add(new Case(2,0,stringToArray("3 4"," "),true));
+        listetest.add(new Case(2,0,stringToArray("4"," "),true));
+        listetest.add(new Case(2,0,stringToArray("4"," "),true));
+        listetest.add(new Case(2,0,stringToArray("2"," "),true));
+        listetest.add(new Case(2,0,stringToArray("1 2 4"," "),true));
+        listetest.add(new Case(2,3,stringToArray(""," "),false));
+        listetest.add(new Case(2,1,stringToArray(""," "),false));
+        listetest.add(new Case(2,0,stringToArray("2 3 4"," "),true));
+        listetest.add(new Case(2,0,stringToArray("2 4"," "),true));
+        listetest.add(new Case(2,0,stringToArray("2 4"," "),true));
+        
+        
+        Grille g = new Grille(2,listetest); 
+        System.out.println("Grille initiale avant la résolution\n");
+        g.showGrille();
+        System.out.println("\n");
+        Grille solution = Algorithm.resolutionHasardeuse(g, 0);
+        System.out.println("Grille initiale après la résolution\n");
+        g.showGrille();
+        System.out.println("\n\nGrille solution\n");
+        solution.showGrille();
+        
+        
+    }
+    
+    public static void test_solutionAlgorithmique(){
+        
+        
+        ArrayList<Case> listetest = new ArrayList<>();
+        listetest.add(new Case(2,0,stringToArray("3 4"," "),true));
+        listetest.add(new Case(2,0,stringToArray("3 4"," "),true));
+        listetest.add(new Case(2,0,stringToArray("1 2 4"," "),true));
+        listetest.add(new Case(2,1,stringToArray(""," "),false));
+        listetest.add(new Case(2,2,stringToArray(""," "),false));
+        listetest.add(new Case(2,0,stringToArray("1 3 4"," "),true));
+        listetest.add(new Case(2,0,stringToArray("3 4"," "),true));
+        listetest.add(new Case(2,0,stringToArray("4"," "),true));
+        listetest.add(new Case(2,0,stringToArray("4"," "),true));
+        listetest.add(new Case(2,0,stringToArray("2"," "),true));
+        listetest.add(new Case(2,0,stringToArray("1 2 4"," "),true));
+        listetest.add(new Case(2,3,stringToArray(""," "),false));
+        listetest.add(new Case(2,1,stringToArray(""," "),false));
+        listetest.add(new Case(2,0,stringToArray("2 3 4"," "),true));
+        listetest.add(new Case(2,0,stringToArray("2 4"," "),true));
+        listetest.add(new Case(2,0,stringToArray("2 4"," "),true));
+        
+        
+        Grille g = new Grille(2,listetest); 
+        //g.showGrille();
+        System.out.println("\n");
+        g = Algorithm.resolutionAlgorithmique(g);
+        System.out.println("\nGrille après résolution");
+        g.showGrille();
+        /*
+        System.out.println("\nEtat des cases après la résolution");
+        for(Case c: g.getEnsembleCases()){
+            System.out.println(c);
+        }
+        
+        */
+        
+        //System.out.println("\nGrille après l'application de la résolution hasardeuse");
+        
+        
+        /*
+        System.out.println();
+        for(Case c: g.getEnsembleCases()){
+            System.out.println(c.estModifiable());
+        }
+        */
         
     }
     

@@ -228,72 +228,6 @@ public class Algorithm {
     }
   
         
-    public static Grille genereGrille_Dessai(int i){
-        
-        Grille g = new Grille(3);
-        if(i == 1){
-                ArrayList<Case> listetest = new ArrayList<>();
-                ArrayList<Integer> allCandidates = new ArrayList<>();
-                for (int j= 1; j < 4; j++){
-                    allCandidates.add(j);
-                }
-                
-                listetest.add(new Case(2, 0, stringToArray("3 4", " "), true));
-                listetest.add(new Case(2, 0, stringToArray("3 4", " "), true));
-                listetest.add(new Case(2, 0, stringToArray("1 2 4", " "), true));
-                listetest.add(new Case(2, 1, stringToArray("", " "), false));
-                listetest.add(new Case(2, 2, stringToArray("", " "), false));
-                listetest.add(new Case(2, 0, stringToArray("1 3 4", " "), true));
-                listetest.add(new Case(2, 0, stringToArray("3 4", " "), true));
-                listetest.add(new Case(2, 0, stringToArray("4", " "), true));
-                listetest.add(new Case(2, 0, stringToArray("4", " "), true));
-                listetest.add(new Case(2, 0, stringToArray("2", " "), true));
-                listetest.add(new Case(2, 0, stringToArray("1 2 4", " "), true));
-                listetest.add(new Case(2, 3, stringToArray("", " "), false));
-                listetest.add(new Case(2, 1, stringToArray("", " "), false));
-                listetest.add(new Case(2, 0, stringToArray("2 3 4", " "), true));
-                listetest.add(new Case(2, 0, stringToArray("2 4", " "), true));
-                listetest.add(new Case(2, 0, stringToArray("2 4", " "), true));
-                
-                /*
-                listetest.add(new Case(2, 0, allCandidates, true));
-                listetest.add(new Case(2, 0, allCandidates, true));
-                listetest.add(new Case(2, 0, allCandidates, true));
-                listetest.add(new Case(2, 1, allCandidates, false));
-                listetest.add(new Case(2, 2, allCandidates, false));
-                listetest.add(new Case(2, 0, allCandidates, true));
-                listetest.add(new Case(2, 0, allCandidates, true));
-                listetest.add(new Case(2, 0, allCandidates, true));
-                listetest.add(new Case(2, 0, allCandidates, true));
-                listetest.add(new Case(2, 0, allCandidates, true));
-                listetest.add(new Case(2, 0, allCandidates, true));
-                listetest.add(new Case(2, 3, allCandidates, false));
-                listetest.add(new Case(2, 1, allCandidates, false));
-                listetest.add(new Case(2, 0, allCandidates, true));
-                listetest.add(new Case(2, 0, allCandidates, true));
-                listetest.add(new Case(2, 0, allCandidates, true));
-                */
-                g = new Grille(2, listetest);
-            }
-        else if (i == 2){
-            ArrayList<Case> listetest = new ArrayList<>();
-            int tailleAuCarre = 3*3;
-            ArrayList<Integer> allCandidates = new ArrayList<>();
-            for (int j = 1; j <= tailleAuCarre; j++) {
-                allCandidates.add(j);
-            }
-            for (int j = 0; j < tailleAuCarre * tailleAuCarre; j++) {
-                //Collections.shuffle(allCandidates);
-                listetest.add(new Case(3, (j+1)/tailleAuCarre, (ArrayList<Integer>) allCandidates.clone(), true));
-            }
-            
-            g = new Grille(3,listetest);
-
-        }
-                  
-        return g;
-       
-    }
     /**
      * Technique de résolution si dans un groupe 2 cases possèdent les 2 mêmes candidats
      * @param groupeEtudie 
@@ -355,5 +289,193 @@ public class Algorithm {
     }
     
      
+        /**
+     * Résout la grille par force brute
+     * @param g
+     * @param indexDepart
+     * @return une Grille pleine et correcte
+     */
+    public static Grille resolutionHasardeuse(Grille g,int indexDepart){
+        
+        // assure que toutes les cases aient l'ensemble des candidats pour s'assurer du
+        // bon fonctionnement de la méthode 
+        if (indexDepart == 0){
+            ArrayList<Integer> allCandidates = new ArrayList<>();
+            for (int i = 0; i < g.getTaille() * g.getTaille(); i++) {
+                allCandidates.add(i + 1);
+            }
+            for (int i = 0; i < g.getEnsembleCases().size(); i++) {
+                if (g.getCase(i).estModifiable()){
+                    g.setCandidatCase(i, allCandidates);
+                }
+            }
+        }
+        
+        if(!g.correcteEtPleine()){
+            if (indexDepart < g.getEnsembleCases().size()){
+                if (g.getCase(indexDepart).estModifiable()) {
+                    Grille g1 = g.clone();
+                    /*
+                    La ligne ci-dessus est très importante car elle permet de sauvegarder l'état
+                    de la grille avant modification et donc assure que l'on puisse backtrack
+                    lors de la récursion
+                     */
+                    ArrayList<Integer> candidats = g1.getCandidatCase(indexDepart);
+                    Collections.shuffle(candidats); // aléa
+                    for(int candidat : candidats){
+                        g1.setValeurCase(indexDepart, candidat);
+                        g1 = resolutionHasardeuse(g1,indexDepart+1);
+                     
+                        if(g1.correcteEtPleine()){
+                            g = g1; // on valide les modifications si g1 est bonne
+                            break;
+                        }
+                    } 
+                }
+                else{
+                    g = resolutionHasardeuse(g,indexDepart+1);   
+                }
+            }
+        }
+        
+        return g;
+        
+    }
+    
+    /*
+    Principe de fonctionnement de resolutionAlgoritmique 
+    1) utiliser tous les algo(sauf singleton nu) sur toutes les cases modifiables de la grille
+    pour simplifier les candidats de chaque case
+    2) appliquer le singleton nu sur toute les cases modifiables
+    3) si le singleton nu a réussi sur au moins 1 case, on boucle les étapes 1 et 2 en 
+    enclenchant une récursion.
+    Si la grille est totalement rempli (aucune valeur non nulle), on vérifie que la grille
+    est correcte. Si la grille n'est pas correcte, on revient à l'étape de récursion précédente
+    et au lieu d'appliquer le singleton nu, on choisit une case parmi celle qui contiennent le
+    moins de candidat(au minimum 2 candidats donc singleton nu exclu) et on choisit la valeur
+    de cette case de façon aléatoire parmi ces candidats puis on boucle par récursion
+    4) Une fois la grille complète est correcte, la retourner (sans appel récursif)
+    
+    */
+    
+    /**
+     * ATTENTION: NON TERMINER !!!
+     * Résout la grille en utilisant des algorithmes de résolution simplifiant les candidats
+     * Permet de générer une solution plus rapidement que la résolution
+     * hasardeuse
+     * @param g
+     * @return une Grille dont toutes les valeurs sont non nulles et correctes
+     */ 
+    public static Grille resolutionAlgorithmique(Grille g){
+        
+        //Application du singleton caché à toutes les cases de la grille
+        
+        for (int i = 0; i < g.getEnsembleCases().size(); i++){
+            g.singletonCache(i);
+        }
+        
+        /*
+        // Application de paire nue à toutes les lignes
+        
+        for(int i = 0; i < g.getTaille()*g.getTaille(); i++){
+            ArrayList<Case> line = g.getLine(i);
+            Algorithm.paireNue(line);
+            g.setLine(i, line);
+        }
+        
+        // Application de paire nue à toutes les colonnes
+        
+        for(int i = 0; i < g.getTaille()*g.getTaille(); i++){
+            ArrayList<Case> colonne = g.getColumn(i);
+            Algorithm.paireNue(colonne);
+            g.setColumn(i, colonne);
+        }
+        
+        // Application de paire nue à tous les blocs
+        
+        for(int i = 0; i < g.getTaille()*g.getTaille(); i++){
+            ArrayList<Case> bloc = g.getBlock(i);
+            Algorithm.paireNue(bloc);
+            g.setBlock(i, bloc);
+        }
+        */
+        
+        
+        // Singleton nu 
+        int utilisationSingletonNu = 0;
+        for (int i = 0; i < g.getEnsembleCases().size(); i++){
+            if (g.singletonNu(i)){
+                utilisationSingletonNu++;
+            }
+        }
+        
+        /*
+        Inutile de faire le reste si la grille est déjà correctement rempli.
+        On peut directement la renvoyer
+        */
+        System.out.println("Utilisation du singleton nu = " + utilisationSingletonNu);
+        if(!g.correcteEtPleine()){
+            
+            if(utilisationSingletonNu == 0){
+                /*
+                Si les candidats de chaque case ne peuvent pas être réduit
+                à 1 seul candidat par case (qui devient alors la valeur de
+                la case par l'application du singleton nu) alors on choisis
+                la première case que l'on trouve parmi celle ayant le moins
+                de candidats et la valeur de cette case devient l'un de ses
+                candidats (autrement dit on fait 1 test) et on recommence
+                la méthode sur toute la grille par récursion
+                
+                */
+                int index = 0;
+                int temp = 0;
+                while (temp < g.getEnsembleCases().size()){
+                    if (g.getEnsembleCases().get(temp).getCandidats().size() <
+                           g.getEnsembleCases().get(index).getCandidats().size()){
+                        index = temp;
+                    }
+                    if (g.getEnsembleCases().get(index).getCandidats().size() == 2){
+                            temp+=g.getEnsembleCases().size();
+                        }
+                    else{
+                        temp++;
+                    }
+                    
+                }
+                
+                
+                /*
+                Création d'une copie de g pour sauvegarder l'état de g en cas
+                de "remonter de branche" lors d'une récursion. C'est en effet 
+                nécessaire ici car on teste chaque valeur possible de la case c
+                (parmi ses candidats) sans garanti que la modification appliqué
+                est la bonne, contrairement à l'utilisation des algorithmes 
+                ci-dessus qui dans le pire des cas ne faussent pas le remplissage
+                de la grille (sous réserve que ces algorithmes soient fonctionnels)
+                */
+                Grille g1 = new Grille(g.getTaille(),g.getEnsembleCases());
+                for (int candidat: g1.getCandidatCase(index)){
+                    g1.setValeurCase(index,candidat);
+                    g1.removeCandidatCase(index,candidat);
+                    // RECURSION
+                    g1 = resolutionAlgorithmique(g1);
+                    if (g1.correcteEtPleine()){
+                        g = g1;
+                        break;
+                        /*
+                        Si g1 n'est pas correctement remplie alors on retourne
+                        à l'étape précédente (on "remonte la branche de la récursion")
+                        */
+                    }
+                }
+               
+            }
+        }
+        
+        return g;
+    
+    }
+    
+    
     
 }

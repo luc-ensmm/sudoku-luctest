@@ -24,7 +24,13 @@ public class TestGrille {
     public static void main(String[] args) {
         // TODO code application logic here
             
-            test_solutionAlgorithmique();
+            test_dAlgorithmeDansColonne();
+            //test_ArrayList_get();
+            //test_singletonCache();
+            //test_singletonNu();
+            //test_set();
+            //test_get();
+            
        
    
     }
@@ -43,7 +49,7 @@ public class TestGrille {
         // et non une référence(adresse dans l'arrayList) de l'objet
         
     }
-    //fonctionnelle
+    
     public static ArrayList<Integer> stringToArray(String str, String regex){
         
         ArrayList<Integer> retour =  new ArrayList<>();
@@ -57,93 +63,8 @@ public class TestGrille {
         return retour;
     }
     
+   
     
-    public static void test_solutionHasardeuse(){
-        
-        
-        ArrayList<Case> listetest = new ArrayList<>();
-        listetest.add(new Case(2,0,stringToArray("3 4"," "),true));
-        listetest.add(new Case(2,0,stringToArray("3 4"," "),true));
-        listetest.add(new Case(2,0,stringToArray("1 2 4"," "),true));
-        listetest.add(new Case(2,1,stringToArray(""," "),false));
-        listetest.add(new Case(2,2,stringToArray(""," "),false));
-        listetest.add(new Case(2,0,stringToArray("1 3 4"," "),true));
-        listetest.add(new Case(2,0,stringToArray("3 4"," "),true));
-        listetest.add(new Case(2,0,stringToArray("4"," "),true));
-        listetest.add(new Case(2,0,stringToArray("4"," "),true));
-        listetest.add(new Case(2,0,stringToArray("2"," "),true));
-        listetest.add(new Case(2,0,stringToArray("1 2 4"," "),true));
-        listetest.add(new Case(2,3,stringToArray(""," "),false));
-        listetest.add(new Case(2,1,stringToArray(""," "),false));
-        listetest.add(new Case(2,0,stringToArray("2 3 4"," "),true));
-        listetest.add(new Case(2,0,stringToArray("2 4"," "),true));
-        listetest.add(new Case(2,0,stringToArray("2 4"," "),true));
-        
-        
-        Grille g = new Grille(2,listetest); 
-        System.out.println("Grille initiale avant la résolution\n");
-        g.showGrille();
-        System.out.println("\n");
-        Grille solution = Grille.resolutionHasardeuse(g, 0);
-        System.out.println("Grille initiale après la résolution\n");
-        g.showGrille();
-        System.out.println("\n\nGrille solution\n");
-        solution.showGrille();
-        
-        
-    }
-    
- 
-    
-    public static void test_solutionAlgorithmique(){
-        
-        
-        ArrayList<Case> listetest = new ArrayList<>();
-        listetest.add(new Case(2,0,stringToArray("3 4"," "),true));
-        listetest.add(new Case(2,0,stringToArray("3 4"," "),true));
-        listetest.add(new Case(2,0,stringToArray("1 2 4"," "),true));
-        listetest.add(new Case(2,1,stringToArray(""," "),false));
-        listetest.add(new Case(2,2,stringToArray(""," "),false));
-        listetest.add(new Case(2,0,stringToArray("1 3 4"," "),true));
-        listetest.add(new Case(2,0,stringToArray("3 4"," "),true));
-        listetest.add(new Case(2,0,stringToArray("4"," "),true));
-        listetest.add(new Case(2,0,stringToArray("4"," "),true));
-        listetest.add(new Case(2,0,stringToArray("2"," "),true));
-        listetest.add(new Case(2,0,stringToArray("1 2 4"," "),true));
-        listetest.add(new Case(2,3,stringToArray(""," "),false));
-        listetest.add(new Case(2,1,stringToArray(""," "),false));
-        listetest.add(new Case(2,0,stringToArray("2 3 4"," "),true));
-        listetest.add(new Case(2,0,stringToArray("2 4"," "),true));
-        listetest.add(new Case(2,0,stringToArray("2 4"," "),true));
-        
-        
-        Grille g = new Grille(2,listetest); 
-        //g.showGrille();
-        System.out.println("\n");
-        g = Grille.resolutionAlgorithmique(g);
-        System.out.println("\nGrille après résolution");
-        g.showGrille();
-        /*
-        System.out.println("\nEtat des cases après la résolution");
-        for(Case c: g.getEnsembleCases()){
-            System.out.println(c);
-        }
-        
-        */
-        
-        //System.out.println("\nGrille après l'application de la résolution hasardeuse");
-        
-        
-        /*
-        System.out.println();
-        for(Case c: g.getEnsembleCases()){
-            System.out.println(c.estModifiable());
-        }
-        */
-        
-    }
-    
-    //fonctionnelle
     public static void test_singletonCache(){
         
         ArrayList<Case> testList = new ArrayList<>();
@@ -174,7 +95,7 @@ public class TestGrille {
         
     }
     
-    //fonctionnelle
+  
     public static void test_singletonNu(){
         int taille = 2;
         ArrayList<Case> testList = new ArrayList<>();
@@ -210,7 +131,7 @@ public class TestGrille {
         
         
     }
-    // fonctionnelle
+  
     public static void test_set(){
         
         int taille = 3;
@@ -245,21 +166,17 @@ public class TestGrille {
         g.afficheGrille();
         
         /*
-        Il est important de noter que pour l'instant on autorise les méthodes
+        Il est important de noter qu'on autorise les méthodes
         setLine, setColumn et setBlock à modifier des cases mêmes si elles sont 
         notées comme non modifiables. Seul les méthodes de la classe Case sont 
         affectés par la valeur du boolean estModifiable de la classe Case.
-        En fonction des avancées du projet, il sera peut-être nécessaire que
-        les méthodes set de la classe Grille ne soient pas en mesure de modifier
-        une case quand son boolean estModifiable est false.
-        
         */
         
         
     }
     
     
-    //fonctionnelle
+    
     public static void test_get(){ 
        
         int taille = 3;
@@ -306,7 +223,7 @@ public class TestGrille {
     }
     
     
-    //fonctionnelle
+    
     public static void test_dAlgorithmeDansColonne(){
         // Test de l'algorithme utilisé dans le getColumn
         ArrayList<Integer> testList = new ArrayList<Integer>();
@@ -336,9 +253,7 @@ public class TestGrille {
         }
         
         
-        
         System.out.println("\n\nAffichage de la " + j + "ème colonne:");
-        
         
         for(int k = j; k <  j + tailleAuCarre*tailleAuCarre; k = k+ tailleAuCarre) {
             System.out.println(testList.get(k));
@@ -364,8 +279,5 @@ public class TestGrille {
            }
         }
         
-        
-    
-    
     }
 }

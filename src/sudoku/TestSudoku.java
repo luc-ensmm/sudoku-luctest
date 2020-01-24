@@ -20,7 +20,14 @@ public class TestSudoku {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        
         test_jouerUnePartie();
+        //test_sudokuJouable();
+        //test_sudokuJouable2();
+        //testSudokuGraphique();
+        //test_sudokuSauvegarde();
+        //test_jouerAvecUnCandidat();
+        //test_resolutionAlgorithmique();
     }
     
     
@@ -90,7 +97,7 @@ public class TestSudoku {
         testList.add(new Case(taille,4,new ArrayList<Integer>(),false));
         
         Grille laGrille = new Grille(taille,testList);
-        Grille laSolution = Grille.resolutionHasardeuse(laGrille, 0);
+        Grille laSolution = Algorithm.resolutionHasardeuse(laGrille, 0);
         Joueur j = new Joueur("No name");
         Sudoku s = new Sudoku(j,laGrille,laSolution);
         s.play();
@@ -98,7 +105,8 @@ public class TestSudoku {
     }
     
     public static void testSudokuGraphique(){
-            ArrayList<Case> testList = new ArrayList<>();
+        
+        ArrayList<Case> testList = new ArrayList<>();
         int taille = 2;
         testList.add(new Case(taille,1,new ArrayList<Integer>(),false));
         testList.add(new Case(taille,0,new ArrayList<Integer>(),true));
@@ -118,7 +126,7 @@ public class TestSudoku {
         testList.add(new Case(taille,4,new ArrayList<Integer>(),false));
         
         Grille laGrille = new Grille(taille,testList);
-        Grille laSolution = Grille.resolutionHasardeuse(laGrille, 0);
+        Grille laSolution = Algorithm.resolutionHasardeuse(laGrille, 0);
         Joueur j = new Joueur("No name");
         Sudoku s = new Sudoku(j,laGrille,laSolution);
        
