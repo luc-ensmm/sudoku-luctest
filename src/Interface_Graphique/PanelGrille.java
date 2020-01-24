@@ -37,8 +37,6 @@ public class PanelGrille extends JPanelImage{
         aideActivated = false;
         this.tailleAuCarree = taille*taille;
         
-        //pad = new NumericPad(this);
-        //addMouseListener(pad);
     }
     
     public PanelGrille(Sudoku s){

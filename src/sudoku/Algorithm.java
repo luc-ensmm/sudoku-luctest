@@ -47,6 +47,8 @@ public class Algorithm {
             throw new RuntimeException(e);
         }
         
+        // Création d'une solution triviale
+        
         ArrayList<Integer> sourceOfValues = new ArrayList<>();
         int tailleAuCarree = taille*taille;
         int i = 1;
@@ -76,6 +78,8 @@ public class Algorithm {
         }
         
         Grille g = new Grille(taille,ensembleCases);
+        
+        // Mélange de ligne et de colonne afin d'avoir une nouvelle solution de façon aléatoire
         Random ran = new Random();
         
         // au minimum tailleAuCaree échanges de ligne/colonne et maximum 2*tailleAuCarree échanges
@@ -85,6 +89,7 @@ public class Algorithm {
         int indexLine1;
         int indexLine2;
         for (i = 0; i < lineSwap; i++){
+            // échanges entre lignes appartenant à la même ligne de bloc
             indexLine1 = ran.nextInt(tailleAuCarree);
             indexLine2 = (indexLine1/taille)*taille + ran.nextInt(taille);
             if (indexLine1 != indexLine2){
@@ -99,6 +104,7 @@ public class Algorithm {
         int indexColumn1;
         int indexColumn2;
         for (i = 0; i < columnSwap; i++){
+            // échanges entre colonnes appartenant à la même colonne de bloc
             indexColumn1 = ran.nextInt(tailleAuCarree);
             indexColumn2 = (indexColumn1/taille)*taille + ran.nextInt(taille);
             if (indexColumn1 != indexColumn2){
@@ -291,6 +297,62 @@ public class Algorithm {
                   
         return g;
        
+    }
+    
+     public static void paireNue(ArrayList<Case> groupeEtudie){
+        ArrayList<Case> caseAvec2Candidats = new ArrayList<Case>();
+        ArrayList<Case> caseAvecPaireNue = new ArrayList<Case>();
+        ArrayList<Integer> candidatsCommuns = new ArrayList<Integer>();
+        ArrayList<Integer> position = new ArrayList<Integer>(); // position des cases ayant 2 candidats
+        ArrayList<Integer> position2 = new ArrayList<Integer>(); //position des cases dont il ne faudra pas supprimer les candidats
+        System.out.println("groupe etudie "+groupeEtudie);
+        for (int i = 0; i<groupeEtudie.size(); i++){
+            if(groupeEtudie.get(i).estModifiable() ==true && groupeEtudie.get(i).getCandidats().size() == 2){
+                caseAvec2Candidats.add(groupeEtudie.get(i)); //liste des cases qui ont 2 candidats  
+                position.add(i);
+                System.out.println("caseAvec2Candidats "+caseAvec2Candidats);
+                System.out.println("position "+position);
+            }
+        } 
+        int k = 0;
+        while(k<caseAvec2Candidats.size() && candidatsCommuns.size()<=2){
+            for(int j = k+1; j<caseAvec2Candidats.size(); j++){
+                if(caseAvec2Candidats.get(k).getCandidats().equals(caseAvec2Candidats.get(j).getCandidats())){
+                    candidatsCommuns = caseAvec2Candidats.get(j).getCandidats(); //liste des candidats qu'il faudra supprimer dans le bloc
+                    System.out.println("k "+k);
+                    System.out.println("j "+j);
+                    System.out.println("case k "+caseAvec2Candidats.get(k));
+                    System.out.println("case j "+caseAvec2Candidats.get(j));
+                    System.out.println("position 1er case "+groupeEtudie.indexOf(caseAvec2Candidats.get(k)));
+                    System.out.println("position 2eme case "+groupeEtudie.indexOf(caseAvec2Candidats.get(j)));
+                    position2.add(position.get(k));
+                    position2.add(position.get(j));
+                    //position.add(groupeEtudie.indexOf(caseAvec2Candidats.get(k)));
+                    //position.add(groupeEtudie.indexOf(caseAvec2Candidats.get(j))); 
+                    System.out.println("c "+candidatsCommuns);
+                    System.out.println("position2 "+position2);
+                }
+                
+            } k++;
+        }
+        System.out.println("position2.get(0) "+position2.get(0));
+        System.out.println("position2.get(1) "+position2.get(1));
+        System.out.println("candidatsCommuns.get(0) "+candidatsCommuns.get(0));
+        System.out.println("candidatsCommuns.get(1) "+candidatsCommuns.get(1));
+        for (int i = 0; i<groupeEtudie.size(); i++){
+            //System.out.println("i for "+i);
+            if(i!=position2.get(0) && i!=position2.get(1)){ //on enlève les candidats pour toutes les autres cases
+                //System.out.println("i if "+i);
+                if(groupeEtudie.get(i).getCandidats().contains(candidatsCommuns.get(0)) || groupeEtudie.get(i).getCandidats().contains(candidatsCommuns.get(1))){
+                    System.out.println("i if contains "+i);
+                    System.out.println("groupeEtudie.get(i).getCandidats() avant remove "+groupeEtudie.get(i).getCandidats());
+                    groupeEtudie.get(i).removeCandidat(candidatsCommuns.get(0));
+                    groupeEtudie.get(i).removeCandidat(candidatsCommuns.get(1));
+                    System.out.println("groupeEtudie.get(i).getCandidats() apres remove "+groupeEtudie.get(i).getCandidats());
+                }
+            }
+        } System.out.println("groupe etudie "+groupeEtudie);
+        
     }
     
 }

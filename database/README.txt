@@ -1,0 +1,1 @@
+Le dossier database/saves ne doit contenir que des fichiers .txt de la forme 'name_partie'

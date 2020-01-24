@@ -31,6 +31,8 @@ public class Menu_Principal extends javax.swing.JFrame {
         int screenHeight = screenSize.height;
         int screenWidth = screenSize.width;
         this.setLocation(screenWidth/2-this.getWidth()/2, screenHeight/2-this.getHeight()/2);
+        jButton3.setEnabled(false);
+        jButton4.setEnabled(false);
         
     }
 
@@ -136,10 +138,25 @@ public class Menu_Principal extends javax.swing.JFrame {
 
               
             if ((s != null) && (s.length() > 0)) {
+                
                 int tailleAuCarree = Integer.parseInt(s);
                 Random ran = new Random();
-                int nbCasesReveles = ran.nextInt(tailleAuCarree*tailleAuCarree-tailleAuCarree*2)
+                String strNbCasesReveles = (String) JOptionPane.showInputDialog(
+                        this,"Toutes valeurs n'appartenant pas à cette intervalle entrainera un choix aléatoire)",
+                        "Nombre de cases à révéler [1," + (tailleAuCarree*tailleAuCarree-1) +"]",
+                        JOptionPane.PLAIN_MESSAGE); 
+                
+                int nbCasesReveles;
+                try {
+                    nbCasesReveles = Integer.parseInt(strNbCasesReveles);
+                    if (nbCasesReveles < 1 && nbCasesReveles > tailleAuCarree*tailleAuCarree-1){
+                        throw new IllegalArgumentException();
+                    }
+                    
+                }catch (IllegalArgumentException e){
+                    nbCasesReveles = ran.nextInt(tailleAuCarree*tailleAuCarree-tailleAuCarree*2)
                         + tailleAuCarree*2;
+                }
                 
                 Grille solution = Algorithm.randomSolutionGenerator((int)Math.sqrt(tailleAuCarree));
                 Grille grille = Algorithm.randomGrilleGenerator(solution, nbCasesReveles);

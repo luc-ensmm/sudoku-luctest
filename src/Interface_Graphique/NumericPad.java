@@ -6,14 +6,17 @@
 package Interface_Graphique;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.event.MouseInputAdapter;
 import sudoku.Algorithm;
 import sudoku.Coup;
 import sudoku.Grille;
@@ -66,7 +69,7 @@ public class NumericPad extends javax.swing.JFrame implements MouseListener{
         setVisible(false);
         
         this.setLocationRelativeTo(parentPanel);
-        //this.setOpacity(0.1f); // ça n'as pas l'air de marché
+        
         pack();
       
           
@@ -190,6 +193,7 @@ public class NumericPad extends javax.swing.JFrame implements MouseListener{
     public void mouseExited(MouseEvent e) {
 
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.

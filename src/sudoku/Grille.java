@@ -29,12 +29,11 @@ public class Grille {
     /**
      * Constructeur général
      * @param taille
-     * @param ensembleCases 
+     * @param ensembleCases ArrayList contenant les cases de la grille
      */
     public Grille(int taille, ArrayList<Case> ensembleCases) {
         
-        // il faut vérifier que le nombre d'objets dans les ArrayList et cohérent avec la taille 
-        // précisé !
+        // il faut vérifier que le nombre d'objets dans les ArrayList et cohérent avec la taille précisée !
         try {
             if (taille*taille*taille*taille != ensembleCases.size()) {
                 throw new IllegalArgumentException("La taille précisée(" + taille 
@@ -45,8 +44,8 @@ public class Grille {
                 this.ensembleCases = ensembleCases;
 
             }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException(e);
         }
 
     }
@@ -57,13 +56,16 @@ public class Grille {
      * @param taille 
      */
     public Grille(int taille){
+        
         this.taille = taille;
         ensembleCases = new ArrayList<>();
         int tailleAuCarre = taille*taille;
         ArrayList<Integer> allCandidates = new ArrayList<>();
+        
         for (int i = 1; i <=tailleAuCarre; i++){
             allCandidates.add(i);
         }
+        
         for (int i = 0; i < tailleAuCarre*tailleAuCarre; i++){
             ensembleCases.add(new Case(taille,0,(ArrayList<Integer>)allCandidates.clone(),true));
         }
@@ -73,29 +75,12 @@ public class Grille {
     public void addListener(GrilleListener listener){
         listeners.add(listener);
     }
-          
-    public void singletonNuVersbose(int indexCase){
-       
-       Case c = ensembleCases.get(indexCase);
-       if (c.estModifiable()){
-            if (c.getCandidats().size() == 1){
-                int valeur_c = c.getCandidats().get(0);
-                c.setValeur(valeur_c);
-                c.removeCandidat(valeur_c);
-            }
-            ensembleCases.set(indexCase, c);
-       }
-       else {
-           System.out.println("La case " + indexCase + " n'est pas modifiable !");
-       }
     
-    }
     
     /**
-     * 
-     * @param indexCase
-     *      Index de la case sur laquelle on applique la méthode
-     * @return Un boolean qui indique si la méthode a été appliqué càd la case n'a qu'un candidat
+     * Applique la technique du singleton nu à la case d'indice précisé
+     * @param indexCase Index de la case sur laquelle on applique la méthode
+     * @return Un boolean qui indique si la case n'a plus qu'un seul candidat après application de la technique
      */
     public boolean singletonNu (int indexCase){
        
@@ -190,8 +175,7 @@ public class Grille {
     
     /**
      * 
-     * @param b
-     *      Numéro du bloc
+     * @param b Numéro du bloc  
      * @return 
      */
     public ArrayList<Case> getBlock(int b){ 
@@ -596,7 +580,7 @@ public class Grille {
     */
     
     /**
-     * Résout la grille en utilisant des algorithmes de résolution
+     * Résout la grille en utilisant des algorithmes de résolution simplifiant les candidats
      * Permet de générer une solution plus rapidement que la résolution
      * hasardeuse
      * @param g
@@ -606,8 +590,36 @@ public class Grille {
         
         //Application du singleton caché à toutes les cases de la grille
         
+        for (int i = 0; i < g.getEnsembleCases().size(); i++){
+            g.singletonCache(i);
+        }
         
+        /*
+        // Application de paire nue à toutes les lignes
         
+        for(int i = 0; i < g.getTaille()*g.getTaille(); i++){
+            ArrayList<Case> line = g.getLine(i);
+            Algorithm.paireNue(line);
+            g.setLine(i, line);
+        }
+        
+        // Application de paire nue à toutes les colonnes
+        
+        for(int i = 0; i < g.getTaille()*g.getTaille(); i++){
+            ArrayList<Case> colonne = g.getColumn(i);
+            Algorithm.paireNue(colonne);
+            g.setColumn(i, colonne);
+        }
+        
+        // Application de paire nue à tous les blocs
+        
+        for(int i = 0; i < g.getTaille()*g.getTaille(); i++){
+            ArrayList<Case> bloc = g.getBlock(i);
+            Algorithm.paireNue(bloc);
+            g.setBlock(i, bloc);
+        }
+        
+        */
         
         // Singleton nu 
         int utilisationSingletonNu = 0;
@@ -1117,61 +1129,7 @@ public class Grille {
         //}
     }
     
-    public void paireNue(ArrayList<Case> groupeEtudie){
-        ArrayList<Case> caseAvec2Candidats = new ArrayList<Case>();
-        ArrayList<Case> caseAvecPaireNue = new ArrayList<Case>();
-        ArrayList<Integer> candidatsCommuns = new ArrayList<Integer>();
-        ArrayList<Integer> position = new ArrayList<Integer>(); // position des cases ayant 2 candidats
-        ArrayList<Integer> position2 = new ArrayList<Integer>(); //position des cases dont il ne faudra pas supprimer les candidats
-        System.out.println("groupe etudie "+groupeEtudie);
-        for (int i = 0; i<groupeEtudie.size(); i++){
-            if(groupeEtudie.get(i).estModifiable() ==true && groupeEtudie.get(i).getCandidats().size() == 2){
-                caseAvec2Candidats.add(groupeEtudie.get(i)); //liste des cases qui ont 2 candidats  
-                position.add(i);
-                System.out.println("caseAvec2Candidats "+caseAvec2Candidats);
-                System.out.println("position "+position);
-            }
-        } 
-        int k = 0;
-        while(k<caseAvec2Candidats.size() && candidatsCommuns.size()<=2){
-            for(int j = k+1; j<caseAvec2Candidats.size(); j++){
-                if(caseAvec2Candidats.get(k).getCandidats().equals(caseAvec2Candidats.get(j).getCandidats())){
-                    candidatsCommuns = caseAvec2Candidats.get(j).getCandidats(); //liste des candidats qu'il faudra supprimer dans le bloc
-                    System.out.println("k "+k);
-                    System.out.println("j "+j);
-                    System.out.println("case k "+caseAvec2Candidats.get(k));
-                    System.out.println("case j "+caseAvec2Candidats.get(j));
-                    System.out.println("position 1er case "+groupeEtudie.indexOf(caseAvec2Candidats.get(k)));
-                    System.out.println("position 2eme case "+groupeEtudie.indexOf(caseAvec2Candidats.get(j)));
-                    position2.add(position.get(k));
-                    position2.add(position.get(j));
-                    //position.add(groupeEtudie.indexOf(caseAvec2Candidats.get(k)));
-                    //position.add(groupeEtudie.indexOf(caseAvec2Candidats.get(j))); 
-                    System.out.println("c "+candidatsCommuns);
-                    System.out.println("position2 "+position2);
-                }
-                
-            } k++;
-        }
-        System.out.println("position2.get(0) "+position2.get(0));
-        System.out.println("position2.get(1) "+position2.get(1));
-        System.out.println("candidatsCommuns.get(0) "+candidatsCommuns.get(0));
-        System.out.println("candidatsCommuns.get(1) "+candidatsCommuns.get(1));
-        for (int i = 0; i<groupeEtudie.size(); i++){
-            //System.out.println("i for "+i);
-            if(i!=position2.get(0) && i!=position2.get(1)){ //on enlève les candidats pour toutes les autres cases
-                //System.out.println("i if "+i);
-                if(groupeEtudie.get(i).getCandidats().contains(candidatsCommuns.get(0)) || groupeEtudie.get(i).getCandidats().contains(candidatsCommuns.get(1))){
-                    System.out.println("i if contains "+i);
-                    System.out.println("groupeEtudie.get(i).getCandidats() avant remove "+groupeEtudie.get(i).getCandidats());
-                    groupeEtudie.get(i).removeCandidat(candidatsCommuns.get(0));
-                    groupeEtudie.get(i).removeCandidat(candidatsCommuns.get(1));
-                    System.out.println("groupeEtudie.get(i).getCandidats() apres remove "+groupeEtudie.get(i).getCandidats());
-                }
-            }
-        } System.out.println("groupe etudie "+groupeEtudie);
-        
-    }
+   
     
     
     

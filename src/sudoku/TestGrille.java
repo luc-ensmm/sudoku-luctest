@@ -24,7 +24,7 @@ public class TestGrille {
     public static void main(String[] args) {
         // TODO code application logic here
             
-            //test_solutionAlgorithmique();
+            test_solutionAlgorithmique();
        
    
     }

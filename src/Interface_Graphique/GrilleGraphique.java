@@ -22,8 +22,10 @@ import sudoku.Joueur;
 import sudoku.Sudoku;
 import sudoku.GrilleListener;
 
+
+
 /**
- *
+ * Interface du jeu
  * @author yannE
  */
 public class GrilleGraphique extends javax.swing.JFrame implements GrilleListener {
@@ -179,6 +181,10 @@ public class GrilleGraphique extends javax.swing.JFrame implements GrilleListene
     }                      
 
     @Override
+    /**
+     * Méthode désactivant les boutons aide, coup précedent et solution ainsi que
+     * le pad numérique à la fin d'une partie de jeu
+     */
     public void laGrilleEstRemplieEtCorrecte(){
         
             JOptionPane.showMessageDialog(this,"Vous avez réussi, félicitations !"+
@@ -187,14 +193,12 @@ public class GrilleGraphique extends javax.swing.JFrame implements GrilleListene
             aide.setEnabled(false);
             solutionButton.setEnabled(false);
             panelGrille.disposeNumericalPad();
-        /*
-            JOptionPane.showMessageDialog(this,"Mauvaise solution !", "Non !",JOptionPane.ERROR_MESSAGE);
-            coup_precedentActionPerformed(); */
-        
-        
         
     }
     
+    /**
+     * Action du bouton quitter
+     */
     public void quitterActionPerformed(){
         // J'assume que le joueur n'as pas donner son nom 
         
@@ -214,7 +218,9 @@ public class GrilleGraphique extends javax.swing.JFrame implements GrilleListene
     }
     
     
-    
+    /**
+     * Action du bouton Menu Principal
+     */
     public void menuPrincipalActionPerformed(){
         String nomJoueur = (String) JOptionPane.showInputDialog(
                         this,"Votre nom:",
@@ -233,6 +239,9 @@ public class GrilleGraphique extends javax.swing.JFrame implements GrilleListene
         this.dispose();
     }
     
+    /**
+     * Action du bouton Solution
+     */
     public void solutionButtonActionPerformed(){
         int response = JOptionPane.showConfirmDialog(
                 this,
