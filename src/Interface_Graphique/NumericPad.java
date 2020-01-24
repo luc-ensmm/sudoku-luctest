@@ -5,10 +5,13 @@
  */
 package Interface_Graphique;
 
+import java.awt.Color;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import sudoku.Algorithm;
@@ -26,7 +29,7 @@ import sudoku.Sudoku;
  * Fenêtre représentant le "pad numérique"
  * @author yannE
  */
-public class NumericPad extends javax.swing.JFrame{
+public class NumericPad extends javax.swing.JFrame implements MouseListener{
 
     /**
      * Creates new form FrameChoice
@@ -35,7 +38,7 @@ public class NumericPad extends javax.swing.JFrame{
     public NumericPad(PanelGrille pg){
         
         jPanel1 = new javax.swing.JPanel();
-        this.pg = pg;
+        this.parentPanel = pg;
         setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(102, 255, 51));
@@ -56,11 +59,13 @@ public class NumericPad extends javax.swing.JFrame{
             }
         
         
-      
+        
         setResizable(false);
         this.currentIndex = -1;
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
+        setVisible(false);
         
+        this.setLocationRelativeTo(parentPanel);
         //this.setOpacity(0.1f); // ça n'as pas l'air de marché
         pack();
       
@@ -70,12 +75,11 @@ public class NumericPad extends javax.swing.JFrame{
     
     public void buttonActionPerformed(java.awt.event.ActionEvent evt){
         
-        // IMPORTANT, VERIFIE SI LA GRILLE EST PLEINE
-        pg.getSudoku().getGrille().correcteEtPleine();
+        
         
         int valeur = Integer.parseInt(evt.getActionCommand()); 
                                                                   
-        Grille g = pg.getSudoku().getGrille();
+        Grille g = parentPanel.getSudoku().getGrille();
         int valeurDeLaCaseAvant = g.getValeurCase(currentIndex);
         // Case sans valeur, ni candidats
         
@@ -102,15 +106,17 @@ public class NumericPad extends javax.swing.JFrame{
             g.setValeurCase(currentIndex, 0);
             if (valeurDeLaCaseAvant != valeur && valeurDeLaCaseAvant != 0) {
                 g.addCandidatCase(currentIndex, valeurDeLaCaseAvant);
-                pg.drawGrille(PanelGrille.Draw.GRILLE);
+                parentPanel.drawGrille(PanelGrille.Draw.GRILLE);
                 g.addCandidatCase(currentIndex,valeur);
             }
         }
         
         
-        pg.drawGrille(PanelGrille.Draw.GRILLE);
+        parentPanel.drawGrille(PanelGrille.Draw.GRILLE);
         // ON RAJOUTE L'EVOLUTION DES COUPS ICI
-        pg.getSudoku().addCoup(new Coup(currentIndex,valeurDeLaCaseAvant,g.getValeurCase(currentIndex)));
+        parentPanel.getSudoku().addCoup(new Coup(currentIndex,valeurDeLaCaseAvant,g.getValeurCase(currentIndex)));
+        // IMPORTANT, VERIFIE SI LA GRILLE EST PLEINE
+        parentPanel.getSudoku().getGrille().correcteEtPleine();
         
         
         
@@ -119,6 +125,70 @@ public class NumericPad extends javax.swing.JFrame{
     
     public void setCurrentIndex(int index){
         currentIndex = index;
+    }
+    
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        
+        int x = e.getX(); 
+        int y = e.getY();
+    
+        int lenghtCell = parentPanel.getWidth()/parentPanel.getTailleAuCarree();
+        int heightCell = parentPanel.getHeight()/parentPanel.getTailleAuCarree();
+        int column = x/lenghtCell;
+        int line = y/heightCell;
+        int indexCase = line*parentPanel.getTailleAuCarree()+ column;
+        if (parentPanel.getSudoku().getGrille().getCase(indexCase).estModifiable()){
+            if (parentPanel.getAideActivated()){
+                parentPanel.drawAideInSingleCell(parentPanel.getSudoku().getGrille(),indexCase,
+                        parentPanel.getSudoku().getSolution().getValeurCase(indexCase),
+                        Color.GREEN,Color.RED);
+            }
+            else {
+                /*
+                int X;
+                if (x < getWidth()/2){
+                    X = -lenghtCell;
+                }
+                else{
+                    X = getWidth() + lenghtCell;
+                }
+                */
+                
+                this.setLocation((int)parentPanel.getLocationOnScreen().getX() + x,
+                        (int)parentPanel.getLocationOnScreen().getY() + y);
+                
+                setCurrentIndex(indexCase);
+                setVisible(true);
+            }
+
+        } else{
+            setVisible(false);
+        }
+
+
+
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        mouseClicked(e);
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
     }
 
     /**
@@ -185,7 +255,7 @@ public class NumericPad extends javax.swing.JFrame{
     // End of variables declaration//GEN-END:variables
     // More variables
     
-    private PanelGrille pg;
+    private PanelGrille parentPanel;
     private int currentIndex;
 
 }

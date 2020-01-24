@@ -65,7 +65,7 @@
                 <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="SudokuLabel"/>
               </AccessibilityProperties>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton1">
+            <Component class="javax.swing.JButton" name="playButton">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Jouer !"/>
               </Properties>
@@ -73,16 +73,19 @@
                 <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="playButton"/>
               </AccessibilityProperties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="playButtonActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton2">
+            <Component class="javax.swing.JButton" name="loadButton">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Charger partie"/>
               </Properties>
               <AccessibilityProperties>
                 <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="loadButton"/>
               </AccessibilityProperties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="loadButtonActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="jButton3">
               <Properties>

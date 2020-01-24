@@ -7,6 +7,7 @@ package Interface_Graphique;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.util.Random;
 import javax.swing.JOptionPane;
 import sudoku.Algorithm;
@@ -45,8 +46,8 @@ public class Menu_Principal extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        playButton = new javax.swing.JButton();
+        loadButton = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
 
@@ -66,18 +67,23 @@ public class Menu_Principal extends javax.swing.JFrame {
         jPanel1.add(jLabel1);
         jLabel1.getAccessibleContext().setAccessibleName("SudokuLabel");
 
-        jButton1.setText("Jouer !");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        playButton.setText("Jouer !");
+        playButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                playButtonActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1);
-        jButton1.getAccessibleContext().setAccessibleName("playButton");
+        jPanel1.add(playButton);
+        playButton.getAccessibleContext().setAccessibleName("playButton");
 
-        jButton2.setText("Charger partie");
-        jPanel1.add(jButton2);
-        jButton2.getAccessibleContext().setAccessibleName("loadButton");
+        loadButton.setText("Charger partie");
+        loadButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loadButtonActionPerformed(evt);
+            }
+        });
+        jPanel1.add(loadButton);
+        loadButton.getAccessibleContext().setAccessibleName("loadButton");
 
         jButton3.setText("Entrer une grille");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -100,7 +106,7 @@ public class Menu_Principal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playButtonActionPerformed
         // TODO add your handling code here:
         
         Object[] options = {"Grilles existantes",
@@ -126,7 +132,7 @@ public class Menu_Principal extends javax.swing.JFrame {
                     JOptionPane.PLAIN_MESSAGE,
                     null,
                     possibilities,
-                    "9*9");
+                    "4");
 
               
             if ((s != null) && (s.length() > 0)) {
@@ -145,12 +151,43 @@ public class Menu_Principal extends javax.swing.JFrame {
 
         //this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_playButtonActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
+        // TODO add your handling code here:
+        
+        File saveFolder = new File("database/saves");
+        File[] listOfSaves = saveFolder.listFiles();
+        String[] savesName = new String [listOfSaves.length];
+        String[] playersName = new String[listOfSaves.length];
+        for (int i = 0; i < listOfSaves.length; i++) {
+            if (listOfSaves[i].isFile() && listOfSaves[i].getName().contains("_partie")) {
+                savesName[i] = listOfSaves[i].getName();
+                playersName[i] = listOfSaves[i].getName().replace("_partie", "").replace(".txt", "");
+            } else {
+                throw new RuntimeException("Le dossier database/saves ne doit contenir"+
+                        " que des fichiers .txt de la forme 'name_partie'");
+            }
+        }
+        
+        String nomJoueur = (String) JOptionPane.showInputDialog(
+                this,
+                "Choisissez votre partie",
+                "Charger partie",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                playersName,playersName[0]);
+
+        
+        new GrilleGraphique(Sudoku.chargerGrille("database/saves/"+nomJoueur+"_partie")).setVisible(true);
+        this.setVisible(false);
+        
+    }//GEN-LAST:event_loadButtonActionPerformed
     
     
     
@@ -192,13 +229,13 @@ public class Menu_Principal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JButton loadButton;
+    private javax.swing.JButton playButton;
     // End of variables declaration//GEN-END:variables
     
     // More variables declaration

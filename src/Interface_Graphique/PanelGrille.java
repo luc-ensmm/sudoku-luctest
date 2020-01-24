@@ -17,14 +17,14 @@ import sudoku.Sudoku;
  *
  * @author yannE
  */
-public class PanelGrille extends JPanelImage implements MouseListener{
+public class PanelGrille extends JPanelImage{
     
     private Sudoku sudoku;
     
     private int taille;
     private int tailleAuCarree;
-    private NumericPad fenetreChoix;
-    private boolean aideActivated = false;
+    private NumericPad pad;
+    private boolean aideActivated;
     
     public enum Draw{
         GRILLE,SOLUTION;
@@ -34,11 +34,11 @@ public class PanelGrille extends JPanelImage implements MouseListener{
         super(width,height);
         this.sudoku = s;
         this.taille = s.getGrille().getTaille();
-        
+        aideActivated = false;
         this.tailleAuCarree = taille*taille;
-        fenetreChoix = new NumericPad(this);
-        fenetreChoix.setVisible(false);
-        addMouseListener(this);
+        
+        //pad = new NumericPad(this);
+        //addMouseListener(pad);
     }
     
     public PanelGrille(Sudoku s){
@@ -47,6 +47,11 @@ public class PanelGrille extends JPanelImage implements MouseListener{
         this.taille = s.getGrille().getTaille();
         
         this.tailleAuCarree = taille*taille;
+    }
+    
+    public void setNumericPad(NumericPad p){
+        pad = p;
+        addMouseListener(pad);
     }
     
     public int getTailleAuCarree(){
@@ -241,72 +246,21 @@ public class PanelGrille extends JPanelImage implements MouseListener{
     
     public void activateAide(boolean state){
         aideActivated = state;
+        /*
         if (!state){
             drawGrille(Draw.GRILLE);
         }
+        */
+    }
+    
+    public boolean getAideActivated(){
+        return aideActivated;
     }
     
     public void disposeNumericalPad(){
-        fenetreChoix.dispose();
+        pad.setVisible(false);
+        pad.dispose();
     }
-    
-    @Override
-        public void mouseClicked(MouseEvent e) {
-            int x = e.getX();
-            int y = e.getY();
-            int lenghtCell = getWidth()/tailleAuCarree;
-            int heightCell = getHeight()/tailleAuCarree;
-            int column = x/lenghtCell;
-            int line = y/heightCell;
-            int indexCase = line*tailleAuCarree + column;
-            if (sudoku.getGrille().getCase(indexCase).estModifiable()){
-                if (aideActivated){
-                    drawAideInSingleCell(sudoku.getGrille(),indexCase,
-                            sudoku.getSolution().getValeurCase(indexCase),
-                            Color.GREEN,Color.RED);
-                }
-                else {
-                    
-                    int X;
-                    if (x < getWidth()/2){
-                        X = -lenghtCell;
-                    }
-                    else{
-                        X = getWidth() + lenghtCell;
-                    }
-                    fenetreChoix.setLocation(X, y);
-                    fenetreChoix.setCurrentIndex(indexCase);
-                    fenetreChoix.setVisible(true);
-                }
-                
-            }
-            
-            
-            
-            
-        }
-
-        @Override
-        public void mousePressed(MouseEvent e) {
-          
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e) {
-           
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e) {
-            
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-          
-        }
-        
-
-        
-    }
+       
+}
 

@@ -77,9 +77,6 @@ public class Sudoku {
         j.setScore(score);
     }
     
-    public int getJoueurScore(){
-        return j.getScore();
-    }
     
     public void jouerUnCoup(){
         
@@ -158,7 +155,7 @@ public class Sudoku {
     
     public void saveGame (){
         try{
-            FileWriter fichier = new FileWriter("partie_"+ j.getNom() +".txt");
+            FileWriter fichier = new FileWriter(j.getNom() + "_partie.txt");
             fichier.write("#nom du joueur: "+j.getNom()+"\n");
             fichier.write("#score: "+String.valueOf(j.getScore())+"\n");
             fichier.write("#taille: "+String.valueOf(g.getTaille())+"\n");
@@ -202,7 +199,10 @@ public class Sudoku {
         
         //lecture du fichier
         try{
-            BufferedReader fichier = new BufferedReader (new FileReader(nomDuFichier+".txt"));//rajouter condition si txt déjà dans nom du fichier
+            if (!nomDuFichier.contains(".txt")){
+                nomDuFichier+= ".txt";
+            }
+            BufferedReader fichier = new BufferedReader (new FileReader(nomDuFichier));
             while (fichier.ready()){
                 String ligne;
                 ligne = fichier.readLine();
@@ -291,6 +291,10 @@ public class Sudoku {
     
     public Pile getListeCoup(){
         return listeCoup;
+    }
+    
+    public Joueur getJoueur(){
+        return j;
     }
     
     public void revenirEnArriere(int nbCoupsJoues){

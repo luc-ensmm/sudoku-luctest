@@ -1,0 +1,21 @@
+#nom du joueur: database/saves/aba
+#score: 0
+#taille: 2
+#grille du joueur: 
+%;1;2;0;4;0;0;1;2;4;1;0;0;0;3;0;1;
+#solution de la partie: 
+$;1;2;3;4;3;4;1;2;4;1;2;3;2;3;4;1;
+#liste des coups joués:
+#valeur avant     valeurapres    position de la case
+14  1  0
+14  0  1
+14  0  0
+14  0  0
+14  0  0
+14  0  0
+14  3  0
+14  0  3
+14  4  0
+14  0  4
+14  2  0
+14  0  2
