@@ -1022,8 +1022,26 @@ public class Grille {
         }
         return new Grille(taille, cloneEnsembleCases);
     }
-
-    public static  int niveauGrille(String niveauDifficulte, int taille){ //a supprimer
+    public static String niveauGrille(int nbCasesRevelees, int taille){
+        int tailleAuCarre = taille*taille;
+        double totalCases = tailleAuCarre*tailleAuCarre;
+        double proportionCasesRevelees = (double)nbCasesRevelees/totalCases;
+        String niveau = "";
+        if (taille == 2){
+            niveau = "facile";
+        } else{
+            if(proportionCasesRevelees>0.20 && proportionCasesRevelees<=0.28){
+                niveau = "difficile";
+            } else if (proportionCasesRevelees>28 && proportionCasesRevelees<=0.36){
+                niveau = "moyen";
+            } else if (proportionCasesRevelees>0.36){
+                niveau = "facile";
+            }
+        } return niveau; 
+             
+    }
+    
+    public static  int niveauGrille2(String niveauDifficulte, int taille){ //a supprimer
         int nbCasesRevelees;
         niveauDifficulte.toLowerCase();
         int taillePuissance4 = taille*taille*taille*taille;

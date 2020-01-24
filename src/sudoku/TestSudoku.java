@@ -5,6 +5,7 @@
  */
 package sudoku;
 
+import static java.lang.Math.sqrt;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -205,7 +206,7 @@ public class TestSudoku {
     }
 
     public static void test_jouerUnePartie() {
-        Sudoku s1 = Sudoku.playCommande();
+        //Sudoku s1 = Sudoku.playCommande();
         //Joueur j = new Joueur("Nom",0);
         //Sudoku s = new Sudoku (j,30, 3);
         //s.afficheSudoku();
