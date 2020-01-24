@@ -131,7 +131,7 @@ public class Menu_Principal extends javax.swing.JFrame {
             String s = (String) JOptionPane.showInputDialog(
                     this,
                     "Taille de la grille",
-                    "",
+                    "Paramètres de jeu",
                     JOptionPane.PLAIN_MESSAGE,
                     null,
                     possibilities,
@@ -143,7 +143,7 @@ public class Menu_Principal extends javax.swing.JFrame {
                 int tailleAuCarree = Integer.parseInt(s);
                 Random ran = new Random();
                 String strNbCasesReveles = (String) JOptionPane.showInputDialog(
-                        this,"Toutes valeurs n'appartenant pas à cette intervalle entrainera un choix aléatoire)",
+                        this,"Toutes valeurs n'appartenant pas à cette intervalle entrainera un choix aléatoire",
                         "Nombre de cases à révéler [1," + (tailleAuCarree*tailleAuCarree-1) +"]",
                         JOptionPane.PLAIN_MESSAGE); 
                 
@@ -193,17 +193,20 @@ public class Menu_Principal extends javax.swing.JFrame {
             }
         }
         
-        String nomJoueur = (String) JOptionPane.showInputDialog(
-                this,
-                "Choisissez votre partie",
-                "Charger partie",
-                JOptionPane.PLAIN_MESSAGE,
-                null,
-                playersName,playersName[0]);
+        try {
+            String nomJoueur = (String) JOptionPane.showInputDialog(
+                    this,
+                    "Choisissez votre partie",
+                    "Charger partie",
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,
+                    playersName, playersName[0]);
 
-        
-        new GrilleGraphique(Sudoku.chargerGrille("database/saves/"+nomJoueur+"_partie")).setVisible(true);
-        this.setVisible(false);
+            if (!nomJoueur.equals(null)) {
+                new GrilleGraphique(Sudoku.chargerGrille("database/saves/" + nomJoueur + "_partie")).setVisible(true);
+                this.setVisible(false);
+            }
+        } catch (NullPointerException e) {}
         
     }//GEN-LAST:event_loadButtonActionPerformed
     

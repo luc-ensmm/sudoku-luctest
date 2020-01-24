@@ -247,7 +247,7 @@ public class GrilleGraphique extends javax.swing.JFrame implements GrilleListene
                 this,
                 "Voir la solution met fin à la partie et annule votre score\n"+
                         "Voulez-vous quand même voir la solution ?",
-                "",
+                "Attention !",
                 JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
         
         if (response == 0){
