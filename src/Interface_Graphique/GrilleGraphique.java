@@ -9,37 +9,36 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import javax.swing.JOptionPane;
 import sudoku.Algorithm;
 import sudoku.Coup;
+import sudoku.Grille;
 import sudoku.Joueur;
 import sudoku.Sudoku;
+import sudoku.GrilleListener;
 
 /**
  *
  * @author yannE
  */
-public class GrilleGraphic2 extends javax.swing.JFrame {
+public class GrilleGraphique extends javax.swing.JFrame implements GrilleListener {
     
     /**
      * Creates new form Grille
      */
     
-    public GrilleGraphic2() {
-        sudoku = new Sudoku(new Joueur("Inconnu"),Algorithm.genereGrille_Dessai(1),Algorithm.genereGrille_Dessai(1));
-        initComponents();
-        panelGrille.drawGrille(PanelGrille.Draw.GRILLE);
-        //this.setSize(new Dimension(frameWidth,frameHeight));
-        //System.out.println("A dessiner");
-       
-    }
     
-    public GrilleGraphic2(Sudoku s){
-        sudoku = s;
-        initComponents();
+    public GrilleGraphique(Sudoku s){
+        initComponents(s);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenHeight = screenSize.height;
+        int screenWidth = screenSize.width;
+        this.setLocation(screenWidth/2-this.getWidth()/2, screenHeight/2-this.getHeight()/2);
         panelGrille.drawGrille(PanelGrille.Draw.GRILLE);
            
     }
@@ -52,8 +51,14 @@ public class GrilleGraphic2 extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
-    private void initComponents() {
+    private void initComponents(Sudoku s) {
         
+        sudoku = s;
+        sudoku.getGrille().addListener(this);
+        System.out.println(s.getGrille().getTaille()/2);
+        int widthPanel = (s.getGrille().getTaille()/2)*579;
+        int heightPanel = (s.getGrille().getTaille()/2)*468;
+        panelGrille = new PanelGrille(s,widthPanel,heightPanel);
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         coup_precedent = new javax.swing.JButton();
@@ -69,7 +74,7 @@ public class GrilleGraphic2 extends javax.swing.JFrame {
         scoreLabel = new javax.swing.JLabel();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0));
         
-        panelGrille = new PanelGrille(sudoku,579,468);
+        
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -166,11 +171,35 @@ public class GrilleGraphic2 extends javax.swing.JFrame {
             }
         });
         
+        aide.addItemListener(new java.awt.event.ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                aideActionPerformed(e);
+            }
+        });
+        
+        
         
 
         pack();
     }// </editor-fold>                        
 
+    @Override
+    public void laGrilleEstRemplieEtCorrecte(){
+        
+            JOptionPane.showMessageDialog(this,"Vous avez réussi, félicitations !"+
+                    "\nScore: " + sudoku.getJoueurScore());
+            coup_precedent.setEnabled(false);
+            aide.setEnabled(false);
+            solutionButton.setEnabled(false);
+            panelGrille.disposeNumericalPad();
+        /*
+            JOptionPane.showMessageDialog(this,"Mauvaise solution !", "Non !",JOptionPane.ERROR_MESSAGE);
+            coup_precedentActionPerformed(); */
+        
+        
+        
+    }
     
     public void quitterActionPerformed(){
         // J'assume que le joueur n'as pas donner son nom 
@@ -243,6 +272,32 @@ public class GrilleGraphic2 extends javax.swing.JFrame {
         
     }
     
+    private boolean aideButtonUsedAtLeastOnce = false;
+    
+    public void aideActionPerformed(ItemEvent e){
+        
+        int state = e.getStateChange();
+        if (state == ItemEvent.SELECTED){
+            if (!aideButtonUsedAtLeastOnce){
+                aideButtonUsedAtLeastOnce = true;
+                JOptionPane.showMessageDialog(this,
+                        "Séléctionnez une case et la bonne valeur de la case\n"+
+                                "s'affichera si elle est parmi les candidats de la case.\n"+
+                                "Chaque utilisation retire -3 au score. Recliquer sur le\n"
+                                + "bouton pour désactiver l'aide.", "Fonctionnement de l'aide",
+                                JOptionPane.PLAIN_MESSAGE);
+                
+            }
+            
+            panelGrille.activateAide(true);
+            
+        }
+        else if (state == ItemEvent.DESELECTED){
+            panelGrille.activateAide(false);
+        }
+        
+    }
+    
     
     /**
      * @param args the command line arguments
@@ -261,14 +316,18 @@ public class GrilleGraphic2 extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GrilleGraphic2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GrilleGraphique.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GrilleGraphic2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GrilleGraphique.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GrilleGraphic2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GrilleGraphique.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GrilleGraphic2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GrilleGraphique.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -277,8 +336,10 @@ public class GrilleGraphic2 extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new GrilleGraphic2().setVisible(true);
-                
+                Grille solution = Algorithm.randomSolutionGenerator(2);
+                Grille g = Algorithm.randomGrilleGenerator(solution, 8);
+                new GrilleGraphique(new Sudoku(new Joueur("Inconnu"), g, solution)).setVisible(true);
+
             }
         });
     }

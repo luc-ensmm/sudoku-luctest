@@ -10,14 +10,11 @@ import java.util.Collections;
 import java.util.Objects;
 import java.util.Random;
 import java.lang.IllegalArgumentException;
+import java.util.List;
 /**
  *
  * @author smoukoka
  */
-
-/*
-JavaDoc à faire absolument !
-*/
 
 /**
  * Classe représentant la grille contenant les cases du sudoku
@@ -27,6 +24,7 @@ public class Grille {
     
     private ArrayList<Case> ensembleCases;
     private int taille;
+    private List<GrilleListener> listeners = new ArrayList<>();
     
     /**
      * Constructeur général
@@ -70,6 +68,10 @@ public class Grille {
             ensembleCases.add(new Case(taille,0,(ArrayList<Integer>)allCandidates.clone(),true));
         }
         
+    }
+    
+    public void addListener(GrilleListener listener){
+        listeners.add(listener);
     }
           
     public void singletonNuVersbose(int indexCase){
@@ -859,6 +861,12 @@ public class Grille {
         }
         else{
             estCorrecte = false;
+        }
+        
+        if(estCorrecte){
+            for(GrilleListener listener: listeners){
+                listener.laGrilleEstRemplieEtCorrecte();
+            }
         }
         
         return estCorrecte;

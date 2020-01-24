@@ -4,8 +4,13 @@
  * and open the template in the editor.
  */
 package Interface_Graphique;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
+import java.util.Random;
+import javax.swing.JOptionPane;
 import sudoku.Algorithm;
+import sudoku.Grille;
 import sudoku.Joueur;
 import sudoku.Sudoku;
 
@@ -21,6 +26,10 @@ public class Menu_Principal extends javax.swing.JFrame {
     
     public Menu_Principal(){
         initComponents();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenHeight = screenSize.height;
+        int screenWidth = screenSize.width;
+        this.setLocation(screenWidth/2-this.getWidth()/2, screenHeight/2-this.getHeight()/2);
         
     }
 
@@ -93,9 +102,47 @@ public class Menu_Principal extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        this.setVisible(false);
-        new MenuChoixGrille().setVisible(true);
         
+        Object[] options = {"Grilles existantes",
+            "Génération aléatoire"};
+        int n = JOptionPane.showOptionDialog(this,
+                "Type de grille ?",
+                "Paramètres de jeu",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null, //do not use a custom Icon
+                options, //the titles of buttons
+                options[1]); //default button title
+        
+        if (n == 0){ // Option grilles existantes
+            
+        }
+        else if (n == 1) { // Options génération aléatoire
+            Object[] possibilities = {"4", "9", "16"};
+            String s = (String) JOptionPane.showInputDialog(
+                    this,
+                    "Taille de la grille",
+                    "",
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,
+                    possibilities,
+                    "9*9");
+
+              
+            if ((s != null) && (s.length() > 0)) {
+                int tailleAuCarree = Integer.parseInt(s);
+                Random ran = new Random();
+                int nbCasesReveles = ran.nextInt(tailleAuCarree*tailleAuCarree-tailleAuCarree*2)
+                        + tailleAuCarree*2;
+                
+                Grille solution = Algorithm.randomSolutionGenerator((int)Math.sqrt(tailleAuCarree));
+                Grille grille = Algorithm.randomGrilleGenerator(solution, nbCasesReveles);
+                
+                this.setVisible(false);
+                new GrilleGraphique(new Sudoku(new Joueur("",0),grille,solution)).setVisible(true);
+            }
+        }
+
         //this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         
     }//GEN-LAST:event_jButton1ActionPerformed

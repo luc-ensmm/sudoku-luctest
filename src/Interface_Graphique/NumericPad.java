@@ -6,11 +6,15 @@
 package Interface_Graphique;
 
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import sudoku.Algorithm;
 import sudoku.Coup;
 import sudoku.Grille;
+import sudoku.Joueur;
 import sudoku.Sudoku;
 
 /**
@@ -22,32 +26,53 @@ import sudoku.Sudoku;
  * Fenêtre représentant le "pad numérique"
  * @author yannE
  */
-public class FrameChoice extends javax.swing.JFrame implements ActionListener {
+public class NumericPad extends javax.swing.JFrame{
 
     /**
      * Creates new form FrameChoice
      */
-    public FrameChoice() {
-        initComponents();
-    }
     
-    public FrameChoice(PanelGrille pg){
-        initComponents();
+    public NumericPad(PanelGrille pg){
+        
+        jPanel1 = new javax.swing.JPanel();
         this.pg = pg;
+        setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
+
+        jPanel1.setBackground(new java.awt.Color(102, 255, 51));
+        jPanel1.setLayout(new java.awt.GridLayout(pg.getSudoku().getGrille().getTaille(),
+                        pg.getSudoku().getGrille().getTaille()));
+       
+        
         for (int i = 1; i <= pg.getTailleAuCarree(); i++){
-            JButton button = new JButton(""+(i));
+            JButton button = new javax.swing.JButton(""+(i));
+            //button.setOpaque(false); // ça n'as pas l'air de marché
+            button.addActionListener(new java.awt.event.ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    buttonActionPerformed(e);
+                }
+            });
             jPanel1.add(button);
-            button.addActionListener(this);
-        }
+            }
         
+        
+      
+        setResizable(false);
         this.currentIndex = -1;
-        jPanel1.setLayout(new BoxLayout(jPanel1,BoxLayout.X_AXIS));
+        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
         
-        
+        //this.setOpacity(0.1f); // ça n'as pas l'air de marché
+        pack();
+      
+          
     }
     
-    @Override
-    public void actionPerformed(java.awt.event.ActionEvent evt){
+    
+    public void buttonActionPerformed(java.awt.event.ActionEvent evt){
+        
+        // IMPORTANT, VERIFIE SI LA GRILLE EST PLEINE
+        pg.getSudoku().getGrille().correcteEtPleine();
+        
         int valeur = Integer.parseInt(evt.getActionCommand()); 
                                                                   
         Grille g = pg.getSudoku().getGrille();
@@ -110,34 +135,8 @@ public class FrameChoice extends javax.swing.JFrame implements ActionListener {
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(102, 102, 255));
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(148, 148, 148)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(152, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(63, 63, 63)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(137, Short.MAX_VALUE))
-        );
+        jPanel1.setLayout(new java.awt.GridLayout(1, 0));
+        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -159,20 +158,24 @@ public class FrameChoice extends javax.swing.JFrame implements ActionListener {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrameChoice.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NumericPad.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrameChoice.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NumericPad.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrameChoice.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NumericPad.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrameChoice.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NumericPad.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FrameChoice().setVisible(true);
+                Grille solution = Algorithm.randomSolutionGenerator(2);
+                Grille g = Algorithm.randomGrilleGenerator(solution, 8);
+                PanelGrille pg = new PanelGrille(new Sudoku(new Joueur("Unknown",0),g,solution));
+                new NumericPad(pg).setVisible(true);
             }
         });
     }

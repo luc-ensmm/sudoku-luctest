@@ -22,8 +22,8 @@ public class PanelGrille extends JPanelImage implements MouseListener{
     private Sudoku sudoku;
     private int taille;
     private int tailleAuCarree;
-    private FrameChoice fenetreChoix;
-   
+    private NumericPad fenetreChoix;
+    private boolean aideActivated = false;
     
     public enum Draw{
         GRILLE,SOLUTION;
@@ -33,15 +33,19 @@ public class PanelGrille extends JPanelImage implements MouseListener{
         super(width,height);
         this.sudoku = s;
         this.taille = s.getGrille().getTaille();
+        
         this.tailleAuCarree = taille*taille;
-        fenetreChoix = new FrameChoice(this);
+        fenetreChoix = new NumericPad(this);
         fenetreChoix.setVisible(false);
-        this.addMouseListener(this);
+        addMouseListener(this);
     }
     
     public PanelGrille(Sudoku s){
-        super();
+        super(500,500);
         this.sudoku = s;
+        this.taille = s.getGrille().getTaille();
+        
+        this.tailleAuCarree = taille*taille;
     }
     
     public int getTailleAuCarree(){
@@ -62,7 +66,7 @@ public class PanelGrille extends JPanelImage implements MouseListener{
                     g = sudoku.getSolution();
                     g.videLesCandidats();
                     break;
-                
+               
                 default:
                     throw new IllegalArgumentException("L'argument n'est pas dans PanelGrille.Draw");       
             }
@@ -98,62 +102,152 @@ public class PanelGrille extends JPanelImage implements MouseListener{
         
         // Valeurs et candidats
         for (int i = 0; i < g.getEnsembleCases().size(); i++){
-            
-            int valeur = g.getValeurCase(i);
-            int ligne = i / tailleAuCarree;
-            int colonne = i - ligne * tailleAuCarree;
-            
-            if (valeur != 0) {
-                
-                int fontSize = 2*(height/tailleAuCarree)/3;
-                setFontSize(fontSize);
-                setCouleur(Color.BLACK);
-                
-                int x = colonne*(width/tailleAuCarree) + (width/tailleAuCarree)/2 - 30*fontSize/100; 
-                int y = ligne*(height/tailleAuCarree) + (height/tailleAuCarree)/2 + 30*fontSize/100; 
-                
-                
-                this.getGraphics2D().drawString(Integer.toString(valeur), x, y);
-            }
-            else {
-                
-                int lenghtCell = width/tailleAuCarree;
-                int heightCell = height/tailleAuCarree;
-                
-                int fontSize = heightCell/taille;
-                setFontSize(fontSize);
-                setCouleur(Color.GRAY);
-                
-                int x = colonne*(width/tailleAuCarree) + 30*(lenghtCell/taille)/100;
-                int y = ligne*(height/tailleAuCarree) + 90*(heightCell/taille)/100;
-                
-                int j = 0;
-                for (Integer candidat: g.getCandidatCase(i)){
-                    this.getGraphics2D().drawString(Integer.toString(candidat),
-                            x + (j%taille)*(lenghtCell/taille)  , y + (j/taille)*(heightCell/taille));
-                    j++;
-                }
-                
-            }
+            drawValuesInSingleCell(g,i,Color.BLACK,Color.LIGHT_GRAY);
         } 
-        
         
         this.repaint();
         
     }
     
+    /**
+     * Modifie la couleur avec laquelle les différents composants sont dessinés
+     * @param couleur 
+     */
     public void setCouleur(Color couleur) {
         this.getGraphics2D().setColor(couleur);
     }
     
     /**
-     * Existe car utilisée dans la classe FrameChoice
+     * Permet de dessiner une valeur d'une cellule différement des autres valeurs/candidats
+     * @param g
+     * @param indexCell
+     * @param specialValue
+     * @param colorSpecialValue
+     * @param colorNonSpecialValue 
+     */
+    public void drawAideInSingleCell(Grille g,int indexCell, int specialValue, 
+            Color colorSpecialValue, Color colorNonSpecialValue){
+        
+        int valeur = g.getValeurCase(indexCell);
+        int ligne = indexCell / tailleAuCarree;
+        int colonne = indexCell - ligne * tailleAuCarree;
+        int height = this.getHeight();
+        int width = this.getWidth();
+        
+        if (valeur != 0) {
+
+            int fontSize = 2 * (height / tailleAuCarree) / 3;
+            setFontSize(fontSize);
+            if (valeur == specialValue){
+                setCouleur(colorSpecialValue);
+            }
+            else{
+                setCouleur(colorNonSpecialValue);
+            }
+            
+
+            int x = colonne * (width / tailleAuCarree) + (width / tailleAuCarree) / 2 - 30 * fontSize / 100;
+            int y = ligne * (height / tailleAuCarree) + (height / tailleAuCarree) / 2 + 30 * fontSize / 100;
+
+            this.getGraphics2D().drawString(Integer.toString(valeur), x, y);
+        } else {
+
+            int lenghtCell = width / tailleAuCarree;
+            int heightCell = height / tailleAuCarree;
+
+            int fontSize = heightCell / taille;
+            setFontSize(fontSize);
+            
+
+            int x = colonne * (width / tailleAuCarree) + 30 * (lenghtCell / taille) / 100;
+            int y = ligne * (height / tailleAuCarree) + 90 * (heightCell / taille) / 100;
+
+            int j = 0;
+            for (Integer candidat : g.getCandidatCase(indexCell)) {
+                if (candidat == specialValue) {
+                    setCouleur(colorSpecialValue);
+                } else {
+                    setCouleur(colorNonSpecialValue);
+                }
+                this.getGraphics2D().drawString(Integer.toString(candidat),
+                        x + (j % taille) * (lenghtCell / taille), y + (j / taille) * (heightCell / taille));
+                j++;
+            }
+
+        }
+        
+        this.repaint();
+        
+    }
+    
+    /**
+     * Dessine la valeur ou les candidats d'une case de façon uniforme
+     * @param g
+     * @param indexCell
+     * @param colorValue
+     * @param colorCandidates 
+     */
+    public void drawValuesInSingleCell(Grille g, int indexCell, Color colorValue, Color colorCandidates) {
+        
+        int valeur = g.getValeurCase(indexCell);
+        int ligne = indexCell / tailleAuCarree;
+        int colonne = indexCell - ligne * tailleAuCarree;
+        int height = this.getHeight();
+        int width = this.getWidth();
+        
+        if (valeur != 0) {
+
+            int fontSize = 2 * (height / tailleAuCarree) / 3;
+            setFontSize(fontSize);
+            
+            setCouleur(colorValue);
+
+            int x = colonne * (width / tailleAuCarree) + (width / tailleAuCarree) / 2 - 30 * fontSize / 100;
+            int y = ligne * (height / tailleAuCarree) + (height / tailleAuCarree) / 2 + 30 * fontSize / 100;
+
+            this.getGraphics2D().drawString(Integer.toString(valeur), x, y);
+        } else {
+
+            int lenghtCell = width / tailleAuCarree;
+            int heightCell = height / tailleAuCarree;
+
+            int fontSize = heightCell / taille;
+            setFontSize(fontSize);
+            setCouleur(colorCandidates);
+
+            int x = colonne * (width / tailleAuCarree) + 30 * (lenghtCell / taille) / 100;
+            int y = ligne * (height / tailleAuCarree) + 90 * (heightCell / taille) / 100;
+
+            int j = 0;
+            for (Integer candidat : g.getCandidatCase(indexCell)) {
+                this.getGraphics2D().drawString(Integer.toString(candidat),
+                        x + (j % taille) * (lenghtCell / taille), y + (j / taille) * (heightCell / taille));
+                j++;
+            }
+
+        }
+        
+        this.repaint();
+    }
+    
+    /**
+     * Existe car utilisée dans la classe NumericPad
      * @return l'objet Sudoku (!= copie du Sudoku, = référence à l'objet)
      */
     public Sudoku getSudoku(){
         return sudoku;
     }
     
+    public void activateAide(boolean state){
+        aideActivated = state;
+        if (!state){
+            drawGrille(Draw.GRILLE);
+        }
+    }
+    
+    public void disposeNumericalPad(){
+        fenetreChoix.dispose();
+    }
     
     @Override
         public void mouseClicked(MouseEvent e) {
@@ -165,12 +259,28 @@ public class PanelGrille extends JPanelImage implements MouseListener{
             int line = y/heightCell;
             int indexCase = line*tailleAuCarree + column;
             if (sudoku.getGrille().getCase(indexCase).estModifiable()){
-                //int valeurCase = sudoku.getGrille().getValeurCase(indexCase);
-                //System.out.println("Index:" + indexCase + " , Valeur:" + valeurCase);
-                fenetreChoix.setLocation(x, y);
-                fenetreChoix.setCurrentIndex(indexCase);
-                fenetreChoix.setVisible(true);
+                if (aideActivated){
+                    drawAideInSingleCell(sudoku.getGrille(),indexCase,
+                            sudoku.getSolution().getValeurCase(indexCase),
+                            Color.GREEN,Color.RED);
+                }
+                else {
+                    
+                    int X;
+                    if (x < getWidth()/2){
+                        X = -lenghtCell;
+                    }
+                    else{
+                        X = getWidth() + lenghtCell;
+                    }
+                    fenetreChoix.setLocation(X, y);
+                    fenetreChoix.setCurrentIndex(indexCase);
+                    fenetreChoix.setVisible(true);
+                }
+                
             }
+            
+            
             
             
         }

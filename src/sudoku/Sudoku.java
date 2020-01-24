@@ -77,6 +77,10 @@ public class Sudoku {
         j.setScore(score);
     }
     
+    public int getJoueurScore(){
+        return j.getScore();
+    }
+    
     public void jouerUnCoup(){
         
         int taille = g.getTaille();
