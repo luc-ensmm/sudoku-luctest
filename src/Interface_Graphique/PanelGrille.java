@@ -20,6 +20,7 @@ import sudoku.Sudoku;
 public class PanelGrille extends JPanelImage implements MouseListener{
     
     private Sudoku sudoku;
+    
     private int taille;
     private int tailleAuCarree;
     private NumericPad fenetreChoix;
