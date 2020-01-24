@@ -1,0 +1,12 @@
+#nom du joueur: GG
+#score: 0
+#taille: 2
+#grille du joueur: 
+%;0;2;4;4;3;0;1;0;0;0;0;3;0;0;0;0;
+#solution de la partie: 
+$;1;2;3;4;3;4;1;2;4;1;2;3;2;3;4;1;
+#liste des coups joués:
+#position de la case   valeur avant     valeurapres    
+2  0  4
+7  1  0
+7  0  1

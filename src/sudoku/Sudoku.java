@@ -140,7 +140,7 @@ public class Sudoku {
      */
     public void saveGame (){
         try{
-            FileWriter fichier = new FileWriter("partie_"+j.getNom() + ".txt");
+            FileWriter fichier = new FileWriter("database/saves/"+j.getNom() + "_partie.txt");
             fichier.write("#nom du joueur: "+j.getNom()+"\n");
             fichier.write("#score: "+String.valueOf(j.getScore())+"\n");
             fichier.write("#taille: "+String.valueOf(g.getTaille())+"\n");

@@ -195,8 +195,7 @@ public class GrilleGraphique extends javax.swing.JFrame implements GrilleListene
      */
     public void laGrilleEstRemplieEtCorrecte(){
         
-            JOptionPane.showMessageDialog(this,"Vous avez réussi, félicitations !"+
-                    "\nScore: " + sudoku.getJoueur().getScore());
+            JOptionPane.showMessageDialog(this,"Vous avez réussi, félicitations !");
             coup_precedent.setEnabled(false);
             aide.setEnabled(false);
             solutionButton.setEnabled(false);
@@ -235,9 +234,8 @@ public class GrilleGraphique extends javax.swing.JFrame implements GrilleListene
                         "Voulez-vous sauvegardez ?",
                         JOptionPane.WARNING_MESSAGE
                         );
-        if ((nomJoueur != null) && nomJoueur.length() > 0) {
-            String nom_sauvegarde = "database/saves/" + nomJoueur; 
-            sudoku.setJoueurName(nom_sauvegarde);
+        if ((nomJoueur != null) && nomJoueur.length() > 0) { 
+            sudoku.setJoueurName(nomJoueur);
             sudoku.saveGame();
             
         }
