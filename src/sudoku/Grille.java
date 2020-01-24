@@ -578,13 +578,7 @@ public class Grille {
         } return candidatBon;
     }
      
-    
-    
-    /*
-    Pour les candidats proposées par le joueur, créer une grille fantome qui
-    contiendra les propositions du joueuer
-    
-    */
+   
     
     /*
     1) utiliser tous les algo(sauf singleton nu) sur toutes les cases modifiables de la grille
