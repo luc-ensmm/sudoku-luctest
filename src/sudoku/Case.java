@@ -14,7 +14,7 @@ import java.util.Objects;
  */
 public class Case {
     
-    final private int taille; // à remplacer par tailleGrille
+    final private int taille; 
     private int valeur; // si valeur = 0 alors la case est considérée vide
     private ArrayList<Integer> candidats;
     private boolean estModifiable; // défini si le joueur peut modifier ou non la case 
@@ -33,9 +33,7 @@ public class Case {
         this.candidats = new ArrayList<Integer>();
         this.estModifiable = estModifiable;
     }
-    
-  
-    
+
     public int getTaille() {
         return taille;
     }
@@ -87,13 +85,14 @@ public class Case {
     }
 
     
-    public void resteUnCandidat(){
+    public void resteUnCandidat(){ 
         if (this.candidats.size() == 1){
             this.setValeur(candidats.get(0));
         } else {
             this.setValeur(0);
         }
-    }
+    }/*s'il reste un candidat alors la case prend comme valeur ce candidat 
+      *dans le cas contraire sa valeur devient 0 (case vide)*/
     
     public boolean estModifiable() {
         return estModifiable;
@@ -103,8 +102,6 @@ public class Case {
         this.estModifiable = estModifiable;
     }
 
-    
-    
     @Override
     public String toString() {
         return "Case{" + "valeur=" + valeur + ", candidats=" + candidats + ", estModifiable=" + estModifiable + '}';
@@ -148,16 +145,15 @@ public class Case {
     public int candidatDejaPresent (Case other) { 
         Integer candidatEnTrop = 0;
         if(other.estModifiable() == false){
-        //while (i<other.candidats.size() && egale == false){
             for (int i = 0; i<this.getCandidats().size(); i++){
                 if (this.getCandidats().get(i) == other.getValeur()) {
-                    //System.out.print("candidat deja présent "+this.getCandidats().get(i));
+                    
                     candidatEnTrop = this.getCandidats().get(i);
                 }   
-            }//System.out.println("candidats en trop "+candidatEnTrop);
+            }
         }return candidatEnTrop;    
     }
-    //on compare les candidats d'une case proposés par un joueur à une autre case non modifiable donc sa valeur est fixe
-    //ainsi il ne peut y avoir des candidats de même valeur car cette case non modifiable provient de la grille de départ
+    /*on compare les candidats d'une case proposées par un joueur à une autre case non modifiable donc sa valeur est fixe
+     *ainsi il ne peut y avoir des candidats de même valeur car cette case non modifiable provient de la grille de départ*/
     
 }

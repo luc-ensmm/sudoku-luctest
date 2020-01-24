@@ -112,11 +112,6 @@ public class Grille {
         return taille;
     }
 
-    /**
-     * 
-     * @param i
-     * @return 
-     */
     public ArrayList<Case> getLine(int i) {
         
         ArrayList<Case> line = new ArrayList<>();
@@ -138,7 +133,6 @@ public class Grille {
         
         return column;
     }
-    
     
     /**
      * Remplace la ligne i par celle en argument
@@ -182,7 +176,7 @@ public class Grille {
     
         ArrayList<Case> block = new ArrayList<>();
         int tailleAuCarree = taille*taille; // introduit pour plus de clarté dans le code
-        int depart = (b/taille)*(tailleAuCarree*taille) + taille*(b-(b/taille)*taille); //le premier terme donne la ligne et le deuxième terme donne la colonne
+        int depart = (b/taille)*(tailleAuCarree*taille) + taille*(b-(b/taille)*taille); 
         for (int k = depart; k < depart + taille*tailleAuCarree; k+=tailleAuCarree){
             for (int m = k; m < k + taille; m++){
                 block.add(ensembleCases.get(m));
@@ -192,10 +186,9 @@ public class Grille {
       
         return block;
     }
-    
-    
+
     public void setBlock(int b, ArrayList<Case> block){ 
-        int tailleAuCarree = taille*taille; // introduit pour plus de clarté dans le code
+        int tailleAuCarree = taille*taille; 
         if (block.size() != tailleAuCarree){
             System.out.println("La ligne mise en argument n'a pas le bon nombre d'élément:\nNombre d'élément de la ligne: " +
                     block.size() + "\nTaille au carrée de la grille: " + tailleAuCarree);
@@ -253,7 +246,6 @@ public class Grille {
                 System.out.print("__");
               }
               System.out.print("\n");
-              //System.out.println("___________");
         }
     
     }
@@ -618,8 +610,8 @@ public class Grille {
             Algorithm.paireNue(bloc);
             g.setBlock(i, bloc);
         }
-        
         */
+        
         
         // Singleton nu 
         int utilisationSingletonNu = 0;
@@ -951,7 +943,7 @@ public class Grille {
                 if(i!=(lineCase) && column.get(lineCase).candidatDejaPresent(column.get(i)) != 0 ){
                     candidatsEnTrop.add(column.get(lineCase).candidatDejaPresent(column.get(i)));
                 } i++;
-            }//System.out.println("candidats en trop colonne "+candidatsEnTrop);
+            }
             
         return candidatsEnTrop;
     }
@@ -992,7 +984,15 @@ public class Grille {
         }//System.out.println("candidats en trop bloc "+candidatsEnTrop);
         return candidatsEnTrop;
     }
-    
+    /**
+     * indique parmi les candidats d'une case lesquels ne sont pas possibles
+     * car d'autres cases non modifiables contiennent déjà ces valeurs 
+     * soit sur la ligne, soit sur la colonne, soit dans le bloc (généralisation
+     * de la méthode candidatDejaPresent de la clase Case
+     * @param lineCase
+     * @param columnCase
+     * @return 
+     */
     public ArrayList<Integer> candidatsEnTrop(int lineCase, int columnCase){
         ArrayList<Integer> candidatsAEnlever1 = this.candidatsEnTropColonne(lineCase, columnCase);
         ArrayList<Integer> candidatsAEnlever2 = this.candidatsEnTropLigne(lineCase, columnCase);
@@ -1023,7 +1023,7 @@ public class Grille {
         return new Grille(taille, cloneEnsembleCases);
     }
 
-    public static  int niveauGrille(String niveauDifficulte, int taille){ //a finir
+    public static  int niveauGrille(String niveauDifficulte, int taille){ //a supprimer
         int nbCasesRevelees;
         niveauDifficulte.toLowerCase();
         int taillePuissance4 = taille*taille*taille*taille;

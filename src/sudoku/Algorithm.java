@@ -25,10 +25,6 @@ de sudoku
 */
 public class Algorithm {
     
-    
-    
-    
-    
     /**
      * Un générateur de grille qui retourne une grille valide et complète 
      * de taille précisé
@@ -298,8 +294,11 @@ public class Algorithm {
         return g;
        
     }
-    
-     public static void paireNue(ArrayList<Case> groupeEtudie){
+    /**
+     * Technique de résolution si dans un groupe 2 cases possèdent les 2 mêmes candidats
+     * @param groupeEtudie 
+     */
+    public static void paireNue(ArrayList<Case> groupeEtudie){
         ArrayList<Case> caseAvec2Candidats = new ArrayList<Case>();
         ArrayList<Case> caseAvecPaireNue = new ArrayList<Case>();
         ArrayList<Integer> candidatsCommuns = new ArrayList<Integer>();
@@ -354,5 +353,7 @@ public class Algorithm {
         } System.out.println("groupe etudie "+groupeEtudie);
         
     }
+    
+     
     
 }

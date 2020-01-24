@@ -48,8 +48,5 @@ public class Coup {
     public void setValeurAvant(int valeurAvant) {
         this.valeurAvant = valeurAvant;
     }
-    
-    
-    
-    
+  
 }

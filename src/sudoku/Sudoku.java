@@ -34,14 +34,6 @@ public class Sudoku {
         this.listeCoup = new Pile();
     }
     
-    /*
-    public Sudoku(Joueur j, Grille g){
-        this.j = j;
-        this.g  = g;
-        this.solution = Grille.resolutionHasardeuse(g, 0);
-        this.listeCoup = new Pile();
-    }
-    */
     
     public Sudoku(Joueur j, Grille g, Grille solution, Pile listeCoup){
         this.j = j;
@@ -49,13 +41,6 @@ public class Sudoku {
         this.listeCoup = listeCoup;
         this.solution = solution;
     }
-    
-    /*public Sudoku(Joueur j, int nbCasesRevelees, int taille){
-        this.j = j;
-        Grille g = Grille.randomInitialization(nbCasesRevelees, taille);
-        Pile listeCoup = new Pile();
-        Grille solution = Grille.resolutionHasardeuse(g, 0);
-    }*/
     
     /**
      * Retourne la grille par référence
@@ -76,8 +61,11 @@ public class Sudoku {
     public void setJoueurScore(int score){
         j.setScore(score);
     }
-    
-    
+
+    /**
+     * permet de jouer un coup en changeant uniquement la valeur de la case
+     * sélectionnée
+     */
     public void jouerUnCoup(){
         
         int taille = g.getTaille();
@@ -116,22 +104,16 @@ public class Sudoku {
                     cases.get(position_case).setValeur(valeur);
                     g.setEnsembleCases(cases);
                     listeCoup.push(new Coup(position_case, valeurAvant , valeur));
-                    //System.out.println("ligne "+ligne);
-                    //System.out.println("colonne "+colonne);
-                    //g.valeursPlausible(ligne, colonne);
                     if(g.valeursPlausible(ligne, colonne) == false){
                         System.out.println("la valeur proposée n'est pas possible veuillez changer la valeur");
                     } 
     
                 }
             }
-        
         }
         else {
             System.out.println("La case choisie n'est pas modifiable");
         }
-       
-    
     }
     
     
@@ -152,10 +134,13 @@ public class Sudoku {
     }
     
     
-    
+    /**
+     * permet de sauvegarder la partie de sudoku 
+     * (joueur,grille,solution,liste de coup)
+     */
     public void saveGame (){
         try{
-            FileWriter fichier = new FileWriter(j.getNom() + "_partie.txt");
+            FileWriter fichier = new FileWriter("partie_"+j.getNom() + ".txt");
             fichier.write("#nom du joueur: "+j.getNom()+"\n");
             fichier.write("#score: "+String.valueOf(j.getScore())+"\n");
             fichier.write("#taille: "+String.valueOf(g.getTaille())+"\n");
@@ -172,7 +157,7 @@ public class Sudoku {
             String position;
             String valeurCoup;
             if (!listeCoup.empty()){
-                fichier.write("\n#liste des coups joués:\n#valeur avant     valeurapres    position de la case\n");
+                fichier.write("\n#liste des coups joués:\n#position de la case   valeur avant     valeurapres    \n");
                 int tailleListe = listeCoup.size();
                 for (int i=0; i<tailleListe; i++){ 
                     Coup coupCourant = listeCoup.pop();
@@ -185,12 +170,17 @@ public class Sudoku {
             e.printStackTrace();
         }
     }
-    
+    /**
+     * charge un grille qui peut être soit une sauvegarde d'une ancienne partie
+     * soit une nouvelle grille à partir de la base de donnée dans ce cas là
+     * les informartions du joueur seront par défaut(nom: Nom, score: 0)
+     * @param nomDuFichier
+     * @return 
+     */
     public static Sudoku chargerGrille (String nomDuFichier){
         int scoreCourant = 0;
         String name = "";
         Case nouvelleCase;
-        Joueur joueurNouveau;
         int taille = 0;
         ArrayList<Coup> stockCoup = new ArrayList<Coup>();
         ArrayList<Case> ensembleDesCases = new ArrayList<Case>();
@@ -209,7 +199,7 @@ public class Sudoku {
                 if (ligne.startsWith("#")){
                     if (ligne.contains("taille")){
                     taille = Integer.parseInt(ligne.substring(9, 10));
-                    //System.out.println(this.g.getTaille());
+                    
                     }
                     if(ligne.contains("nom du joueur")){
                         name = ligne.substring(16);
@@ -221,9 +211,9 @@ public class Sudoku {
                 } else if (ligne.startsWith("%")){
                     String champs[] = ligne.split(";");
                     int tailleAuCarre = taille*taille;
-                    //System.out.println(tailleCarre*tailleCarre);
+                    
                     for (int i = 1; i<tailleAuCarre*tailleAuCarre+1; i++){
-                        //System.out.print(champs[i]+" ");
+                        
                         int valeurCase = Integer.parseInt(champs[i]);
                         ArrayList<Integer> candidats = new ArrayList<Integer>();
                         if(valeurCase!=0){
@@ -257,15 +247,12 @@ public class Sudoku {
                     stockCoup.add(unCoup);
                     ensembleDesCases.get(positionInt).estModifiable(true);
                 }
-                
+            //on reconstitut la liste des coups joués    
             }if (stockCoup.size()>1){
                     for(int i = stockCoup.size()-1; i>=0; i--){
                         listeDesCoups.push(stockCoup.get(i));   
                     }
                 }
-            Joueur joueurCourant = new Joueur(name,scoreCourant); 
-            Grille grilleCourante = new Grille(taille,ensembleDesCases);
-            Grille laSolution = new Grille(taille,ensembleSolutionCase);
             
         }catch (IOException e){
             e.printStackTrace();
@@ -296,7 +283,12 @@ public class Sudoku {
     public Joueur getJoueur(){
         return j;
     }
-    
+    /**
+     * on revient en arrière autant fois qu'on le souhaite (dans la limite 
+     * de la pile
+     * @param nbCoupsJoues 
+     * nbCoupsJoues = combien de fois on souhaite revenir en arrière
+     */
     public void revenirEnArriere(int nbCoupsJoues){
         System.out.println(listeCoup.size());
         if (nbCoupsJoues > listeCoup.size()){
@@ -315,7 +307,10 @@ public class Sudoku {
         } this.afficheSudoku();
     }
         
-       
+/**
+ * Permet de faire des propositions de candidats ainsi que d'utiliser les 
+ * différentes aides disponibles
+ */       
  public void jouerUnCoupAvecCandidats(){
         
         int taille = g.getTaille();
@@ -403,8 +398,6 @@ public class Sudoku {
             }this.calculScore(nbHelp1, nbHelp2, nbHelp3, nbHelp4, nbHelp5);
             this.g.getEnsembleCases().get(position_case).addCandidat(lesCandidats);
             System.out.println("candidats de la case "+this.g.getEnsembleCases().get(position_case).getCandidats());
-            //this.getGrille().candidatsEnTrop(ligne, colonne);
-            //this.supprimerCandidatsEnTrop(ligne, colonne); //méthode qu'il convient d'utiliser sur une grille de taille 3 minimum sinon pas d'intérêt
             this.g.getEnsembleCases().get(position_case).resteUnCandidat(); 
             int valeurApres = this.getGrille().getValeurCase(position_case);
             if(valeurApres != valeurAvant){
@@ -414,7 +407,9 @@ public class Sudoku {
             System.out.println("la case sélectionnée n'est pas modifiable");
         }
     }
- 
+ /**
+  * Permet de supprimer autant de candidat qu'une case en possède
+  */
     public void enleverCandidat(){
         int taille = g.getTaille();
         int ligne = -1;
@@ -465,7 +460,10 @@ public class Sudoku {
             System.out.println("la case sélectionnée n'est pas modifiable");
         }
     }
-    
+    /**
+     * Menu pour les différentes actions possibles
+     * @return 
+     */
     public boolean playGameWithCandidat(){
         g.afficheGrille();
         boolean resultat;
@@ -538,8 +536,13 @@ public class Sudoku {
         if(!this.getGrille().candidatsEnTrop(lineCase, columnCase).isEmpty());
             this.enleverCandidat();
     }
-     
-    public void help1(int lineCase, int columnCase){ //permet de savoir si la solution d'une case spécifique se trouve parmi les candidats de cette case
+     /**
+      * permet de savoir si la solution d'une case spécifique se trouve 
+      * parmi les candidats de cette case
+      * @param lineCase
+      * @param columnCase 
+      */
+    public void help1(int lineCase, int columnCase){ 
         int j = 0;
         boolean candidatBon = false;
         int taille = this.getGrille().getTaille();
@@ -557,7 +560,11 @@ public class Sudoku {
         
     }
     
-    public void help2(){ //si la case ne contient pas la bonne valeur dans ces candidats ou dans sa propre valeur elle est écrite en rouge
+    /**
+     * si la case ne contient pas la bonne valeur dans ces candidats ou dans
+     * sa propre valeur elle est écrite en rouge
+     */
+    public void help2(){ 
         int taille = this.getGrille().getTaille();
         int ligne;
         int colonne;
@@ -572,7 +579,12 @@ public class Sudoku {
             }  
         }
     }
-    
+/**
+ * Enleve les candidats inutiles car des cases non modifiables (fixes) possèdent
+ * déjà cette valeur au sein d'une ligne, d'une colonne ou d'un bloc
+ * @param lineCase
+ * @param columnCase 
+ */
 public void help3(int lineCase, int columnCase ){
     ArrayList<Integer> candidatsAEnlever = this.getGrille().candidatsEnTrop(lineCase, columnCase);
     int taille = this.getGrille().getTaille();
@@ -582,7 +594,10 @@ public void help3(int lineCase, int columnCase ){
     }
     System.out.println("candidat de la case après aide "+this.getGrille().getCandidatCase(positionCase));
 }    
-    
+    /**
+     * Supprime un candidat faux dans chaque cases modifiables de la grille
+     * (si un candidat est juste en aucun il ne sera supprimer)
+     */
     public void help4(){ //supprime un candidat faux
         //int nbCandidatsSupprime;
         int indiceCandidatSupprime;
@@ -642,7 +657,9 @@ public void help3(int lineCase, int columnCase ){
         Joueur joueur;
         Sudoku s;
         int taille;
+        int tailleAuCarre;
         int nbCasesRevelees;
+        int seuilMinCasesRevelees;
         String niveau = "";
         Calendar cal = Calendar.getInstance();
         System.out.println(cal.get(Calendar.HOUR_OF_DAY)+"h "+cal.get(Calendar.MINUTE)+"m et "+cal.get(Calendar.SECOND)+"s");
@@ -657,14 +674,13 @@ public void help3(int lineCase, int columnCase ){
             joueur = new Joueur(name);
             System.out.println("Quelle taille de grille souhaitez vous ? (2, 3, 4...");
             taille = Clavier.Clavier.getInt();
-            System.out.println("niveau de difficulté: facile, moyen, difficile");
-            niveau = Clavier.Clavier.getString();
-            nbCasesRevelees = Grille.niveauGrille(niveau, taille);
+            tailleAuCarre = taille*taille;
+            seuilMinCasesRevelees = (int)(0.21*(tailleAuCarre*tailleAuCarre)+1);
+            System.out.println("combien de cases souhaitez vous révéler ? (entre "+seuilMinCasesRevelees+" et "+tailleAuCarre*tailleAuCarre+")");
+            nbCasesRevelees = Clavier.Clavier.getInt();
             Grille laSolution = Algorithm.randomSolutionGenerator(taille);
             Grille laGrille = Algorithm.randomGrilleGenerator(laSolution,nbCasesRevelees);
-            
             laGrille.videLesCandidats();
-            //laSolution.afficheGrille();
             Pile p = new Pile();
             s = new Sudoku(joueur, laGrille, laSolution, p);
             
