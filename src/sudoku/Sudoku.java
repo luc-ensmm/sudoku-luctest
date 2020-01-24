@@ -598,8 +598,7 @@ public void help3(int lineCase, int columnCase ){
      * Supprime un candidat faux dans chaque cases modifiables de la grille
      * (si un candidat est juste en aucun il ne sera supprimer)
      */
-    public void help4(){ //supprime un candidat faux
-        //int nbCandidatsSupprime;
+    public void help4(){
         int indiceCandidatSupprime;
         int valeurBonne = 0;
         for(int i = 0; i<this.getGrille().getEnsembleCases().size(); i++){
@@ -610,16 +609,14 @@ public void help3(int lineCase, int columnCase ){
                     //System.out.println("valeur bonne "+valeurBonne);
                     System.out.println("candidat - valeur "+caseCourante.getCandidats());
                 }
-                //Random ran1 = new Random();
-                //nbCandidatsSupprime = ran1.nextInt(caseCourante.getCandidats().size()+1);
+                
                 System.out.println("size "+caseCourante.getCandidats().size());
-                //System.out.println("nbCandidatsSupprime "+nbCandidatsSupprime);
-                //for(int j = 0; j<nbCandidatsSupprime; j++){
+                
                     Random ran2 = new Random();
                     indiceCandidatSupprime = ran2.nextInt(caseCourante.getCandidats().size());
                     System.out.println("indiceCandidatSupprime "+indiceCandidatSupprime);
                     caseCourante.getCandidats().remove(indiceCandidatSupprime);
-                //} 
+               
                 if (valeurBonne != 0){
                     caseCourante.getCandidats().add(valeurBonne);
                     valeurBonne = 0;
@@ -629,7 +626,9 @@ public void help3(int lineCase, int columnCase ){
             }
         }
     } 
-    
+    /**
+     * Révèle la valeur d'une case modifiable au hasard
+     */
     public void help5(){
         ArrayList<Integer> listeCasesModifiables = new ArrayList<Integer>();
         int indice;
@@ -650,7 +649,10 @@ public void help3(int lineCase, int columnCase ){
         solutionCase = this.getSolution().getCase(indiceCaseRevele);
         this.getGrille().setCase(indiceCaseRevele, solutionCase);
     }
-    
+    /**
+     * Menu pour jouer un sudoku à partir de la commande
+     * @return 
+     */
     public static Sudoku playCommande(){
         String mot;
         String name;
@@ -678,6 +680,7 @@ public void help3(int lineCase, int columnCase ){
             seuilMinCasesRevelees = (int)(0.21*(tailleAuCarre*tailleAuCarre)+1);
             System.out.println("combien de cases souhaitez vous révéler ? (entre "+seuilMinCasesRevelees+" et "+tailleAuCarre*tailleAuCarre+")");
             nbCasesRevelees = Clavier.Clavier.getInt();
+            niveau = Grille.niveauGrille(nbCasesRevelees, taille);
             Grille laSolution = Algorithm.randomSolutionGenerator(taille);
             Grille laGrille = Algorithm.randomGrilleGenerator(laSolution,nbCasesRevelees);
             laGrille.videLesCandidats();
@@ -705,7 +708,12 @@ public void help3(int lineCase, int columnCase ){
         }
         return valeur;
     } 
-    
+    /**
+     * calcul le score en fonction de la difficulté et de la durée de la partie
+     * @param niveauDeDifficulte
+     * @param cal
+     * @return 
+     */
     public int scoreFinale(String niveauDeDifficulte, Calendar cal){
         Calendar ca2 = Calendar.getInstance();
         int duree;
@@ -730,8 +738,6 @@ public void help3(int lineCase, int columnCase ){
             nbPoint = -2*ecart;
             this.j.setScore(nbPoint);
         }
-        //System.out.println("ecart "+ecart);
-        //System.out.println("nb point "+nbPoint);
         return this.j.getScore();
     }
     
